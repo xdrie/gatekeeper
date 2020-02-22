@@ -1,6 +1,6 @@
 #region
 
-using System.Collections.Generic;
+using Hexagon.Services.Application;
 
 #endregion
 
@@ -26,7 +26,7 @@ namespace Gatekeeper.Config {
             /// <summary>
             /// The verbosity of the application logger
             /// </summary>
-            public SpeercsLogger.LogLevel logLevel = SpeercsLogger.LogLevel.Information;
+            public SLogger.LogLevel logLevel = SLogger.LogLevel.Information;
 
             /// <summary>
             /// Whether to enable ASP.NET Core verbose logging
@@ -37,14 +37,6 @@ namespace Gatekeeper.Config {
             /// Whether to enable detailed/sensitive database logging
             /// </summary>
             public bool databaseLogging = true;
-
-            public MetricsLevel metricsLevel = MetricsLevel.Full;
-
-            /// <summary>
-            /// Whether to send script execution errors that occur inside the server code.
-            /// This can potentially be a security risk.
-            /// </summary>
-            public bool sendScriptErrors = false;
         }
 
         public Logging logging = new Logging();

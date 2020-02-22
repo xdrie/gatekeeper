@@ -1,6 +1,7 @@
 #region
 
 using System.Text;
+using Hexagon.Services.Application;
 using Tomlyn.Model;
 
 #endregion
@@ -26,11 +27,9 @@ namespace Gatekeeper.Config {
             cfg.server.maxUsers = (long) server[rename(nameof(cfg.server.maxUsers))];
 
             var logging = (TomlTable) tb[rename(nameof(cfg.logging))];
-            cfg.logging.logLevel = (SpeercsLogger.LogLevel) logging[rename(nameof(cfg.logging.logLevel))];
+            cfg.logging.logLevel = (SLogger.LogLevel) logging[rename(nameof(cfg.logging.logLevel))];
             cfg.logging.aspnetVerboseLogging = (bool) logging[rename(nameof(cfg.logging.aspnetVerboseLogging))];
             cfg.logging.databaseLogging = (bool) logging[rename(nameof(cfg.logging.databaseLogging))];
-            cfg.logging.metricsLevel = (MetricsLevel) logging[rename(nameof(cfg.logging.metricsLevel))];
-            cfg.logging.sendScriptErrors = (bool) logging[rename(nameof(cfg.logging.sendScriptErrors))];
 
             return cfg;
         }

@@ -2,11 +2,16 @@
     <PropertyGroup>
         <TargetFramework>netcoreapp3.1</TargetFramework>
         <OutputType>Exe</OutputType>
+        <Nullable>enable</Nullable>
     </PropertyGroup>
 
     <ItemGroup>
         <PackageReference Include="Carter" Version="5.1.0" />
         <PackageReference Include="NSwag.AspNetCore" Version="13.2.3" />
         <PackageReference Include="Tomlyn" Version="0.1.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\lib\Hexagon\src\Hexagon\Hexagon.csproj" />
     </ItemGroup>
 </Project>
