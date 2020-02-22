@@ -9,15 +9,14 @@ using Gatekeeper.OpenAPI;
 using Gatekeeper.Services;
 
 namespace Gatekeeper.Modules {
-    public class RegisterEndpoint : RouteMetaData {
-        
-    }
+    public class RegisterEndpoint : RouteMetaData { }
+
     public class RegistrationModule : CarterModule {
         public RegistrationModule() {
             Post<CreateUser>("/register", async (req, res) => {
                 var ureq = await req.BindAndValidate<UserRegistrationRequest>();
                 if (!ureq.ValidationResult.IsValid) {
-                    res.StatusCode = (int)HttpStatusCode.UnprocessableEntity;
+                    res.StatusCode = (int) HttpStatusCode.UnprocessableEntity;
                     await res.Negotiate(ureq.ValidationResult.GetFormattedErrors());
                     return;
                 }
