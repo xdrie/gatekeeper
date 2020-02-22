@@ -1,4 +1,5 @@
 using FluentValidation;
+using Gatekeeper.Models.Identity;
 
 namespace Gatekeeper.Models.Requests {
     public class UserCreateRequest {

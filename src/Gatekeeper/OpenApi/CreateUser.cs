@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Net;
 using Carter.OpenApi;
 using Gatekeeper.Models;
+using Gatekeeper.Models.Identity;
 using Gatekeeper.Models.Requests;
 
 namespace Gatekeeper.OpenApi {
