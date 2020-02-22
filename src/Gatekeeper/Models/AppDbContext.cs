@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Gatekeeper.Models {
     public class AppDbContext : DependencyDbContext {
-        protected AppDbContext(SContext context) : base(context) { }
+        public AppDbContext(SContext context) : base(context) { }
 
         public DbSet<User> users { get; set; }
         public DbSet<Token> tokens { get; set; }

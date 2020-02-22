@@ -1,4 +1,4 @@
-using Gatekeeper.Services.User;
+using Gatekeeper.Services.Users;
 using Hexagon.Services.Application;
 
 namespace Gatekeeper.Config {
@@ -15,6 +15,7 @@ namespace Gatekeeper.Config {
         public SContext(SConfig config) {
             this.config = config;
             log = new SLogger(config.logging.logLevel);
+            userManager = new UserManagerService(this);
         }
     }
 }
