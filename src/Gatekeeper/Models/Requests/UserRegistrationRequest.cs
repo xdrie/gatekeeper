@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace UnifiedAuthService.Models.Requests {
+namespace Gatekeeper.Models.Requests {
     public class UserRegistrationRequest {
         public string Username { get; set; }
         public string Name { get; set; }

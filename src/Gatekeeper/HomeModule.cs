@@ -1,4 +1,4 @@
-﻿namespace UnifiedAuthService {
+﻿namespace Gatekeeper {
     using Carter;
     using Microsoft.AspNetCore.Http;
 

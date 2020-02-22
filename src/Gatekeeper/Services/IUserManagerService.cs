@@ -1,4 +1,4 @@
-namespace UnifiedAuthService.Services {
+namespace Gatekeeper.Services {
     public interface IUserManagerService {
         
     }

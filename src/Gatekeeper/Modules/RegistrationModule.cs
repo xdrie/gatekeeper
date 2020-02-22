@@ -3,12 +3,12 @@ using Carter;
 using Carter.ModelBinding;
 using Carter.OpenApi;
 using Carter.Response;
-using UnifiedAuthService.Models;
-using UnifiedAuthService.Models.Requests;
-using UnifiedAuthService.OpenAPI;
-using UnifiedAuthService.Services;
+using Gatekeeper.Models;
+using Gatekeeper.Models.Requests;
+using Gatekeeper.OpenAPI;
+using Gatekeeper.Services;
 
-namespace UnifiedAuthService.Modules {
+namespace Gatekeeper.Modules {
     public class RegisterEndpoint : RouteMetaData {
         
     }
