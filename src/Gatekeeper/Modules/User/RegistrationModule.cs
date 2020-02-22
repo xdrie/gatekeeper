@@ -2,13 +2,12 @@ using System.Net;
 using Carter.ModelBinding;
 using Carter.Response;
 using Gatekeeper.Config;
-using Gatekeeper.Models.Identity;
 using Gatekeeper.Models.Requests;
 using Gatekeeper.OpenApi;
 using Hexagon.Services.Application;
 using Hexagon.Services.Serialization;
 
-namespace Gatekeeper.Modules {
+namespace Gatekeeper.Modules.User {
     public class RegistrationModule : ApiModule {
         public RegistrationModule(SContext context) : base("/user", context) {
             Post<CreateUser>("/create", async (req, res) => {
@@ -19,12 +18,12 @@ namespace Gatekeeper.Modules {
                     return;
                 }
 
-                var newUser = new User {
+                var newUser = new Models.Identity.User {
                     username = createReq.Data.Username,
                     name = createReq.Data.Name
                 };
                 if (this.serverContext.config.server.maxUsers > -1 &&
-                    serverContext.userManager.registeredUserCount >= this.serverContext.config.server.maxUsers) {
+                    serverContext.userManager.registeredUserCount >= serverContext.config.server.maxUsers) {
                     res.StatusCode = (int) HttpStatusCode.InsufficientStorage;
                     return;
                 }

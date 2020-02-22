@@ -9,6 +9,7 @@
         <PackageReference Include="Carter" Version="5.1.0" />
         <PackageReference Include="NSwag.AspNetCore" Version="13.2.3" />
         <PackageReference Include="Tomlyn" Version="0.1.1" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.2.6" />
     </ItemGroup>
 
     <ItemGroup>
