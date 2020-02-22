@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace Gatekeeper.Modules {
     public class HomeModule : ApiModule {
-        public HomeModule(SContext context) : base("/", context) {
+        public HomeModule(SContext context) : base("/home", context) {
             Get("/", async (req, res) => await res.WriteAsync("Hello from Carter!"));
         }
     }

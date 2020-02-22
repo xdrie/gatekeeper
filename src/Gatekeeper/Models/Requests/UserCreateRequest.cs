@@ -1,7 +1,7 @@
 using FluentValidation;
 
 namespace Gatekeeper.Models.Requests {
-    public class UserRegistrationRequest {
+    public class UserCreateRequest {
         public string Username { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
@@ -10,7 +10,7 @@ namespace Gatekeeper.Models.Requests {
         public string IsRobot { get; set; }
     }
 
-    public class UserRegistrationValidator : AbstractValidator<UserRegistrationRequest> {
+    public class UserRegistrationValidator : AbstractValidator<UserCreateRequest> {
         public UserRegistrationValidator() {
             RuleFor(x => x.Username).NotEmpty().Length(4, 32);
             RuleFor(x => x.Name).NotEmpty().MaximumLength(32);
