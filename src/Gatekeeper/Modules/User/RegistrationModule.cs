@@ -19,8 +19,8 @@ namespace Gatekeeper.Modules.User {
                 }
 
                 var newUser = new Models.Identity.User {
-                    username = createReq.Data.Username,
-                    name = createReq.Data.Name
+                    username = createReq.Data.username,
+                    name = createReq.Data.name
                 };
                 if (this.serverContext.config.server.maxUsers > -1 &&
                     serverContext.userManager.registeredUserCount >= serverContext.config.server.maxUsers) {

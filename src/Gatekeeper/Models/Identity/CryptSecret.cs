@@ -7,11 +7,7 @@ using Newtonsoft.Json;
 
 namespace Gatekeeper.Models.Identity {
     public class CryptSecret : DatabaseObject {
-        [JsonIgnore]
-        [ForeignKey(nameof(userId))]
-        public Identity.User user { get; set; }
-
-        [JsonIgnore] public int userId { get; set; }
+        public User user { get; set; }
 
         public byte[] salt { get; set; }
 
