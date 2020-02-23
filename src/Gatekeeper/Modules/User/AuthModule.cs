@@ -25,9 +25,10 @@ namespace Gatekeeper.Modules.User {
                 // attempt to register user
                 try {
                     // register the user
-                    (var user, var token) = serverContext.userManager.registerUser(createReq.Data);
+                    var user = serverContext.userManager.registerUser(createReq.Data);
                     serverContext.log.writeLine($"registered user {user.username}",
                         SLogger.LogLevel.Information);
+                    var token = serverContext.userManager.issueRootToken(user);
 
                     // Return user details
                     res.StatusCode = (int) HttpStatusCode.Created;
@@ -60,7 +61,7 @@ namespace Gatekeeper.Modules.User {
                 if (serverContext.userManager.checkPassword(loginReq.Data.password, user)) {
                     // var metrics = new UserMetricsService(serverContext);
                     // metrics.log(user.identifier, MetricsEventType.Auth);
-                    // Return user details
+                    // return user details
                     res.StatusCode = (int) HttpStatusCode.OK;
                     await res.respondSerialized(new AuthenticatedUser(user));
                     return;
