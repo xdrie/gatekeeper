@@ -43,7 +43,7 @@ namespace Gatekeeper {
             });
             
             // server context start signal
-            context.build();
+            // context.build();
         }
 
         public void Configure(IApplicationBuilder app) {

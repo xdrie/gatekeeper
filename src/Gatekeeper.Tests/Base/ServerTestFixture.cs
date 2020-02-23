@@ -17,11 +17,11 @@ using Microsoft.Extensions.Logging;
 namespace Gatekeeper.Tests.Base {
     public class ServerTestFixture : IDisposable {
         public CustomWebApplicationFactory<Startup> factory { get; }
-        public SContext serverContext => factory.serverContext;
+        // public SContext serverContext => factory.serverContext;
 
         public class CustomWebApplicationFactory<TStartup>
             : WebApplicationFactory<TStartup> where TStartup : class {
-            public SContext serverContext;
+            // public SContext serverContext;
 
             protected override void ConfigureWebHost(IWebHostBuilder builder) {
                 builder.ConfigureServices(services => {
@@ -41,10 +41,10 @@ namespace Gatekeeper.Tests.Base {
 
                     // Build the service provider.
                     var sp = services.BuildServiceProvider();
-                    serverContext = sp.GetService<SContext>();
-                    
-                    // set server context options
-                    serverContext.log.verbosity = SLogger.LogLevel.Trace;
+                    // serverContext = sp.GetService<SContext>();
+                    //
+                    // // set server context options
+                    // serverContext.log.verbosity = SLogger.LogLevel.Trace;
 
                     // Create a scope to obtain a reference to the database
                     // context (ApplicationDbContext).

@@ -12,9 +12,7 @@ namespace Gatekeeper.Config {
         public SConfig config { get; }
         
         public IServiceCollection services { get; set; }
-        public IServiceProvider serviceProvider { get; set; }
-        
-        public AppDbContext dbContext => serviceProvider.GetService<AppDbContext>();
+        public AppDbContext getDbContext() => services.BuildServiceProvider().GetService<AppDbContext>();
         public UserManagerService userManager { get; set; }
 
         public SLogger log;
@@ -24,10 +22,6 @@ namespace Gatekeeper.Config {
             log = new SLogger(config.logging.logLevel);
             userManager = new UserManagerService(this);
             this.services = services;
-        }
-
-        public void build() {
-            serviceProvider = services.BuildServiceProvider();
         }
 
         public void Dispose() { }
