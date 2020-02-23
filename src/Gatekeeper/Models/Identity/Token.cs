@@ -1,5 +1,4 @@
 using System;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Gatekeeper.Models.Identity {
     public class Token : DatabaseObject {

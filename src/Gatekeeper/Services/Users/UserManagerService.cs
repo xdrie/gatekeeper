@@ -43,12 +43,13 @@ namespace Gatekeeper.Services.Users {
             return user;
         }
 
-        public Token issueRootToken(User user) {
+        public Token issueRootToken(int userId) {
             // create an access token
             var tokenSource = new AccessTokenSource(serverContext);
-            var token = tokenSource.issueRoot(user);
+            var token = tokenSource.issueRoot();
 
             using (var db = serverContext.getDbContext()) {
+                token.user = db.users.Find(userId);
                 db.tokens.Add(token); // add token
                 db.SaveChanges();
             }
@@ -74,7 +75,7 @@ namespace Gatekeeper.Services.Users {
 
         private User loadPassword(User forUser) {
             using (var db = serverContext.getDbContext()) {
-                var user = db.users.First(x => x.id == forUser.id);
+                var user = db.users.First(x => x.dbid == forUser.dbid);
                 db.Entry(user).Reference(x => x.password).Load();
                 return user;
             }

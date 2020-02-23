@@ -29,7 +29,7 @@ namespace Gatekeeper.Modules.User {
                     var user = serverContext.userManager.registerUser(createReq.Data);
                     serverContext.log.writeLine($"registered user {user.username}",
                         SLogger.LogLevel.Information);
-                    var token = serverContext.userManager.issueRootToken(user);
+                    var token = serverContext.userManager.issueRootToken(user.dbid);
 
                     // Return user details
                     res.StatusCode = (int) HttpStatusCode.Created;
@@ -61,7 +61,7 @@ namespace Gatekeeper.Modules.User {
                 // validate password
                 if (serverContext.userManager.checkPassword(loginReq.Data.password, user)) {
                     // issue a new token
-                    var token = serverContext.userManager.issueRootToken(user);
+                    var token = serverContext.userManager.issueRootToken(user.dbid);
 
                     // return user details
                     res.StatusCode = (int) HttpStatusCode.OK;
