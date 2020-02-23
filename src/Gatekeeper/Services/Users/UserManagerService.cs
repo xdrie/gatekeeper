@@ -56,7 +56,7 @@ namespace Gatekeeper.Services.Users {
 
             return token;
         }
-        
+
         public void deleteUser(int userId) {
             using (var db = serverContext.getDbContext()) {
                 // delete all associated tokens
