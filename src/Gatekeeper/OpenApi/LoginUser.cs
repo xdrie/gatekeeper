@@ -21,8 +21,8 @@ namespace Gatekeeper.OpenApi {
             },
             new RouteMetaDataResponse {
                 Code = (int) HttpStatusCode.OK,
-                Description = $"The corresponding {nameof(User)} object",
-                Response = typeof(User)
+                Description = $"The corresponding {nameof(AuthenticatedUser)} object",
+                Response = typeof(AuthenticatedUser)
             }
         };
 

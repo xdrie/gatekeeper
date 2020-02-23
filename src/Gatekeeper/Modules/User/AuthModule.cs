@@ -3,6 +3,7 @@ using System.Security;
 using Carter.ModelBinding;
 using Carter.Response;
 using Gatekeeper.Config;
+using Gatekeeper.Models.Identity;
 using Gatekeeper.Models.Requests;
 using Gatekeeper.OpenApi;
 using Gatekeeper.Services.Users;
@@ -34,7 +35,7 @@ namespace Gatekeeper.Modules.User {
 
                     // Return user details
                     res.StatusCode = (int) HttpStatusCode.Created;
-                    await res.respondSerialized(user);
+                    await res.respondSerialized(new AuthenticatedUser(user));
                 }
                 catch (UserManagerService.UserAlreadyExistsException) {
                     res.StatusCode = (int) HttpStatusCode.Conflict;
@@ -62,7 +63,7 @@ namespace Gatekeeper.Modules.User {
                     // metrics.log(user.identifier, MetricsEventType.Auth);
                     // Return user details
                     res.StatusCode = (int) HttpStatusCode.OK;
-                    await res.respondSerialized(user);
+                    await res.respondSerialized(new AuthenticatedUser(user));
                     return;
                 }
 
