@@ -1,13 +1,14 @@
+using System;
 using Gatekeeper.Services.Users;
 using Hexagon.Services.Application;
 
 namespace Gatekeeper.Config {
-    public class SContext {
+    public class SContext : IDisposable {
         /// <summary>
         /// configuration used to create this context instance
         /// </summary>
         public SConfig config { get; }
-        
+
         public UserManagerService userManager { get; set; }
 
         public SLogger log;
@@ -17,5 +18,7 @@ namespace Gatekeeper.Config {
             log = new SLogger(config.logging.logLevel);
             userManager = new UserManagerService(this);
         }
+
+        public void Dispose() { }
     }
 }

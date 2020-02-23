@@ -7,12 +7,14 @@ using Hexagon.Services.Application;
 namespace Gatekeeper.Config {
     public class SConfig {
         public class Server {
+            public const string DEFAULT_DATABASE = "Data Source=database.db";
+
             /// <summary>
             /// Database connection path.
             /// Specify a file using "Data Source=database.db"
             /// Specify in-memory transient using null
             /// </summary>
-            // public string database = "Data Source=database.db";
+            public string database = DEFAULT_DATABASE;
 
             /// <summary>
             /// Enables production mode (disables using hardcoded/test values)
