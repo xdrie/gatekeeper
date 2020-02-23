@@ -1,13 +1,12 @@
 using System;
-using System.Linq;
 using System.Collections;
+using System.Linq;
 using Gatekeeper.Config;
 using Gatekeeper.Models;
 using Gatekeeper.Models.Identity;
 using Gatekeeper.Models.Requests;
 using Gatekeeper.Services.Auth;
 using Hexagon.Utilities;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Gatekeeper.Services.Users {
     public class UserManagerService : DependencyObject {
