@@ -24,7 +24,9 @@ namespace Gatekeeper.Config {
             var cfg = new SConfig();
 
             var server = (TomlTable) tb[rename(nameof(cfg.server))];
-            cfg.server.production = (bool) server[rename(nameof(cfg.server.production))];
+            #if DEBUG
+            cfg.server.development = (bool) server[rename(nameof(cfg.server.development))];
+            #endif
 
             var logging = (TomlTable) tb[rename(nameof(cfg.logging))];
             cfg.logging.logLevel = (SLogger.LogLevel) logging[rename(nameof(cfg.logging.logLevel))];

@@ -8,7 +8,7 @@ namespace Gatekeeper.Config {
     public class SConfig {
         public const string SERVER_NAME = "ALTiCU Gatekeeper";
         public const string VERSION = "v0.0.4.2300-dev";
-        
+
         public class Server {
             public const string DEFAULT_DATABASE = "Data Source=database.db";
 
@@ -19,10 +19,12 @@ namespace Gatekeeper.Config {
             /// </summary>
             public string database = DEFAULT_DATABASE;
 
+            #if DEBUG
             /// <summary>
-            /// Enables production mode (disables using hardcoded/test values)
+            /// Enables development mode (sets up hardcoded/test values and "fake" services)
             /// </summary>
-            public bool production = true;
+            public bool development = true;
+            #endif
         }
 
         public Server server = new Server();

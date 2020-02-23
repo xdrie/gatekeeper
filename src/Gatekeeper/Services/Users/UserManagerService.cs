@@ -30,9 +30,11 @@ namespace Gatekeeper.Services.Users {
                 registered = DateTime.Now
             };
 
-            if (!serverContext.config.server.production) { // if in development, set a default verification code
+            #if DEBUG
+            if (serverContext.config.server.development) { // if in development, set a default verification code
                 user.verification = DevelopmentConstants.DEFAULT_VERIFICATION;
             }
+            #endif
 
             using (var db = serverContext.getDbContext()) {
                 db.users.Add(user); // add user
