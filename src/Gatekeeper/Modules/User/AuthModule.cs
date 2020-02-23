@@ -9,8 +9,8 @@ using Hexagon.Services.Application;
 using Hexagon.Services.Serialization;
 
 namespace Gatekeeper.Modules.User {
-    public class RegistrationModule : ApiModule {
-        public RegistrationModule(SContext context) : base("/user", context) {
+    public class AuthModule : ApiModule {
+        public AuthModule(SContext context) : base("/user", context) {
             Post<CreateUser>("/create", async (req, res) => {
                 var createReq = await req.BindAndValidate<UserCreateRequest>();
                 if (!createReq.ValidationResult.IsValid) {
