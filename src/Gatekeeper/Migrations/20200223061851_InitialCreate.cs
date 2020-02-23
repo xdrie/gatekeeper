@@ -16,7 +16,7 @@ namespace Gatekeeper.Migrations
                     name = table.Column<string>(nullable: false),
                     username = table.Column<string>(nullable: false),
                     email = table.Column<string>(nullable: false),
-                    emailPublic = table.Column<bool>(nullable: false),
+                    emailVisible = table.Column<bool>(nullable: false),
                     totp = table.Column<byte[]>(nullable: true),
                     pronouns = table.Column<int>(nullable: false),
                     role = table.Column<int>(nullable: false),

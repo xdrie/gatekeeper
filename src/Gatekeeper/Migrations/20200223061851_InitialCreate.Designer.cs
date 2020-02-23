@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gatekeeper.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20200223043902_InitialCreate")]
+    [Migration("20200223061851_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -55,7 +55,7 @@ namespace Gatekeeper.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<bool>("emailPublic")
+                    b.Property<bool>("emailVisible")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("name")

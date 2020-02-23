@@ -17,7 +17,7 @@ namespace Gatekeeper.Models.Identity {
             pronouns = user.pronouns;
             registered = user.registered;
             
-            if (user.emailPublic) {
+            if (user.emailVisible) {
                 email = user.email;
             }
         }

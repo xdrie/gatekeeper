@@ -53,7 +53,7 @@ namespace Gatekeeper.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<bool>("emailPublic")
+                    b.Property<bool>("emailVisible")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("name")

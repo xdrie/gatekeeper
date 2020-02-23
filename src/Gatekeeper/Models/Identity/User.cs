@@ -5,7 +5,7 @@ namespace Gatekeeper.Models.Identity {
         public string name { get; set; }
         public string username { get; set; }
         public string email { get; set; }
-        public bool emailPublic { get; set; } = false;
+        public bool emailVisible { get; set; } = false;
         public CryptSecret password { get; set; }
         public byte[]? totp { get; set; }
         public Pronouns pronouns { get; set; }

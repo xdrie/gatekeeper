@@ -35,7 +35,7 @@ namespace Gatekeeper.Tests.Modules.User {
                 name = TEST_NAME,
                 email = TEST_EMAIL,
                 password = TEST_PASSWORD,
-                pronouns = Models.Identity.User.Pronouns.TheyThem,
+                pronouns = Models.Identity.User.Pronouns.TheyThem.ToString(),
                 isRobot = UserRegistrationValidator.NOT_ROBOT_PROMISE
             });
         }
