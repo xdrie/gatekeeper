@@ -66,7 +66,7 @@ namespace Gatekeeper.Tests.Base {
         }
 
         public ServerTestFixture() {
-            factory = new TestSpeercsApplicationFactory<Startup>();
+            factory = new CustomWebApplicationFactory<Startup>();
         }
 
         public HttpClient getClient() {

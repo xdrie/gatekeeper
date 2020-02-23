@@ -1,5 +1,6 @@
 using System.IO;
 using Gatekeeper.Config;
+using Gatekeeper.Models;
 using Gatekeeper.Services.Database;
 using Microsoft.EntityFrameworkCore;
 using Tomlyn;
@@ -34,11 +35,9 @@ namespace Gatekeeper {
             // register server context
             services.AddSingleton(context);
             
-            // prepare database
-            // run default database migration
-            using (var db = new AppDbContextFactory(context).create()) {
-                db.Database.Migrate();
-            }
+            // set up database
+            services.AddDbContext<AppDbContext>();
+            
         }
 
         public void Configure(IApplicationBuilder app) {
