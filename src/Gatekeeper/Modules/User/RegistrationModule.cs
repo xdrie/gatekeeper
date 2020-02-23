@@ -19,11 +19,7 @@ namespace Gatekeeper.Modules.User {
                     return;
                 }
 
-                var newUser = new Models.Identity.User {
-                    username = createReq.Data.username,
-                    name = createReq.Data.name
-                };
-                if (this.serverContext.config.server.maxUsers > -1 &&
+                if (serverContext.config.server.maxUsers > -1 &&
                     serverContext.userManager.registeredUserCount >= serverContext.config.server.maxUsers) {
                     res.StatusCode = (int) HttpStatusCode.InsufficientStorage;
                     return;
