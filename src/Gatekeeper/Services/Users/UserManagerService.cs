@@ -26,7 +26,7 @@ namespace Gatekeeper.Services.Users {
                 username = request.username,
                 email = request.email,
                 password = cryptPassword,
-                pronouns = request.pronouns,
+                pronouns = (User.Pronouns) Enum.Parse(typeof(User.Pronouns), request.pronouns),
                 verification = StringUtils.secureRandomString(8),
                 registered = DateTime.Now
             };
@@ -34,7 +34,7 @@ namespace Gatekeeper.Services.Users {
             if (!serverContext.config.server.production) { // if in development, set a default verification code
                 user.verification = DevelopmentConstants.DEFAULT_VERIFICATION;
             }
-            
+
             using (var db = serverContext.getDbContext()) {
                 db.users.Add(user); // add user
                 db.SaveChanges();
