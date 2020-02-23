@@ -10,16 +10,15 @@ namespace Gatekeeper.Tests.Modules.Users {
     [Collection(UserTestCollection.KEY)]
     public class SelfModuleTests {
         private readonly UserTestFixture fx;
-        private readonly HttpClient client;
 
         public SelfModuleTests(UserTestFixture fixture) {
             fx = fixture;
-            client = fx.getClient();
         }
 
         [Fact]
         public async Task canAccessMePage() {
             await fx.initialize();
+            var client = fx.getAuthedClient();
             
             // check me page
             var resp = await client.GetAsync("/a/u/me");

@@ -18,15 +18,14 @@ namespace Gatekeeper.Tests.Modules.Auth {
     [Collection(ServerTestCollection.KEY)]
     public class AuthModuleTests {
         private readonly ServerTestFixture fx;
-        private readonly HttpClient client;
 
         public AuthModuleTests(ServerTestFixture fixture) {
             fx = fixture;
-            client = fx.getClient();
         }
 
         [Fact]
         public async Task canRegisterAccount() {
+            var client = fx.getClient();
             var username = AccountRegistrar.TEST_USERNAME + "_reg";
             var resp = await AccountRegistrar.registerAccount(client, username);
             resp.EnsureSuccessStatusCode();
@@ -37,6 +36,7 @@ namespace Gatekeeper.Tests.Modules.Auth {
 
         [Fact]
         public async Task canLoginAccount() {
+            var client = fx.getClient();
             var username = AccountRegistrar.TEST_USERNAME + "_login";
             var regResponse = await AccountRegistrar.registerAccount(client, username);
             regResponse.EnsureSuccessStatusCode();
@@ -53,6 +53,7 @@ namespace Gatekeeper.Tests.Modules.Auth {
 
         [Fact]
         public async Task canDeleteAccount() {
+            var client = fx.getClient();
             var username = AccountRegistrar.TEST_USERNAME + "_delete";
             var regResponse = await AccountRegistrar.registerAccount(client, username);
             regResponse.EnsureSuccessStatusCode();
