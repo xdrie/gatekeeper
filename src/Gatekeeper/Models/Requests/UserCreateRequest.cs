@@ -12,12 +12,13 @@ namespace Gatekeeper.Models.Requests {
     }
 
     public class UserRegistrationValidator : AbstractValidator<UserCreateRequest> {
+        public const string NOT_ROBOT_PROMISE = "I am not a robot";
         public UserRegistrationValidator() {
             RuleFor(x => x.username).NotEmpty().Length(4, 32);
             RuleFor(x => x.name).NotEmpty().MaximumLength(32);
             RuleFor(x => x.email).NotEmpty().EmailAddress();
             RuleFor(x => x.password).NotEmpty().MinimumLength(8);
-            RuleFor(x => x.isRobot).Equal("I am not a robot");
+            RuleFor(x => x.isRobot).Equal(NOT_ROBOT_PROMISE);
         }
     }
 }

@@ -3,6 +3,7 @@
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Gatekeeper.Models.Requests;
 using Gatekeeper.Tests.Base;
 using Gatekeeper.Tests.Meta;
 using Newtonsoft.Json.Linq;
@@ -10,7 +11,7 @@ using Xunit;
 
 #endregion
 
-namespace Gatekeeper.Tests.Auth {
+namespace Gatekeeper.Tests.Modules.User {
     [Collection(ServerTestCollection.KEY)]
     public class AuthModuleTests {
         private readonly ServerTestFixture fx;
@@ -21,13 +22,19 @@ namespace Gatekeeper.Tests.Auth {
             client = fx.getClient();
         }
 
-        private const string TEST_USERNAME = "test";
+        public const string TEST_USERNAME = "test";
+        public const string TEST_NAME = "Test Testingtest";
+        public const string TEST_EMAIL = "test@example.com";
         public const string TEST_PASSWORD = "1234567890";
 
         public static Task<HttpResponseMessage> registerAccount(HttpClient client, string username) {
-            return client.PostAsJsonAsync("/a/auth/register", new {
-                username,
-                password = TEST_PASSWORD
+            return client.PostAsJsonAsync("/a/auth/register", new UserCreateRequest {
+                username = TEST_USERNAME,
+                name = TEST_NAME,
+                email = TEST_EMAIL,
+                password = TEST_PASSWORD,
+                pronouns = Models.Identity.User.Pronouns.TheyThem,
+                isRobot = UserRegistrationValidator.NOT_ROBOT_PROMISE
             });
         }
 
