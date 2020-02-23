@@ -5,6 +5,7 @@ using Carter.Response;
 using Gatekeeper.Config;
 using Gatekeeper.Models.Requests;
 using Gatekeeper.OpenApi;
+using Gatekeeper.Services.Users;
 using Hexagon.Services.Application;
 using Hexagon.Services.Serialization;
 
@@ -32,12 +33,41 @@ namespace Gatekeeper.Modules.User {
                         SLogger.LogLevel.Information);
 
                     // Return user details
+                    res.StatusCode = (int) HttpStatusCode.Created;
                     await res.respondSerialized(user);
                 }
-                catch (SecurityException) {
+                catch (UserManagerService.UserAlreadyExistsException) {
+                    res.StatusCode = (int) HttpStatusCode.Conflict;
+                    return;
+                }
+            });
+
+            Post<LoginUser>("/login", async (req, res) => {
+                var loginReq = await req.BindAndValidate<UserLoginRequest>();
+                if (!loginReq.ValidationResult.IsValid) {
+                    res.StatusCode = (int) HttpStatusCode.UnprocessableEntity;
+                    await res.Negotiate(loginReq.ValidationResult.GetFormattedErrors());
+                    return;
+                }
+
+                var user = serverContext.userManager.findByUsername(loginReq.Data.username);
+                if (user == null) {
                     res.StatusCode = (int) HttpStatusCode.Unauthorized;
                     return;
                 }
+
+                // validate password
+                if (serverContext.userManager.checkPassword(loginReq.Data.password, user)) {
+                    // var metrics = new UserMetricsService(serverContext);
+                    // metrics.log(user.identifier, MetricsEventType.Auth);
+                    // Return user details
+                    res.StatusCode = (int) HttpStatusCode.OK;
+                    await res.respondSerialized(user);
+                    return;
+                }
+
+                res.StatusCode = (int) HttpStatusCode.Unauthorized;
+                return;
             });
         }
     }
