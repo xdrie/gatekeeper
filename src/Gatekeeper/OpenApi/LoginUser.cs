@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Net;
 using Carter.OpenApi;
-using Gatekeeper.Models.Identity;
 using Gatekeeper.Models.Requests;
+using Gatekeeper.Models.Responses;
 
 namespace Gatekeeper.OpenApi {
     public class LoginUser : RouteMetaData {
@@ -21,8 +21,8 @@ namespace Gatekeeper.OpenApi {
             },
             new RouteMetaDataResponse {
                 Code = (int) HttpStatusCode.OK,
-                Description = $"The corresponding {nameof(AuthenticatedUser)} object",
-                Response = typeof(AuthenticatedUser)
+                Description = $"The corresponding {nameof(AuthedUserResponse)} object",
+                Response = typeof(AuthedUserResponse)
             }
         };
 

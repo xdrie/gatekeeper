@@ -32,7 +32,7 @@ namespace Gatekeeper.Modules.User {
 
                     // Return user details
                     res.StatusCode = (int) HttpStatusCode.Created;
-                    await res.respondSerialized(new CreatedUserResponse {
+                    await res.respondSerialized(new AuthedUserResponse {
                         user = new AuthenticatedUser(user),
                         token = token
                     });
@@ -59,9 +59,15 @@ namespace Gatekeeper.Modules.User {
 
                 // validate password
                 if (serverContext.userManager.checkPassword(loginReq.Data.password, user)) {
+                    // issue a new token
+                    var token = serverContext.userManager.issueRootToken(user);
+
                     // return user details
                     res.StatusCode = (int) HttpStatusCode.OK;
-                    await res.respondSerialized(new AuthenticatedUser(user));
+                    await res.respondSerialized(new AuthedUserResponse {
+                        user = new AuthenticatedUser(user),
+                        token = token
+                    });
                     return;
                 }
 
