@@ -13,7 +13,7 @@ namespace Gatekeeper.Modules {
             // require authentication
             this.requiresUserAuthentication();
 
-            this.Before = async (ctx) => {
+            this.Before += async (ctx) => {
                 var usernameClaim = ctx.User.Claims.First(x => x.Type == ApiAuthenticator.CLAIM_USERNAME);
                 currentUser = serverContext.userManager.findByUsername(usernameClaim.Value);
 

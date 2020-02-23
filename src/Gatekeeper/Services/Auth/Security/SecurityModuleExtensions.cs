@@ -14,13 +14,13 @@ namespace Gatekeeper.Services.Auth.Security {
         }
 
         public static void authenticationHook(CarterModule module, string claimType) {
-            module.Before += ctx => {
+            module.Before += async (ctx) => {
                 if (ctx.User != null && ctx.User.ensureClaimPresent(claimType)) {
-                    return Task.FromResult(true);
+                    return true;
                 }
 
                 ctx.Response.StatusCode = (int) HttpStatusCode.Unauthorized;
-                return Task.FromResult(false);
+                return false;
             };
         }
 
