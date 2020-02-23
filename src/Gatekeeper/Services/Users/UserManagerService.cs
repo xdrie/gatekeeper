@@ -56,6 +56,18 @@ namespace Gatekeeper.Services.Users {
 
             return token;
         }
+        
+        public void deleteUser(int userId) {
+            using (var db = serverContext.getDbContext()) {
+                // delete all associated tokens
+                var userTokens = db.tokens.Where(x => x.user.dbid == userId);
+                db.tokens.RemoveRange(userTokens);
+                // delete user
+                var user = db.users.Find(userId);
+                db.users.Remove(user);
+                db.SaveChanges();
+            }
+        }
 
         public bool checkPassword(string password, User user) {
             user = loadPassword(user);

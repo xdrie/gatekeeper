@@ -75,6 +75,34 @@ namespace Gatekeeper.Modules.User {
                 res.StatusCode = (int) HttpStatusCode.Unauthorized;
                 return;
             });
+
+            Post<DeleteUser>("/delete", async (req, res) => {
+                var loginReq = await req.BindAndValidate<UserLoginRequest>();
+                if (!loginReq.ValidationResult.IsValid) {
+                    res.StatusCode = (int) HttpStatusCode.UnprocessableEntity;
+                    await res.Negotiate(loginReq.ValidationResult.GetFormattedErrors());
+                    return;
+                }
+
+                var user = serverContext.userManager.findByUsername(loginReq.Data.username);
+                if (user == null) {
+                    res.StatusCode = (int) HttpStatusCode.Unauthorized;
+                    return;
+                }
+
+                // validate password
+                if (serverContext.userManager.checkPassword(loginReq.Data.password, user)) {
+                    // delete the account
+                    serverContext.userManager.deleteUser(user.dbid);
+
+                    // return success indication
+                    res.StatusCode = (int) HttpStatusCode.NoContent;
+                    return;
+                }
+
+                res.StatusCode = (int) HttpStatusCode.Unauthorized;
+                return;
+            });
         }
     }
 }
