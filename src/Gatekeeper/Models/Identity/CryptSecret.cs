@@ -19,7 +19,7 @@ namespace Gatekeeper.Models.Identity {
 
         public int saltLength { get; set; }
 
-        public static CryptSecret createDefault() {
+        public static CryptSecret withDefaultParameters() {
             return new CryptSecret {
                 iterations = DEFAULT_ITERATION_COUNT,
                 length = DEFAULT_LENGTH,

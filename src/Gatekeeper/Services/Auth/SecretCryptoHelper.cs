@@ -7,15 +7,15 @@ using Gatekeeper.Models.Identity;
 #endregion
 
 namespace Gatekeeper.Services.Auth {
-    public class AuthCryptoHelper {
-        private CryptSecret secr { get; }
+    public class SecretCryptoHelper {
+        private CryptSecret secret { get; }
 
-        public AuthCryptoHelper(CryptSecret secr) {
-            this.secr = secr;
+        public SecretCryptoHelper(CryptSecret secret) {
+            this.secret = secret;
         }
 
         public byte[] generateSalt() {
-            var len = secr.saltLength;
+            var len = secret.saltLength;
             var bytes = new byte[len];
             using (var rng = RandomNumberGenerator.Create()) {
                 rng.GetBytes(bytes);
@@ -24,19 +24,17 @@ namespace Gatekeeper.Services.Auth {
             return bytes;
         }
 
-        private byte[] calculatePasswordHash(byte[] password, byte[] salt) {
-            var iter = secr.iterations;
-            var len = secr.length;
+        private byte[] calculateSecretHash(byte[] password, byte[] salt) {
+            var iter = secret.iterations;
+            var len = secret.length;
             using (var deriveBytes = new Rfc2898DeriveBytes(password, salt, iter)) {
                 return deriveBytes.GetBytes(len);
             }
         }
 
-        public byte[] calculateUserPasswordHash(string password, byte[] salt) {
+        public byte[] calculateSecretHash(string password, byte[] salt) {
             var passwordBytes = Encoding.UTF8.GetBytes(password);
-            return calculatePasswordHash(passwordBytes, salt);
+            return calculateSecretHash(passwordBytes, salt);
         }
-
-        public const int DEFAULT_API_KEY_LENGTH = 42;
     }
 }

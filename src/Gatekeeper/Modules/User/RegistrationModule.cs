@@ -1,4 +1,5 @@
 using System.Net;
+using System.Security;
 using Carter.ModelBinding;
 using Carter.Response;
 using Gatekeeper.Config;
@@ -29,13 +30,18 @@ namespace Gatekeeper.Modules.User {
                 }
 
                 // attempt to register user
-                var user = serverContext.userManager.registerUser(createReq.Data);
+                try {
+                    var user = serverContext.userManager.registerUser(createReq.Data);
+                    serverContext.log.writeLine($"registered user {user.username}",
+                        SLogger.LogLevel.Information);
 
-                serverContext.log.writeLine($"registered user {user.username}",
-                    SLogger.LogLevel.Information);
-
-                // Return user details
-                await res.respondSerialized(user);
+                    // Return user details
+                    await res.respondSerialized(user);
+                }
+                catch (SecurityException) {
+                    res.StatusCode = (int) HttpStatusCode.Unauthorized;
+                    return;
+                }
             });
         }
     }
