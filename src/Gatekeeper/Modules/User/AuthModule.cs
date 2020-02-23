@@ -5,6 +5,7 @@ using Carter.Response;
 using Gatekeeper.Config;
 using Gatekeeper.Models.Identity;
 using Gatekeeper.Models.Requests;
+using Gatekeeper.Models.Responses;
 using Gatekeeper.OpenApi;
 using Gatekeeper.Services.Users;
 using Hexagon.Services.Application;
@@ -29,13 +30,17 @@ namespace Gatekeeper.Modules.User {
 
                 // attempt to register user
                 try {
+                    // register the user
                     var user = serverContext.userManager.registerUser(createReq.Data);
                     serverContext.log.writeLine($"registered user {user.username}",
                         SLogger.LogLevel.Information);
 
                     // Return user details
                     res.StatusCode = (int) HttpStatusCode.Created;
-                    await res.respondSerialized(new AuthenticatedUser(user));
+                    await res.respondSerialized(new CreatedUserResponse {
+                        user = new AuthenticatedUser(user),
+                        // token = 
+                    });
                 }
                 catch (UserManagerService.UserAlreadyExistsException) {
                     res.StatusCode = (int) HttpStatusCode.Conflict;

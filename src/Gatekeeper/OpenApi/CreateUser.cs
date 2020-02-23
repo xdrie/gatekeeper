@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Net;
 using Carter.OpenApi;
-using Gatekeeper.Models.Identity;
 using Gatekeeper.Models.Requests;
+using Gatekeeper.Models.Responses;
 
 namespace Gatekeeper.OpenApi {
     public class CreateUser : RouteMetaData {
@@ -25,8 +25,8 @@ namespace Gatekeeper.OpenApi {
             },
             new RouteMetaDataResponse {
                 Code = (int) HttpStatusCode.Created,
-                Description = $"A new {nameof(AuthenticatedUser)} object",
-                Response = typeof(AuthenticatedUser)
+                Description = $"A new {nameof(CreatedUserResponse)} object",
+                Response = typeof(CreatedUserResponse)
             }
         };
 
