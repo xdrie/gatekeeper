@@ -7,7 +7,7 @@ using Gatekeeper.Models.Responses;
 namespace Gatekeeper.OpenApi.Auth {
     public class LoginUser : RouteMetaData {
         public override string Description => "Login to a user account";
-        public override string Tag => OpenApiTags.USER_MANAGEMENT;
+        public override string Tag => GateApiConstants.Tags.USER_MANAGEMENT;
 
         public override RouteMetaDataResponse[] Responses { get; } = {
             new RouteMetaDataResponse {
