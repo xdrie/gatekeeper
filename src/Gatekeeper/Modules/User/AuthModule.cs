@@ -22,12 +22,6 @@ namespace Gatekeeper.Modules.User {
                     return;
                 }
 
-                if (serverContext.config.server.maxUsers > -1 &&
-                    serverContext.userManager.registeredUserCount >= serverContext.config.server.maxUsers) {
-                    res.StatusCode = (int) HttpStatusCode.InsufficientStorage;
-                    return;
-                }
-
                 // attempt to register user
                 try {
                     // register the user

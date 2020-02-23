@@ -16,10 +16,6 @@ namespace Gatekeeper.OpenApi {
                 Response = typeof(IEnumerable<dynamic>)
             },
             new RouteMetaDataResponse {
-                Code = (int) HttpStatusCode.InsufficientStorage,
-                Description = "User limit has been exceeded"
-            },
-            new RouteMetaDataResponse {
                 Code = (int) HttpStatusCode.Conflict,
                 Description = "A user with the same username already exists"
             },

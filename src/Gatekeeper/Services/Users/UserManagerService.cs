@@ -14,8 +14,6 @@ namespace Gatekeeper.Services.Users {
     public class UserManagerService : DependencyObject {
         public UserManagerService(SContext context) : base(context) { }
 
-        public int registeredUserCount => throw new NotImplementedException();
-
         public User registerUser(UserCreateRequest request) {
             if (findByUsername(request.username) != null)
                 throw new UserAlreadyExistsException("a user with the same username already exists");
