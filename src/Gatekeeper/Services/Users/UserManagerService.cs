@@ -14,7 +14,7 @@ namespace Gatekeeper.Services.Users {
     public class UserManagerService : DependencyObject {
         public UserManagerService(SContext context) : base(context) { }
 
-        public User registerUser(UserCreateRequest request) {
+        public (User, Token) registerUser(UserCreateRequest request) {
             if (findByUsername(request.username) != null)
                 throw new UserAlreadyExistsException("a user with the same username already exists");
             // encrypt the password
@@ -32,13 +32,17 @@ namespace Gatekeeper.Services.Users {
                 registered = DateTime.Now
             };
 
-            if (!serverContext.config.server.production) {
+            if (!serverContext.config.server.production) { // if in development, set a default verification code
                 user.verification = DevelopmentConstants.DEFAULT_VERIFICATION;
             }
+            
+            // create an access token
+            var tokenSource = new AccessTokenSource(serverContext);
+            var token = tokenSource.issueRoot(user);
 
             using (var db = new AppDbContextFactory().create()) {
-                // add user to database
-                db.users.Add(user);
+                db.users.Add(user); // add user
+                db.tokens.Add(token); // add token
                 db.SaveChanges();
             }
 
@@ -46,7 +50,7 @@ namespace Gatekeeper.Services.Users {
             // var metrics = userMetricsService.create(user);
             // userMetricsService.log(user.identifier, MetricsEventType.Auth);
 
-            return user;
+            return (user, token);
         }
 
         public bool checkPassword(string password, User user) {

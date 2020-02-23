@@ -25,7 +25,7 @@ namespace Gatekeeper.Modules.User {
                 // attempt to register user
                 try {
                     // register the user
-                    var user = serverContext.userManager.registerUser(createReq.Data);
+                    (var user, var token) = serverContext.userManager.registerUser(createReq.Data);
                     serverContext.log.writeLine($"registered user {user.username}",
                         SLogger.LogLevel.Information);
 
@@ -33,7 +33,7 @@ namespace Gatekeeper.Modules.User {
                     res.StatusCode = (int) HttpStatusCode.Created;
                     await res.respondSerialized(new CreatedUserResponse {
                         user = new AuthenticatedUser(user),
-                        // token = 
+                        token = token
                     });
                 }
                 catch (UserManagerService.UserAlreadyExistsException) {
