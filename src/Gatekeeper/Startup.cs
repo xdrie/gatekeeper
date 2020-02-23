@@ -53,7 +53,8 @@ namespace Gatekeeper {
                 .GetRequiredService<IServiceScopeFactory>()
                 .CreateScope()) {
                 using (var context = serviceScope.ServiceProvider.GetService<AppDbContext>()) {
-                    context.Database.Migrate();
+                    // context.Database.Migrate();
+                    context.Database.EnsureCreated();
                 }
             }
 
