@@ -5,7 +5,7 @@ using Gatekeeper.Tests.Meta;
 using Xunit;
 
 namespace Gatekeeper.Tests.Modules.Users {
-    [Collection(ServerTestCollection.KEY)]
+    [Collection(UserTestCollection.KEY)]
     public class SelfModuleTests {
         private readonly UserTestFixture fx;
         private readonly HttpClient client;

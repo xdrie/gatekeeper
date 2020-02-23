@@ -23,7 +23,8 @@ namespace Gatekeeper.Tests.Base {
 
         public async Task initialize() {
             // register account
-            var response = await AccountRegistrar.registerAccount(getClient(), $"{AccountRegistrar.TEST_USERNAME}_{Guid.NewGuid():N}");
+            var response = await AccountRegistrar.registerAccount(getClient(),
+                $"{AccountRegistrar.TEST_USERNAME}_{Guid.NewGuid():N}");
             response.EnsureSuccessStatusCode();
         }
     }
