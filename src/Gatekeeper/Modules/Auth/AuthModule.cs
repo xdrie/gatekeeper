@@ -1,20 +1,18 @@
 using System.Net;
-using System.Security;
 using Carter.ModelBinding;
 using Carter.Response;
 using Gatekeeper.Config;
 using Gatekeeper.Models.Identity;
 using Gatekeeper.Models.Requests;
 using Gatekeeper.Models.Responses;
-using Gatekeeper.OpenApi;
 using Gatekeeper.OpenApi.Auth;
 using Gatekeeper.Services.Users;
 using Hexagon.Services.Application;
 using Hexagon.Services.Serialization;
 
-namespace Gatekeeper.Modules.User {
+namespace Gatekeeper.Modules.Auth {
     public class AuthModule : ApiModule {
-        public AuthModule(SContext context) : base("/user", context) {
+        public AuthModule(SContext context) : base("/auth", context) {
             Post<CreateUser>("/create", async (req, res) => {
                 var createReq = await req.BindAndValidate<UserCreateRequest>();
                 if (!createReq.ValidationResult.IsValid) {
