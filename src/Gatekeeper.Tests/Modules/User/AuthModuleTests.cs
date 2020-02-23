@@ -38,18 +38,6 @@ namespace Gatekeeper.Tests.Modules.User {
             });
         }
 
-        [Theory]
-        [InlineData("a")] // too short
-        [InlineData(
-            "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")] // too long
-        public async Task registrationRejectsInvalidPasswords(string password) {
-            var resp = await client.PostAsJsonAsync("/a/auth/register", new {
-                username = TEST_USERNAME,
-                password
-            });
-            Assert.Equal(HttpStatusCode.UnprocessableEntity, resp.StatusCode);
-        }
-
         [Fact]
         public async Task canRegisterAccount() {
             var username = TEST_USERNAME + "_reg";
