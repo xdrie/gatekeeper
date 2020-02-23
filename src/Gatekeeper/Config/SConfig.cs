@@ -6,6 +6,9 @@ using Hexagon.Services.Application;
 
 namespace Gatekeeper.Config {
     public class SConfig {
+        public const string SERVER_NAME = "ALTiCU Gatekeeper";
+        public const string VERSION = "v0.0.3.2207-dev";
+        
         public class Server {
             /// <summary>
             /// Database connection path.

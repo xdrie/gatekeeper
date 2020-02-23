@@ -4,10 +4,10 @@ using Carter.OpenApi;
 using Gatekeeper.Models.Requests;
 using Gatekeeper.Models.Responses;
 
-namespace Gatekeeper.OpenApi {
+namespace Gatekeeper.OpenApi.Auth {
     public class CreateUser : RouteMetaData {
-        public override string Description { get; } = "Register a new user account";
-        public override string Tag { get; } = OpenApiTags.USER_MANAGEMENT;
+        public override string Description => "Register a new user account";
+        public override string Tag => OpenApiTags.USER_MANAGEMENT;
 
         public override RouteMetaDataResponse[] Responses { get; } = {
             new RouteMetaDataResponse {
