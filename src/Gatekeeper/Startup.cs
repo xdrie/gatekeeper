@@ -28,7 +28,7 @@ namespace Gatekeeper {
                 var configModel = configDoc.ToModel();
                 serverConfig = ConfigLoader.readDocument(configModel);
             }
-            
+
             var context = new SContext(services, serverConfig);
             // register server context
             services.AddSingleton(context);
@@ -36,17 +36,27 @@ namespace Gatekeeper {
             // set up database
             services.AddDbContext<AppDbContext>(options => {
                 options.UseSqlite(context.config.server.database);
+                // options.UseInMemoryDatabase("InMemoryDb");
                 if (context.config.logging.databaseLogging) {
                     options.EnableDetailedErrors();
                     options.EnableSensitiveDataLogging();
                 }
             });
-            
+
             // server context start signal
             // context.build();
         }
 
         public void Configure(IApplicationBuilder app) {
+            // update the database
+            using (var serviceScope = app.ApplicationServices
+                .GetRequiredService<IServiceScopeFactory>()
+                .CreateScope()) {
+                using (var context = serviceScope.ServiceProvider.GetService<AppDbContext>()) {
+                    context.Database.Migrate();
+                }
+            }
+
             app.UseRouting();
 
             app.UseEndpoints(builder => builder.MapCarter());
