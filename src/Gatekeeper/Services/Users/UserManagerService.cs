@@ -11,12 +11,12 @@ namespace Gatekeeper.Services.Users {
 
         public int registeredUserCount => throw new NotImplementedException();
 
-        public User registerUser(UserCreateRequest createReqData) {
+        public User registerUser(UserCreateRequest createRequest) {
             throw new NotImplementedException();
         }
 
         private User loadPassword(User regUser) {
-            using (var db = new AppDbContext(serverContext)) {
+            using (var db = new AppDbContext()) {
                 var user = db.users.First(x => x.id == regUser.id);
                 db.Entry(user).Reference(x => x.password).Load();
                 return user;
@@ -24,7 +24,7 @@ namespace Gatekeeper.Services.Users {
         }
 
         public User findByUser(string username) {
-            using (var db = new AppDbContext(serverContext)) {
+            using (var db = new AppDbContext()) {
                 return db.users.FirstOrDefault(x => x.username == username);
             }
         }
