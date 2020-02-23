@@ -7,7 +7,7 @@ using Gatekeeper.Models.Responses;
 namespace Gatekeeper.OpenApi.Auth {
     public class DeleteUser : RouteMetaData {
         public override string Description => "Delete a user account";
-        public override string Tag => OpenApiTags.USER_MANAGEMENT;
+        public override string Tag => OpenApiConstants.Tags.USER_MANAGEMENT;
 
         public override RouteMetaDataResponse[] Responses { get; } = {
             new RouteMetaDataResponse {

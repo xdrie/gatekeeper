@@ -5,7 +5,7 @@ using Gatekeeper.Models.Meta;
 namespace Gatekeeper.OpenApi.Meta {
     public class GetMeta : RouteMetaData {
         public override string Description => "Get server metadata";
-        public override string Tag => OpenApiTags.SERVER_META;
+        public override string Tag => OpenApiConstants.Tags.SERVER_META;
 
         public override RouteMetaDataResponse[] Responses { get; } = {
             new RouteMetaDataResponse {
