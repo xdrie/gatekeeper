@@ -11,12 +11,14 @@ namespace Gatekeeper.Models.Identity {
         public User.Pronouns pronouns { get; set; }
         public DateTime registered { get; set; }
 
+        public PublicUser() { }
+
         public PublicUser(User user) {
             name = user.name;
             username = user.username;
             pronouns = user.pronouns;
             registered = user.registered;
-            
+
             if (user.emailVisible) {
                 email = user.email;
             }
