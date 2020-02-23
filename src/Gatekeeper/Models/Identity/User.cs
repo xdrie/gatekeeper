@@ -7,7 +7,7 @@ namespace Gatekeeper.Models.Identity {
         public string email { get; set; }
         public CryptSecret password { get; set; }
         public byte[]? totp { get; set; }
-        public Pronouns pronouns { get; set; } = Pronouns.TheyThem;
+        public Pronouns pronouns { get; set; }
         public Role role { get; set; } = Role.Pending;
         public string verification { get; set; }
         public DateTime registered { get; set; }
