@@ -31,7 +31,7 @@ namespace Gatekeeper.Tests.Modules.User {
 
         public static Task<HttpResponseMessage> registerAccount(HttpClient client, string username) {
             return client.PostAsJsonAsync("/a/user/create", new UserCreateRequest {
-                username = TEST_USERNAME,
+                username = username,
                 name = TEST_NAME,
                 email = TEST_EMAIL,
                 password = TEST_PASSWORD,
