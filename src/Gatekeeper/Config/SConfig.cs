@@ -12,12 +12,12 @@ namespace Gatekeeper.Config {
             /// Specify a file using "Data Source=database.db"
             /// Specify in-memory transient using null
             /// </summary>
-            public string database = "Data Source=database.db";
+            // public string database = "Data Source=database.db";
 
             /// <summary>
-            /// Maximum number of registered users. Set to -1 for unlimited.
+            /// Enables production mode (disables using hardcoded/test values)
             /// </summary>
-            public long maxUsers = -1;
+            public bool production = true;
         }
 
         public Server server = new Server();

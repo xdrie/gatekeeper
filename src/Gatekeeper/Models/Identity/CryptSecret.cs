@@ -1,21 +1,17 @@
 #region
 
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
 #endregion
 
 namespace Gatekeeper.Models.Identity {
+    [Owned]
     public class CryptSecret : DatabaseObject {
-        [JsonIgnore]
-        [ForeignKey(nameof(userId))]
-        public Identity.User user { get; set; }
-
-        [JsonIgnore] public int userId { get; set; }
-
         public byte[] salt { get; set; }
 
-        public byte[] secret { get; set; }
+        public byte[] hash { get; set; }
 
         public int iterations { get; set; }
 
@@ -23,7 +19,7 @@ namespace Gatekeeper.Models.Identity {
 
         public int saltLength { get; set; }
 
-        public static CryptSecret createDefault() {
+        public static CryptSecret withDefaultParameters() {
             return new CryptSecret {
                 iterations = DEFAULT_ITERATION_COUNT,
                 length = DEFAULT_LENGTH,
