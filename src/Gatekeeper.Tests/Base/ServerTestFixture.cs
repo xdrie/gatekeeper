@@ -54,7 +54,7 @@ namespace Gatekeeper.Tests.Base {
                         var logger = scopedServices
                             .GetRequiredService<ILogger<TestWebApplicationFactory<TStartup>>>();
 
-                        // Ensure the database is created.
+                        // Ensure the in-memory database is created.
                         db.Database.EnsureCreated();
 
                         try {

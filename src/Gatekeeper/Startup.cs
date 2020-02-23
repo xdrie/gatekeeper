@@ -52,9 +52,13 @@ namespace Gatekeeper {
             using (var serviceScope = app.ApplicationServices
                 .GetRequiredService<IServiceScopeFactory>()
                 .CreateScope()) {
-                using (var context = serviceScope.ServiceProvider.GetService<AppDbContext>()) {
-                    // context.Database.Migrate();
-                    context.Database.EnsureCreated();
+                
+                var serverContext = app.ApplicationServices.GetService<SContext>();
+                using (var dbContext = serviceScope.ServiceProvider.GetService<AppDbContext>()) {
+                    if (!dbContext.Database.IsInMemory()) {
+                        dbContext.Database.Migrate();
+                    }
+                    // context.Database.EnsureCreated();
                 }
             }
 
