@@ -1,7 +1,9 @@
 using System.Net.Http;
 using System.Threading.Tasks;
+using Gatekeeper.Models.Identity;
 using Gatekeeper.Tests.Base;
 using Gatekeeper.Tests.Meta;
+using Newtonsoft.Json;
 using Xunit;
 
 namespace Gatekeeper.Tests.Modules.Users {
@@ -19,7 +21,10 @@ namespace Gatekeeper.Tests.Modules.Users {
         public async Task canAccessMePage() {
             await fx.initialize();
             
-            // TODO: check me page
+            // check me page
+            var resp = await client.GetAsync("/a/u/me");
+            var data = JsonConvert.DeserializeObject<AuthenticatedUser>(await resp.Content.ReadAsStringAsync());
+            Assert.Equal(fx.username, data.username);
         }
     }
 }

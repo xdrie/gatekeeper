@@ -19,7 +19,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Gatekeeper.Tests.Base {
     public class UserTestFixture : ServerTestFixture {
-        public static string username;
+        public string username;
 
         public async Task initialize() {
             // register account
