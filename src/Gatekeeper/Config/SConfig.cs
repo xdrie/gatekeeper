@@ -15,6 +15,11 @@ namespace Gatekeeper.Config {
             // public string database = "Data Source=database.db";
 
             /// <summary>
+            /// Enables production mode (disables using hardcoded/test values)
+            /// </summary>
+            public bool production = true;
+
+            /// <summary>
             /// Maximum number of registered users. Set to -1 for unlimited.
             /// </summary>
             public long maxUsers = -1;

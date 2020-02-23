@@ -36,6 +36,10 @@ namespace Gatekeeper.Services.Users {
                 registered = DateTime.Now
             };
 
+            if (!serverContext.config.server.production) {
+                user.verification = DevelopmentConstants.DEFAULT_VERIFICATION;
+            }
+
             using (var db = new AppDbContextFactory().create()) {
                 // add user to database
                 db.users.Add(user);
