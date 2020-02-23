@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using Gatekeeper.Config;
@@ -31,6 +32,9 @@ namespace Gatekeeper.Services.Auth {
                 token = db.tokens.Find(token.dbid);
                 db.Entry(token).Reference(x => x.user).Load();
             }
+
+            // 3. parse token scopes/path
+            var accessScope = AccessScope.parse(token.scope);
 
             var claims = new[] {
                 new Claim(CLAIM_USERNAME, token.user.username)

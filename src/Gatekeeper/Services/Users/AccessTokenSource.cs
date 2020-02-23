@@ -2,6 +2,7 @@ using System;
 using Gatekeeper.Config;
 using Gatekeeper.Models;
 using Gatekeeper.Models.Identity;
+using Gatekeeper.Services.Auth;
 using Hexagon.Utilities;
 
 namespace Gatekeeper.Services.Users {
@@ -16,7 +17,7 @@ namespace Gatekeeper.Services.Users {
             return new Token {
                 content = StringUtils.secureRandomString(TOKEN_LENGTH),
                 expires = DateTime.Now.Add(lifetime),
-                scope = scope
+                scope = new AccessScope().pack() // root
             };
         }
 
