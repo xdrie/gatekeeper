@@ -4,8 +4,10 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Gatekeeper.Models.Requests;
+using Gatekeeper.Models.Responses;
 using Gatekeeper.Tests.Base;
 using Gatekeeper.Tests.Meta;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Xunit;
 
@@ -28,7 +30,7 @@ namespace Gatekeeper.Tests.Modules.User {
         public const string TEST_PASSWORD = "1234567890";
 
         public static Task<HttpResponseMessage> registerAccount(HttpClient client, string username) {
-            return client.PostAsJsonAsync("/a/auth/register", new UserCreateRequest {
+            return client.PostAsJsonAsync("/a/user/create", new UserCreateRequest {
                 username = TEST_USERNAME,
                 name = TEST_NAME,
                 email = TEST_EMAIL,
@@ -43,10 +45,9 @@ namespace Gatekeeper.Tests.Modules.User {
             var username = TEST_USERNAME + "_reg";
             var resp = await registerAccount(client, username);
             resp.EnsureSuccessStatusCode();
-            var data = JObject.Parse(await resp.Content.ReadAsStringAsync());
-            Assert.Equal(username, data["username"]);
-            Assert.NotNull(data["token"]);
-            Assert.NotNull(data["userid"]);
+            var data = JsonConvert.DeserializeObject<AuthedUserResponse>(await resp.Content.ReadAsStringAsync());
+            Assert.Equal(username, data.user.username);
+            Assert.NotNull(data.token.content);
         }
 
         [Fact]
