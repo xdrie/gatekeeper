@@ -1,18 +1,16 @@
 using System.IO;
+using Carter;
 using Gatekeeper.Config;
 using Gatekeeper.Models;
-using Gatekeeper.Services.Database;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Tomlyn;
 
 namespace Gatekeeper {
-    using Carter;
-    using Microsoft.AspNetCore.Builder;
-    using Microsoft.Extensions.DependencyInjection;
-
     public class Startup {
         private const string CONFIG_FILE = "config.toml";
-        
+
         public void ConfigureServices(IServiceCollection services) {
             // Adds services required for using options.
             services.AddOptions();
@@ -30,14 +28,22 @@ namespace Gatekeeper {
                 var configModel = configDoc.ToModel();
                 serverConfig = ConfigLoader.readDocument(configModel);
             }
-
-            var context = new SContext(serverConfig);
+            
+            var context = new SContext(services, serverConfig);
             // register server context
             services.AddSingleton(context);
-            
+
             // set up database
-            services.AddDbContext<AppDbContext>();
+            services.AddDbContext<AppDbContext>(options => {
+                options.UseSqlite(context.config.server.database);
+                if (context.config.logging.databaseLogging) {
+                    options.EnableDetailedErrors();
+                    options.EnableSensitiveDataLogging();
+                }
+            });
             
+            // server context start signal
+            context.build();
         }
 
         public void Configure(IApplicationBuilder app) {

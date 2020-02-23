@@ -1,13 +1,11 @@
 using System;
-using System.Collections;
 using System.Linq;
-using System.Security;
+using System.Collections;
 using Gatekeeper.Config;
 using Gatekeeper.Models;
 using Gatekeeper.Models.Identity;
 using Gatekeeper.Models.Requests;
 using Gatekeeper.Services.Auth;
-using Gatekeeper.Services.Database;
 using Hexagon.Utilities;
 
 namespace Gatekeeper.Services.Users {
@@ -36,7 +34,7 @@ namespace Gatekeeper.Services.Users {
                 user.verification = DevelopmentConstants.DEFAULT_VERIFICATION;
             }
 
-            using (var db = new AppDbContextFactory().create()) {
+            using (var db = serverContext.dbContext) {
                 db.users.Add(user); // add user
                 db.SaveChanges();
             }
@@ -49,7 +47,7 @@ namespace Gatekeeper.Services.Users {
             var tokenSource = new AccessTokenSource(serverContext);
             var token = tokenSource.issueRoot(user);
 
-            using (var db = new AppDbContextFactory().create()) {
+            using (var db = serverContext.dbContext) {
                 db.tokens.Add(token); // add token
                 db.SaveChanges();
             }
@@ -68,13 +66,13 @@ namespace Gatekeeper.Services.Users {
         }
 
         public User? findByUsername(string username) {
-            using (var db = new AppDbContextFactory().create()) {
+            using (var db = serverContext.dbContext) {
                 return db.users.FirstOrDefault(x => x.username == username);
             }
         }
 
         private User loadPassword(User forUser) {
-            using (var db = new AppDbContextFactory().create()) {
+            using (var db = serverContext.dbContext) {
                 var user = db.users.First(x => x.id == forUser.id);
                 db.Entry(user).Reference(x => x.password).Load();
                 return user;

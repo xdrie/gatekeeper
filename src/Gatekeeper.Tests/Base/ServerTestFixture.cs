@@ -5,11 +5,9 @@ using System.Linq;
 using System.Net.Http;
 using Gatekeeper.Config;
 using Gatekeeper.Models;
-using Gatekeeper.Services.Database;
 using Hexagon.Services.Application;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -19,12 +17,15 @@ using Microsoft.Extensions.Logging;
 namespace Gatekeeper.Tests.Base {
     public class ServerTestFixture : IDisposable {
         public CustomWebApplicationFactory<Startup> factory { get; }
+        public SContext serverContext => factory.serverContext;
 
         public class CustomWebApplicationFactory<TStartup>
             : WebApplicationFactory<TStartup> where TStartup : class {
+            public SContext serverContext;
+
             protected override void ConfigureWebHost(IWebHostBuilder builder) {
                 builder.ConfigureServices(services => {
-                    // Remove the app's ApplicationDbContext registration.
+                    // remove the existing database registration
                     var descriptor = services.SingleOrDefault(
                         d => d.ServiceType ==
                              typeof(DbContextOptions<AppDbContext>));
@@ -40,6 +41,10 @@ namespace Gatekeeper.Tests.Base {
 
                     // Build the service provider.
                     var sp = services.BuildServiceProvider();
+                    serverContext = sp.GetService<SContext>();
+                    
+                    // set server context options
+                    serverContext.log.verbosity = SLogger.LogLevel.Trace;
 
                     // Create a scope to obtain a reference to the database
                     // context (ApplicationDbContext).
