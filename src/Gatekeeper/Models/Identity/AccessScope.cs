@@ -1,6 +1,6 @@
 using System.IO;
 
-namespace Gatekeeper.Services.Auth {
+namespace Gatekeeper.Models.Identity {
     public struct AccessScope {
         public const string ROOT_PATH = "/";
 

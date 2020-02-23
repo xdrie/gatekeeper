@@ -3,6 +3,7 @@
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Gatekeeper.Models.Identity;
 using Gatekeeper.Models.Requests;
 using Gatekeeper.Models.Responses;
 using Gatekeeper.Tests.Base;
@@ -32,6 +33,7 @@ namespace Gatekeeper.Tests.Modules.Auth {
             var data = JsonConvert.DeserializeObject<AuthedUserResponse>(await resp.Content.ReadAsStringAsync());
             Assert.Equal(username, data.user.username);
             Assert.NotNull(data.token.content);
+            Assert.Equal(data.token.scope, AccessScope.ROOT_PATH);
         }
 
         [Fact]
