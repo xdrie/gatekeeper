@@ -1,7 +1,9 @@
+using System.Collections.Generic;
 using System.IO;
 using Carter;
 using Gatekeeper.Config;
 using Gatekeeper.Models;
+using Gatekeeper.OpenApi;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,6 +20,14 @@ namespace Gatekeeper {
             services.AddCarter(options => {
                 options.OpenApi.DocumentTitle = "ALTiCU Unified Authentication Service";
                 options.OpenApi.ServerUrls = new[] {"http://localhost:5000"};
+                options.OpenApi.Securities = new Dictionary<string, OpenApiSecurity> {
+                    {
+                        GateApiConstants.Security.USER_BEARER_AUTH,
+                        new OpenApiSecurity {Type = OpenApiSecurityType.http, Scheme = "bearer"}
+                    },
+                    // { "ApiKey", new OpenApiSecurity { Type = OpenApiSecurityType.apiKey, Name = "X-API-KEY", In = OpenApiIn.header } }
+                };
+                options.OpenApi.GlobalSecurityDefinitions = new[] {GateApiConstants.Security.USER_BEARER_AUTH};
             });
 
             // load configuration
@@ -52,12 +62,12 @@ namespace Gatekeeper {
             using (var serviceScope = app.ApplicationServices
                 .GetRequiredService<IServiceScopeFactory>()
                 .CreateScope()) {
-                
                 var serverContext = app.ApplicationServices.GetService<SContext>();
                 using (var dbContext = serviceScope.ServiceProvider.GetService<AppDbContext>()) {
                     if (!dbContext.Database.IsInMemory()) {
                         dbContext.Database.Migrate();
                     }
+
                     // context.Database.EnsureCreated();
                 }
             }

@@ -1,5 +1,5 @@
 namespace Gatekeeper.OpenApi {
-    public static class OpenApiConstants {
+    public static class GateApiConstants {
         public static class Tags {
             public const string USER_MANAGEMENT = "User Management";
             public const string SERVER_META = "Meta";
@@ -7,7 +7,7 @@ namespace Gatekeeper.OpenApi {
         }
 
         public static class Security {
-            public const string USER_TOKEN = "User Token";
+            public const string USER_BEARER_AUTH = "BearerAuth";
         }
     }
 }

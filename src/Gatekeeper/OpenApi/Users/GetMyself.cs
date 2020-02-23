@@ -5,8 +5,8 @@ using Gatekeeper.Models.Identity;
 namespace Gatekeeper.OpenApi.Users {
     public class GetMyself : RouteMetaData {
         public override string Description => "Get current user metadata";
-        public override string Tag => OpenApiConstants.Tags.USER_DIRECTORY;
-        public override string SecuritySchema => OpenApiConstants.Security.USER_TOKEN;
+        public override string Tag => GateApiConstants.Tags.USER_DIRECTORY;
+        public override string SecuritySchema => GateApiConstants.Security.USER_BEARER_AUTH;
 
         public override RouteMetaDataResponse[] Responses { get; } = {
             new RouteMetaDataResponse {
