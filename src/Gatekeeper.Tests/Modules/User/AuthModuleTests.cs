@@ -1,5 +1,6 @@
 #region
 
+using System;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -36,7 +37,7 @@ namespace Gatekeeper.Tests.Modules.User {
                 email = TEST_EMAIL,
                 password = TEST_PASSWORD,
                 pronouns = Models.Identity.User.Pronouns.TheyThem.ToString(),
-                isRobot = UserRegistrationValidator.NOT_ROBOT_PROMISE
+                isRobot = UserCreateRequest.Validator.NOT_ROBOT_PROMISE
             });
         }
 
@@ -50,51 +51,33 @@ namespace Gatekeeper.Tests.Modules.User {
             Assert.NotNull(data.token.content);
         }
 
-        // [Fact]
-        // public async Task canLoginAccount() {
-        //     var username = TEST_USERNAME + "_login";
-        //     var regResponse = await registerAccount(client, username);
-        //     regResponse.EnsureSuccessStatusCode();
-        //     // now attempt to log in
-        //     var resp = await client.PostAsJsonAsync("/a/auth/login", new {
-        //         username,
-        //         password = TEST_PASSWORD
-        //     });
-        //     var data = JObject.Parse(await resp.Content.ReadAsStringAsync());
-        //     Assert.Equal(username, data["username"]);
-        //     Assert.NotNull(data["token"]);
-        //     Assert.NotNull(data["userid"]);
-        // }
-        //
-        // [Fact]
-        // public async Task canReauthAccount() {
-        //     var username = TEST_USERNAME + "_reauth";
-        //     var regResponse = await registerAccount(client, username);
-        //     regResponse.EnsureSuccessStatusCode();
-        //     var regData = JObject.Parse(await regResponse.Content.ReadAsStringAsync());
-        //     var token = regData["token"];
-        //     // attempt to reauth using token
-        //     var resp = await client.PostAsJsonAsync("/a/auth/reauth", new {
-        //         username,
-        //         token
-        //     });
-        //     var data = JObject.Parse(await resp.Content.ReadAsStringAsync());
-        //     Assert.Equal(username, data["username"]);
-        //     Assert.Equal(token, data["token"]);
-        //     Assert.NotNull(data["userid"]);
-        // }
-        //
-        // [Fact]
-        // public async Task canDeleteAccount() {
-        //     var username = TEST_USERNAME + "_delete";
-        //     var regResponse = await registerAccount(client, username);
-        //     regResponse.EnsureSuccessStatusCode();
-        //     var regData = JObject.Parse(await regResponse.Content.ReadAsStringAsync());
-        //     var resp = await client.PostAsJsonAsync("/a/auth/delete", new {
-        //         username,
-        //         password = TEST_PASSWORD
-        //     });
-        //     resp.EnsureSuccessStatusCode();
-        // }
+        [Fact]
+        public async Task canLoginAccount() {
+            var username = TEST_USERNAME + "_login";
+            var regResponse = await registerAccount(client, username);
+            regResponse.EnsureSuccessStatusCode();
+            // now attempt to log in
+            var resp = await client.PostAsJsonAsync("/a/user/login", new UserLoginRequest {
+                username = username,
+                password = TEST_PASSWORD
+            });
+            var data = JsonConvert.DeserializeObject<AuthedUserResponse>(await resp.Content.ReadAsStringAsync());
+            Assert.Equal(username, data.user.username);
+            Assert.NotNull(data.token.content);
+            Assert.True(data.token.expires > DateTime.Now);
+        }
+
+        [Fact]
+        public async Task canDeleteAccount() {
+            var username = TEST_USERNAME + "_delete";
+            var regResponse = await registerAccount(client, username);
+            regResponse.EnsureSuccessStatusCode();
+            var regData = JObject.Parse(await regResponse.Content.ReadAsStringAsync());
+            var resp = await client.PostAsJsonAsync("/a/auth/delete", new {
+                username,
+                password = TEST_PASSWORD
+            });
+            resp.EnsureSuccessStatusCode();
+        }
     }
 }
