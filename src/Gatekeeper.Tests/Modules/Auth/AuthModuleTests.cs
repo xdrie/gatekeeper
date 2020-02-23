@@ -30,7 +30,7 @@ namespace Gatekeeper.Tests.Modules.User {
         public const string TEST_PASSWORD = "1234567890";
 
         public static Task<HttpResponseMessage> registerAccount(HttpClient client, string username) {
-            return client.PostAsJsonAsync("/a/user/create", new UserCreateRequest {
+            return client.PostAsJsonAsync("/a/auth/create", new UserCreateRequest {
                 username = username,
                 name = TEST_NAME,
                 email = TEST_EMAIL,
@@ -56,7 +56,7 @@ namespace Gatekeeper.Tests.Modules.User {
             var regResponse = await registerAccount(client, username);
             regResponse.EnsureSuccessStatusCode();
             // now attempt to log in
-            var resp = await client.PostAsJsonAsync("/a/user/login", new UserLoginRequest {
+            var resp = await client.PostAsJsonAsync("/a/auth/login", new UserLoginRequest {
                 username = username,
                 password = TEST_PASSWORD
             });
@@ -72,7 +72,7 @@ namespace Gatekeeper.Tests.Modules.User {
             var regResponse = await registerAccount(client, username);
             regResponse.EnsureSuccessStatusCode();
             var regData = JObject.Parse(await regResponse.Content.ReadAsStringAsync());
-            var resp = await client.PostAsJsonAsync("/a/user/delete", new UserLoginRequest {
+            var resp = await client.PostAsJsonAsync("/a/auth/delete", new UserLoginRequest {
                 username = username,
                 password = TEST_PASSWORD
             });
