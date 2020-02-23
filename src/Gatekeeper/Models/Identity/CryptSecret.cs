@@ -7,7 +7,6 @@ using Newtonsoft.Json;
 #endregion
 
 namespace Gatekeeper.Models.Identity {
-    [Owned]
     public class CryptSecret : DatabaseObject {
         public byte[] salt { get; set; }
 

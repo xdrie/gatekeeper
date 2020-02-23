@@ -16,6 +16,34 @@ namespace Gatekeeper.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.1.2");
 
+            modelBuilder.Entity("Gatekeeper.Models.Identity.CryptSecret", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<byte[]>("hash")
+                        .IsRequired()
+                        .HasColumnType("BLOB");
+
+                    b.Property<int>("iterations")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("length")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<byte[]>("salt")
+                        .IsRequired()
+                        .HasColumnType("BLOB");
+
+                    b.Property<int>("saltLength")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("id");
+
+                    b.ToTable("CryptSecret");
+                });
+
             modelBuilder.Entity("Gatekeeper.Models.Identity.Token", b =>
                 {
                     b.Property<int>("id")
@@ -60,6 +88,9 @@ namespace Gatekeeper.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("passwordid")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("pronouns")
                         .HasColumnType("INTEGER");
 
@@ -82,6 +113,8 @@ namespace Gatekeeper.Migrations
 
                     b.HasKey("id");
 
+                    b.HasIndex("passwordid");
+
                     b.ToTable("users");
                 });
 
@@ -96,42 +129,11 @@ namespace Gatekeeper.Migrations
 
             modelBuilder.Entity("Gatekeeper.Models.Identity.User", b =>
                 {
-                    b.OwnsOne("Gatekeeper.Models.Identity.CryptSecret", "password", b1 =>
-                        {
-                            b1.Property<int>("id")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("INTEGER");
-
-                            b1.Property<int>("Userid")
-                                .HasColumnType("INTEGER");
-
-                            b1.Property<byte[]>("hash")
-                                .IsRequired()
-                                .HasColumnType("BLOB");
-
-                            b1.Property<int>("iterations")
-                                .HasColumnType("INTEGER");
-
-                            b1.Property<int>("length")
-                                .HasColumnType("INTEGER");
-
-                            b1.Property<byte[]>("salt")
-                                .IsRequired()
-                                .HasColumnType("BLOB");
-
-                            b1.Property<int>("saltLength")
-                                .HasColumnType("INTEGER");
-
-                            b1.HasKey("id");
-
-                            b1.HasIndex("Userid")
-                                .IsUnique();
-
-                            b1.ToTable("users1");
-
-                            b1.WithOwner()
-                                .HasForeignKey("Userid");
-                        });
+                    b.HasOne("Gatekeeper.Models.Identity.CryptSecret", "password")
+                        .WithMany()
+                        .HasForeignKey("passwordid")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
