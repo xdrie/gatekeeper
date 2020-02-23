@@ -24,7 +24,6 @@ namespace Gatekeeper.Config {
             var cfg = new SConfig();
 
             var server = (TomlTable) tb[rename(nameof(cfg.server))];
-            cfg.server.maxUsers = (long) server[rename(nameof(cfg.server.maxUsers))];
 
             var logging = (TomlTable) tb[rename(nameof(cfg.logging))];
             cfg.logging.logLevel = (SLogger.LogLevel) logging[rename(nameof(cfg.logging.logLevel))];
