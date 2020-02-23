@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gatekeeper.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20200223004120_InitialCreate")]
+    [Migration("20200223043902_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -29,6 +29,10 @@ namespace Gatekeeper.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("expires")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("scope")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("userid")
@@ -51,6 +55,9 @@ namespace Gatekeeper.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<bool>("emailPublic")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("name")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -65,7 +72,6 @@ namespace Gatekeeper.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<byte[]>("totp")
-                        .IsRequired()
                         .HasColumnType("BLOB");
 
                     b.Property<string>("username")
@@ -101,6 +107,10 @@ namespace Gatekeeper.Migrations
                             b1.Property<int>("Userid")
                                 .HasColumnType("INTEGER");
 
+                            b1.Property<byte[]>("hash")
+                                .IsRequired()
+                                .HasColumnType("BLOB");
+
                             b1.Property<int>("iterations")
                                 .HasColumnType("INTEGER");
 
@@ -113,10 +123,6 @@ namespace Gatekeeper.Migrations
 
                             b1.Property<int>("saltLength")
                                 .HasColumnType("INTEGER");
-
-                            b1.Property<byte[]>("secret")
-                                .IsRequired()
-                                .HasColumnType("BLOB");
 
                             b1.HasKey("id");
 
