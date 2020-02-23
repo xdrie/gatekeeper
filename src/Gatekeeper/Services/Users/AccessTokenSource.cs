@@ -17,7 +17,7 @@ namespace Gatekeeper.Services.Users {
             return new Token {
                 content = StringUtils.secureRandomString(TOKEN_LENGTH),
                 expires = DateTime.Now.Add(lifetime),
-                scope = new AccessScope().pack() // root
+                scope = new AccessScope(AccessScope.ROOT_PATH).path
             };
         }
 
