@@ -7,5 +7,8 @@ namespace Gatekeeper.Models {
         public DbSet<Token> tokens { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
+
+        protected override void OnModelCreating(ModelBuilder builder) {
+        }
     }
 }

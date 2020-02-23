@@ -1,14 +1,13 @@
 using System;
-using System.Collections;
 using System.Linq;
-using System.Security;
+using System.Collections;
 using Gatekeeper.Config;
 using Gatekeeper.Models;
 using Gatekeeper.Models.Identity;
 using Gatekeeper.Models.Requests;
 using Gatekeeper.Services.Auth;
-using Gatekeeper.Services.Database;
 using Hexagon.Utilities;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Gatekeeper.Services.Users {
     public class UserManagerService : DependencyObject {
@@ -27,7 +26,7 @@ namespace Gatekeeper.Services.Users {
                 username = request.username,
                 email = request.email,
                 password = cryptPassword,
-                pronouns = request.pronouns,
+                pronouns = (User.Pronouns) Enum.Parse(typeof(User.Pronouns), request.pronouns),
                 verification = StringUtils.secureRandomString(8),
                 registered = DateTime.Now
             };
@@ -36,7 +35,7 @@ namespace Gatekeeper.Services.Users {
                 user.verification = DevelopmentConstants.DEFAULT_VERIFICATION;
             }
 
-            using (var db = new AppDbContextFactory().create()) {
+            using (var db = serverContext.getDbContext()) {
                 db.users.Add(user); // add user
                 db.SaveChanges();
             }
@@ -44,17 +43,30 @@ namespace Gatekeeper.Services.Users {
             return user;
         }
 
-        public Token issueRootToken(User user) {
+        public Token issueRootToken(int userId) {
             // create an access token
             var tokenSource = new AccessTokenSource(serverContext);
-            var token = tokenSource.issueRoot(user);
+            var token = tokenSource.issueRoot();
 
-            using (var db = new AppDbContextFactory().create()) {
+            using (var db = serverContext.getDbContext()) {
+                token.user = db.users.Find(userId);
                 db.tokens.Add(token); // add token
                 db.SaveChanges();
             }
 
             return token;
+        }
+        
+        public void deleteUser(int userId) {
+            using (var db = serverContext.getDbContext()) {
+                // delete all associated tokens
+                var userTokens = db.tokens.Where(x => x.user.dbid == userId);
+                db.tokens.RemoveRange(userTokens);
+                // delete user
+                var user = db.users.Find(userId);
+                db.users.Remove(user);
+                db.SaveChanges();
+            }
         }
 
         public bool checkPassword(string password, User user) {
@@ -68,14 +80,14 @@ namespace Gatekeeper.Services.Users {
         }
 
         public User? findByUsername(string username) {
-            using (var db = new AppDbContextFactory().create()) {
+            using (var db = serverContext.getDbContext()) {
                 return db.users.FirstOrDefault(x => x.username == username);
             }
         }
 
         private User loadPassword(User forUser) {
-            using (var db = new AppDbContextFactory().create()) {
-                var user = db.users.First(x => x.id == forUser.id);
+            using (var db = serverContext.getDbContext()) {
+                var user = db.users.First(x => x.dbid == forUser.dbid);
                 db.Entry(user).Reference(x => x.password).Load();
                 return user;
             }

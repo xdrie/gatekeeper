@@ -5,6 +5,8 @@ namespace Gatekeeper.Models.Identity {
     public class AuthenticatedUser : PublicUser {
         public User.Role role { get; set; }
 
+        public AuthenticatedUser() { }
+
         public AuthenticatedUser(User user) : base(user) {
             // email is always visible to authenticator
             email = user.email;

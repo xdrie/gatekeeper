@@ -1,15 +1,16 @@
 using System.IO;
+using Carter;
 using Gatekeeper.Config;
+using Gatekeeper.Models;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Tomlyn;
 
 namespace Gatekeeper {
-    using Carter;
-    using Microsoft.AspNetCore.Builder;
-    using Microsoft.Extensions.DependencyInjection;
-
     public class Startup {
         private const string CONFIG_FILE = "config.toml";
-        
+
         public void ConfigureServices(IServiceCollection services) {
             // Adds services required for using options.
             services.AddOptions();
@@ -28,12 +29,39 @@ namespace Gatekeeper {
                 serverConfig = ConfigLoader.readDocument(configModel);
             }
 
-            var context = new SContext(serverConfig);
+            var context = new SContext(services, serverConfig);
             // register server context
             services.AddSingleton(context);
+
+            // set up database
+            services.AddDbContext<AppDbContext>(options => {
+                options.UseSqlite(context.config.server.database);
+                // options.UseInMemoryDatabase("InMemoryDb");
+                if (context.config.logging.databaseLogging) {
+                    options.EnableDetailedErrors();
+                    options.EnableSensitiveDataLogging();
+                }
+            });
+
+            // server context start signal
+            // context.build();
         }
 
         public void Configure(IApplicationBuilder app) {
+            // update the database
+            using (var serviceScope = app.ApplicationServices
+                .GetRequiredService<IServiceScopeFactory>()
+                .CreateScope()) {
+                
+                var serverContext = app.ApplicationServices.GetService<SContext>();
+                using (var dbContext = serviceScope.ServiceProvider.GetService<AppDbContext>()) {
+                    if (!dbContext.Database.IsInMemory()) {
+                        dbContext.Database.Migrate();
+                    }
+                    // context.Database.EnsureCreated();
+                }
+            }
+
             app.UseRouting();
 
             app.UseEndpoints(builder => builder.MapCarter());

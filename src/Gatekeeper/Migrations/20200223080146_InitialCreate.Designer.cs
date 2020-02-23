@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gatekeeper.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20200223043902_InitialCreate")]
+    [Migration("20200223080146_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -18,9 +18,37 @@ namespace Gatekeeper.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.1.2");
 
+            modelBuilder.Entity("Gatekeeper.Models.Identity.CryptSecret", b =>
+                {
+                    b.Property<int>("dbid")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<byte[]>("hash")
+                        .IsRequired()
+                        .HasColumnType("BLOB");
+
+                    b.Property<int>("iterations")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("length")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<byte[]>("salt")
+                        .IsRequired()
+                        .HasColumnType("BLOB");
+
+                    b.Property<int>("saltLength")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("dbid");
+
+                    b.ToTable("CryptSecret");
+                });
+
             modelBuilder.Entity("Gatekeeper.Models.Identity.Token", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("dbid")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
@@ -35,19 +63,19 @@ namespace Gatekeeper.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("userid")
+                    b.Property<int>("userdbid")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("id");
+                    b.HasKey("dbid");
 
-                    b.HasIndex("userid");
+                    b.HasIndex("userdbid");
 
                     b.ToTable("tokens");
                 });
 
             modelBuilder.Entity("Gatekeeper.Models.Identity.User", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("dbid")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
@@ -55,12 +83,15 @@ namespace Gatekeeper.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<bool>("emailPublic")
+                    b.Property<bool>("emailVisible")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("name")
                         .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.Property<int>("passworddbid")
+                        .HasColumnType("INTEGER");
 
                     b.Property<int>("pronouns")
                         .HasColumnType("INTEGER");
@@ -82,7 +113,9 @@ namespace Gatekeeper.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.HasKey("id");
+                    b.HasKey("dbid");
+
+                    b.HasIndex("passworddbid");
 
                     b.ToTable("users");
                 });
@@ -91,49 +124,18 @@ namespace Gatekeeper.Migrations
                 {
                     b.HasOne("Gatekeeper.Models.Identity.User", "user")
                         .WithMany()
-                        .HasForeignKey("userid")
+                        .HasForeignKey("userdbid")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
             modelBuilder.Entity("Gatekeeper.Models.Identity.User", b =>
                 {
-                    b.OwnsOne("Gatekeeper.Models.Identity.CryptSecret", "password", b1 =>
-                        {
-                            b1.Property<int>("id")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("INTEGER");
-
-                            b1.Property<int>("Userid")
-                                .HasColumnType("INTEGER");
-
-                            b1.Property<byte[]>("hash")
-                                .IsRequired()
-                                .HasColumnType("BLOB");
-
-                            b1.Property<int>("iterations")
-                                .HasColumnType("INTEGER");
-
-                            b1.Property<int>("length")
-                                .HasColumnType("INTEGER");
-
-                            b1.Property<byte[]>("salt")
-                                .IsRequired()
-                                .HasColumnType("BLOB");
-
-                            b1.Property<int>("saltLength")
-                                .HasColumnType("INTEGER");
-
-                            b1.HasKey("id");
-
-                            b1.HasIndex("Userid")
-                                .IsUnique();
-
-                            b1.ToTable("users1");
-
-                            b1.WithOwner()
-                                .HasForeignKey("Userid");
-                        });
+                    b.HasOne("Gatekeeper.Models.Identity.CryptSecret", "password")
+                        .WithMany()
+                        .HasForeignKey("passworddbid")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

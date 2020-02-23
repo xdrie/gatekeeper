@@ -8,15 +8,33 @@ namespace Gatekeeper.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "CryptSecret",
+                columns: table => new
+                {
+                    dbid = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    salt = table.Column<byte[]>(nullable: false),
+                    hash = table.Column<byte[]>(nullable: false),
+                    iterations = table.Column<int>(nullable: false),
+                    length = table.Column<int>(nullable: false),
+                    saltLength = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CryptSecret", x => x.dbid);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "users",
                 columns: table => new
                 {
-                    id = table.Column<int>(nullable: false)
+                    dbid = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     name = table.Column<string>(nullable: false),
                     username = table.Column<string>(nullable: false),
                     email = table.Column<string>(nullable: false),
-                    emailPublic = table.Column<bool>(nullable: false),
+                    emailVisible = table.Column<bool>(nullable: false),
+                    passworddbid = table.Column<int>(nullable: false),
                     totp = table.Column<byte[]>(nullable: true),
                     pronouns = table.Column<int>(nullable: false),
                     role = table.Column<int>(nullable: false),
@@ -25,65 +43,46 @@ namespace Gatekeeper.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_users", x => x.id);
+                    table.PrimaryKey("PK_users", x => x.dbid);
+                    table.ForeignKey(
+                        name: "FK_users_CryptSecret_passworddbid",
+                        column: x => x.passworddbid,
+                        principalTable: "CryptSecret",
+                        principalColumn: "dbid",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "tokens",
                 columns: table => new
                 {
-                    id = table.Column<int>(nullable: false)
+                    dbid = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
+                    userdbid = table.Column<int>(nullable: false),
                     content = table.Column<string>(nullable: false),
-                    userid = table.Column<int>(nullable: false),
                     expires = table.Column<DateTime>(nullable: false),
                     scope = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_tokens", x => x.id);
+                    table.PrimaryKey("PK_tokens", x => x.dbid);
                     table.ForeignKey(
-                        name: "FK_tokens_users_userid",
-                        column: x => x.userid,
+                        name: "FK_tokens_users_userdbid",
+                        column: x => x.userdbid,
                         principalTable: "users",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "users1",
-                columns: table => new
-                {
-                    id = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    salt = table.Column<byte[]>(nullable: false),
-                    hash = table.Column<byte[]>(nullable: false),
-                    iterations = table.Column<int>(nullable: false),
-                    length = table.Column<int>(nullable: false),
-                    saltLength = table.Column<int>(nullable: false),
-                    Userid = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_users1", x => x.id);
-                    table.ForeignKey(
-                        name: "FK_users1_users_Userid",
-                        column: x => x.Userid,
-                        principalTable: "users",
-                        principalColumn: "id",
+                        principalColumn: "dbid",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_tokens_userid",
+                name: "IX_tokens_userdbid",
                 table: "tokens",
-                column: "userid");
+                column: "userdbid");
 
             migrationBuilder.CreateIndex(
-                name: "IX_users1_Userid",
-                table: "users1",
-                column: "Userid",
-                unique: true);
+                name: "IX_users_passworddbid",
+                table: "users",
+                column: "passworddbid");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -92,10 +91,10 @@ namespace Gatekeeper.Migrations
                 name: "tokens");
 
             migrationBuilder.DropTable(
-                name: "users1");
+                name: "users");
 
             migrationBuilder.DropTable(
-                name: "users");
+                name: "CryptSecret");
         }
     }
 }

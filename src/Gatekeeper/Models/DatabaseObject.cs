@@ -7,6 +7,6 @@ using Newtonsoft.Json;
 
 namespace Gatekeeper.Models {
     public class DatabaseObject {
-        [JsonIgnore] [Key] public int id { get; set; }
+        [JsonIgnore] [Key] public int dbid { get; set; }
     }
 }
