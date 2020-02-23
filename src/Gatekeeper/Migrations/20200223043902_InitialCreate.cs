@@ -16,7 +16,8 @@ namespace Gatekeeper.Migrations
                     name = table.Column<string>(nullable: false),
                     username = table.Column<string>(nullable: false),
                     email = table.Column<string>(nullable: false),
-                    totp = table.Column<byte[]>(nullable: false),
+                    emailPublic = table.Column<bool>(nullable: false),
+                    totp = table.Column<byte[]>(nullable: true),
                     pronouns = table.Column<int>(nullable: false),
                     role = table.Column<int>(nullable: false),
                     verification = table.Column<string>(nullable: false),
@@ -35,7 +36,8 @@ namespace Gatekeeper.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     content = table.Column<string>(nullable: false),
                     userid = table.Column<int>(nullable: false),
-                    expires = table.Column<DateTime>(nullable: false)
+                    expires = table.Column<DateTime>(nullable: false),
+                    scope = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -55,7 +57,7 @@ namespace Gatekeeper.Migrations
                     id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     salt = table.Column<byte[]>(nullable: false),
-                    secret = table.Column<byte[]>(nullable: false),
+                    hash = table.Column<byte[]>(nullable: false),
                     iterations = table.Column<int>(nullable: false),
                     length = table.Column<int>(nullable: false),
                     saltLength = table.Column<int>(nullable: false),

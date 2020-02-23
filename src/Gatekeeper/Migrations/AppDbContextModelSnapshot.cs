@@ -29,6 +29,10 @@ namespace Gatekeeper.Migrations
                     b.Property<DateTime>("expires")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("scope")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("userid")
                         .HasColumnType("INTEGER");
 
@@ -49,6 +53,9 @@ namespace Gatekeeper.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<bool>("emailPublic")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("name")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -63,7 +70,6 @@ namespace Gatekeeper.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<byte[]>("totp")
-                        .IsRequired()
                         .HasColumnType("BLOB");
 
                     b.Property<string>("username")
@@ -99,6 +105,10 @@ namespace Gatekeeper.Migrations
                             b1.Property<int>("Userid")
                                 .HasColumnType("INTEGER");
 
+                            b1.Property<byte[]>("hash")
+                                .IsRequired()
+                                .HasColumnType("BLOB");
+
                             b1.Property<int>("iterations")
                                 .HasColumnType("INTEGER");
 
@@ -111,10 +121,6 @@ namespace Gatekeeper.Migrations
 
                             b1.Property<int>("saltLength")
                                 .HasColumnType("INTEGER");
-
-                            b1.Property<byte[]>("secret")
-                                .IsRequired()
-                                .HasColumnType("BLOB");
 
                             b1.HasKey("id");
 
