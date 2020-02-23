@@ -28,7 +28,7 @@ namespace Gatekeeper.OpenApi.Auth {
 
         public override RouteMetaDataRequest[] Requests { get; } = {
             new RouteMetaDataRequest {
-                Description = $"A {nameof(UserLoginRequest)} for a new user",
+                Description = $"A {nameof(UserLoginRequest)} containing credentials",
                 Request = typeof(UserLoginRequest)
             }
         };
