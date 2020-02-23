@@ -58,6 +58,13 @@ namespace Gatekeeper.Modules.Auth {
 
                 // validate password
                 if (serverContext.userManager.checkPassword(loginReq.Data.password, user)) {
+                    // check two-factor
+                    if (user.totpEnabled) {
+                        // require login with otp code, but creds were good
+                        res.StatusCode = (int) HttpStatusCode.FailedDependency;
+                        return;
+                    }
+                    
                     // issue a new token
                     var token = serverContext.userManager.issueRootToken(user.dbid);
 
@@ -90,6 +97,13 @@ namespace Gatekeeper.Modules.Auth {
 
                 // validate password
                 if (serverContext.userManager.checkPassword(loginReq.Data.password, user)) {
+                    // check two-factor
+                    if (user.totpEnabled) {
+                        // require login with otp code, but creds were good
+                        res.StatusCode = (int) HttpStatusCode.FailedDependency;
+                        return;
+                    }
+                    
                     // delete the account
                     serverContext.userManager.deleteUser(user.dbid);
 

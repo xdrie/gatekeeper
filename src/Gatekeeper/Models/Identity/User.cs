@@ -8,6 +8,7 @@ namespace Gatekeeper.Models.Identity {
         public bool emailVisible { get; set; } = false;
         public CryptSecret password { get; set; }
         public byte[]? totp { get; set; }
+        public bool totpEnabled { get; set; } = false;
         public Pronouns pronouns { get; set; }
         public Role role { get; set; } = Role.Pending;
         public string verification { get; set; }

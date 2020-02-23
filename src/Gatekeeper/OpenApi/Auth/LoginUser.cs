@@ -20,6 +20,10 @@ namespace Gatekeeper.OpenApi.Auth {
                 Description = $"Provided credentials were not accepted",
             },
             new RouteMetaDataResponse {
+                Code = (int) HttpStatusCode.FailedDependency,
+                Description = $"Two-factor authentication is required",
+            },
+            new RouteMetaDataResponse {
                 Code = (int) HttpStatusCode.OK,
                 Description = $"The corresponding {nameof(AuthedUserResponse)} object",
                 Response = typeof(AuthedUserResponse)
