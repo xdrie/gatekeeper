@@ -11,7 +11,7 @@ namespace Gatekeeper.Models.Identity {
     public class CryptSecret : DatabaseObject {
         public byte[] salt { get; set; }
 
-        public byte[] secret { get; set; }
+        public byte[] hash { get; set; }
 
         public int iterations { get; set; }
 

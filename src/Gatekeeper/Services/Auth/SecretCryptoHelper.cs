@@ -8,14 +8,14 @@ using Gatekeeper.Models.Identity;
 
 namespace Gatekeeper.Services.Auth {
     public class SecretCryptoHelper {
-        private CryptSecret secret { get; }
+        private CryptSecret cryptSecret { get; }
 
-        public SecretCryptoHelper(CryptSecret secret) {
-            this.secret = secret;
+        public SecretCryptoHelper(CryptSecret cryptSecret) {
+            this.cryptSecret = cryptSecret;
         }
 
-        public byte[] generateSalt() {
-            var len = secret.saltLength;
+        private byte[] generateSalt() {
+            var len = cryptSecret.saltLength;
             var bytes = new byte[len];
             using (var rng = RandomNumberGenerator.Create()) {
                 rng.GetBytes(bytes);
@@ -25,16 +25,21 @@ namespace Gatekeeper.Services.Auth {
         }
 
         private byte[] calculateSecretHash(byte[] password, byte[] salt) {
-            var iter = secret.iterations;
-            var len = secret.length;
+            var iter = cryptSecret.iterations;
+            var len = cryptSecret.length;
             using (var deriveBytes = new Rfc2898DeriveBytes(password, salt, iter)) {
                 return deriveBytes.GetBytes(len);
             }
         }
 
-        public byte[] calculateSecretHash(string password, byte[] salt) {
-            var passwordBytes = Encoding.UTF8.GetBytes(password);
-            return calculateSecretHash(passwordBytes, salt);
+        public void storeSecret(string secret) {
+            cryptSecret.salt = generateSalt();
+            cryptSecret.hash = calculateSecretHash(Encoding.UTF8.GetBytes(secret), cryptSecret.salt);
+        }
+
+        public byte[] hashCleartext(string secret) {
+            var hash = calculateSecretHash(Encoding.UTF8.GetBytes(secret), cryptSecret.salt);
+            return hash;
         }
     }
 }
