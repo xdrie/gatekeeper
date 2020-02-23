@@ -16,10 +16,10 @@ using Microsoft.Extensions.Logging;
 
 namespace Gatekeeper.Tests.Base {
     public class ServerTestFixture : IDisposable {
-        public CustomWebApplicationFactory<Startup> factory { get; }
-        // public SContext serverContext => factory.serverContext;
+        public TestWebApplicationFactory<Startup> factory { get; }
+        public SContext serverContext => factory.Server.Services.GetService<SContext>();
 
-        public class CustomWebApplicationFactory<TStartup>
+        public class TestWebApplicationFactory<TStartup>
             : WebApplicationFactory<TStartup> where TStartup : class {
             // public SContext serverContext;
 
@@ -52,7 +52,7 @@ namespace Gatekeeper.Tests.Base {
                         var scopedServices = scope.ServiceProvider;
                         var db = scopedServices.GetRequiredService<AppDbContext>();
                         var logger = scopedServices
-                            .GetRequiredService<ILogger<CustomWebApplicationFactory<TStartup>>>();
+                            .GetRequiredService<ILogger<TestWebApplicationFactory<TStartup>>>();
 
                         // Ensure the database is created.
                         db.Database.EnsureCreated();
@@ -71,7 +71,7 @@ namespace Gatekeeper.Tests.Base {
         }
 
         public ServerTestFixture() {
-            factory = new CustomWebApplicationFactory<Startup>();
+            factory = new TestWebApplicationFactory<Startup>();
         }
 
         public HttpClient getClient() {
