@@ -41,10 +41,6 @@ namespace Gatekeeper.Services.Users {
                 db.SaveChanges();
             }
 
-            // var userMetricsService = new UserMetricsService(serverContext);
-            // var metrics = userMetricsService.create(user);
-            // userMetricsService.log(user.identifier, MetricsEventType.Auth);
-
             return user;
         }
 

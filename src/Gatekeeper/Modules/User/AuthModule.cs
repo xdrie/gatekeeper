@@ -59,8 +59,6 @@ namespace Gatekeeper.Modules.User {
 
                 // validate password
                 if (serverContext.userManager.checkPassword(loginReq.Data.password, user)) {
-                    // var metrics = new UserMetricsService(serverContext);
-                    // metrics.log(user.identifier, MetricsEventType.Auth);
                     // return user details
                     res.StatusCode = (int) HttpStatusCode.OK;
                     await res.respondSerialized(new AuthenticatedUser(user));
