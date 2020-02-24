@@ -62,7 +62,7 @@ namespace Gatekeeper.Tests.Modules.Auth {
             var (client, totpSetup) = await registerAndStartTotpSetup(username);
             await confirmTotpSetup(client, totpSetup.secret);
             // attempt a login, which should fail with FailedDependency (requires OTP)
-            var resp = await client.PostAsJsonAsync("/a/auth/login", new LoginUserRequest {
+            var resp = await client.PostAsJsonAsync("/a/auth/login", new LoginRequest {
                 username = username,
                 password = AccountRegistrar.TEST_PASSWORD
             });
@@ -76,7 +76,7 @@ namespace Gatekeeper.Tests.Modules.Auth {
             await confirmTotpSetup(client, totpSetup.secret);
             var totpProvider = new TotpProvider(Convert.FromBase64String(totpSetup.secret));
             // attempt a 2fa login
-            var resp = await client.PostAsJsonAsync("/a/auth/login2fa", new TwoFactorLoginRequest {
+            var resp = await client.PostAsJsonAsync("/a/auth/login2fa", new LoginRequestTwoFactor {
                 username = username,
                 password = AccountRegistrar.TEST_PASSWORD,
                 otpcode = totpProvider.getCode()

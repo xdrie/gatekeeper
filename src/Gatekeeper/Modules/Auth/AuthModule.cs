@@ -15,7 +15,7 @@ namespace Gatekeeper.Modules.Auth {
     public class AuthModule : ApiModule {
         public AuthModule(SContext context) : base("/auth", context) {
             Post<CreateUser>("/create", async (req, res) => {
-                var createReq = await req.BindAndValidate<CreateUserRequest>();
+                var createReq = await req.BindAndValidate<RegisterRequest>();
                 if (!createReq.ValidationResult.IsValid) {
                     res.StatusCode = (int) HttpStatusCode.UnprocessableEntity;
                     await res.Negotiate(createReq.ValidationResult.GetFormattedErrors());
@@ -44,7 +44,7 @@ namespace Gatekeeper.Modules.Auth {
             });
 
             Post<LoginUser>("/login", async (req, res) => {
-                var loginReq = await req.BindAndValidate<LoginUserRequest>();
+                var loginReq = await req.BindAndValidate<LoginRequest>();
                 if (!loginReq.ValidationResult.IsValid) {
                     res.StatusCode = (int) HttpStatusCode.UnprocessableEntity;
                     await res.Negotiate(loginReq.ValidationResult.GetFormattedErrors());
@@ -83,7 +83,7 @@ namespace Gatekeeper.Modules.Auth {
             });
             
             Post<LoginTwoFactor>("/login2fa", async (req, res) => {
-                var loginReq = await req.BindAndValidate<TwoFactorLoginRequest>();
+                var loginReq = await req.BindAndValidate<LoginRequestTwoFactor>();
                 if (!loginReq.ValidationResult.IsValid) {
                     res.StatusCode = (int) HttpStatusCode.UnprocessableEntity;
                     await res.Negotiate(loginReq.ValidationResult.GetFormattedErrors());
@@ -119,7 +119,7 @@ namespace Gatekeeper.Modules.Auth {
             });
 
             Post<DeleteUser>("/delete", async (req, res) => {
-                var loginReq = await req.BindAndValidate<LoginUserRequest>();
+                var loginReq = await req.BindAndValidate<LoginRequest>();
                 if (!loginReq.ValidationResult.IsValid) {
                     res.StatusCode = (int) HttpStatusCode.UnprocessableEntity;
                     await res.Negotiate(loginReq.ValidationResult.GetFormattedErrors());

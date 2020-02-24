@@ -22,7 +22,7 @@ namespace Gatekeeper.Services.Auth {
 
         public Token issueRoot() => issue("/", ROOT_TOKEN_LIFETIME);
 
-        public TokenCredential? resolve(string tokenStr) {
+        public Credential? resolve(string tokenStr) {
             // 1. match the token string to a Token
             var token = default(Token);
             using (var db = serverContext.getDbContext()) {
@@ -44,7 +44,7 @@ namespace Gatekeeper.Services.Auth {
             }
 
             // 3. parse token scopes/path
-            return new TokenCredential(token, AccessScope.parse(token.scope));
+            return new Credential(token, AccessScope.parse(token.scope));
         }
     }
 }

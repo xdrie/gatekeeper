@@ -12,7 +12,7 @@ namespace Gatekeeper.Services.Users {
     public class UserManagerService : DependencyObject {
         public UserManagerService(SContext context) : base(context) { }
 
-        public User registerUser(CreateUserRequest request) {
+        public User registerUser(RegisterRequest request) {
             if (findByUsername(request.username) != null)
                 throw new UserAlreadyExistsException("a user with the same username already exists");
             // encrypt the password
