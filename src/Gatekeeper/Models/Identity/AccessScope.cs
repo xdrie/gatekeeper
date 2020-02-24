@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 
 namespace Gatekeeper.Models.Identity {
@@ -21,5 +22,11 @@ namespace Gatekeeper.Models.Identity {
         }
 
         public string path => Path.Join(layer, app);
+
+        public bool atLeast(AccessScope requiredScope) {
+            return path.StartsWith(requiredScope.path);
+        }
+        
+        public static AccessScope rootScope => new AccessScope(ROOT_PATH);
     }
 }

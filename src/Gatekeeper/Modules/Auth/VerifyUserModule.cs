@@ -6,7 +6,7 @@ using Gatekeeper.OpenApi.Auth;
 
 namespace Gatekeeper.Modules.Auth {
     public class VerifyUserModule : AuthenticatedUserModule {
-        public VerifyUserModule(SContext serverContext) : base("/auth", serverContext) {
+        public VerifyUserModule(SContext serverContext) : base(AccessScope.rootScope, "/auth", serverContext) {
             Post<VerifyUser>("/verify/{code}", async (req, res) => {
                 // check if given code matches verification, then update role
                 var code = req.RouteValues.As<string>("code");

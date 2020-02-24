@@ -13,7 +13,7 @@ using Hexagon.Utilities;
 
 namespace Gatekeeper.Modules.Auth {
     public class TwoFactorSetupModule : AuthenticatedUserModule {
-        public TwoFactorSetupModule(SContext serverContext) : base("/auth", serverContext) {
+        public TwoFactorSetupModule(SContext serverContext) : base(AccessScope.rootScope, "/auth", serverContext) {
             Get<SetupTwoFactor>("/setup2fa", async (req, res) => {
                 // check if two-factor ALREADY enabled
                 if (currentUser.totpEnabled) {
