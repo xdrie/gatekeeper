@@ -10,6 +10,10 @@ namespace Gatekeeper.Services.Auth {
             totp = new Totp(secret, mode: OtpHashMode.Sha256, totpSize: 6);
         }
 
+        public string getCode() {
+            return totp.ComputeTotp(DateTime.UtcNow);
+        }
+
         public bool verify(string code) {
             return totp.VerifyTotp(DateTime.UtcNow, code, out long timeWindowUsed);
         }
