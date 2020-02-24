@@ -14,7 +14,7 @@ namespace Gatekeeper.Modules.Auth {
     public class AuthModule : ApiModule {
         public AuthModule(SContext context) : base("/auth", context) {
             Post<CreateUser>("/create", async (req, res) => {
-                var createReq = await req.BindAndValidate<UserCreateRequest>();
+                var createReq = await req.BindAndValidate<CreateUserRequest>();
                 if (!createReq.ValidationResult.IsValid) {
                     res.StatusCode = (int) HttpStatusCode.UnprocessableEntity;
                     await res.Negotiate(createReq.ValidationResult.GetFormattedErrors());
@@ -43,7 +43,7 @@ namespace Gatekeeper.Modules.Auth {
             });
 
             Post<LoginUser>("/login", async (req, res) => {
-                var loginReq = await req.BindAndValidate<UserLoginRequest>();
+                var loginReq = await req.BindAndValidate<LoginUserRequest>();
                 if (!loginReq.ValidationResult.IsValid) {
                     res.StatusCode = (int) HttpStatusCode.UnprocessableEntity;
                     await res.Negotiate(loginReq.ValidationResult.GetFormattedErrors());
@@ -75,7 +75,7 @@ namespace Gatekeeper.Modules.Auth {
             });
 
             Post<DeleteUser>("/delete", async (req, res) => {
-                var loginReq = await req.BindAndValidate<UserLoginRequest>();
+                var loginReq = await req.BindAndValidate<LoginUserRequest>();
                 if (!loginReq.ValidationResult.IsValid) {
                     res.StatusCode = (int) HttpStatusCode.UnprocessableEntity;
                     await res.Negotiate(loginReq.ValidationResult.GetFormattedErrors());

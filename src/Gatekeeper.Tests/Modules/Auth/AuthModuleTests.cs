@@ -43,7 +43,7 @@ namespace Gatekeeper.Tests.Modules.Auth {
             var regResponse = await AccountRegistrar.registerAccount(client, username);
             regResponse.EnsureSuccessStatusCode();
             // now attempt to log in
-            var resp = await client.PostAsJsonAsync("/a/auth/login", new UserLoginRequest {
+            var resp = await client.PostAsJsonAsync("/a/auth/login", new LoginUserRequest {
                 username = username,
                 password = AccountRegistrar.TEST_PASSWORD
             });
@@ -60,7 +60,7 @@ namespace Gatekeeper.Tests.Modules.Auth {
             var regResponse = await AccountRegistrar.registerAccount(client, username);
             regResponse.EnsureSuccessStatusCode();
             var regData = JObject.Parse(await regResponse.Content.ReadAsStringAsync());
-            var resp = await client.PostAsJsonAsync("/a/auth/delete", new UserLoginRequest {
+            var resp = await client.PostAsJsonAsync("/a/auth/delete", new LoginUserRequest {
                 username = username,
                 password = AccountRegistrar.TEST_PASSWORD
             });
