@@ -77,7 +77,7 @@ namespace Gatekeeper {
 
                 // log some server information
                 serverContext.log.writeLine(
-                    $"running {nameof(Gatekeeper)} v{SConfig.VERSION} instance '{SConfig.SERVER_NAME}'",
+                    $"running {nameof(Gatekeeper)} {SConfig.VERSION} instance '{SConfig.SERVER_NAME}'",
                     SLogger.LogLevel.Information);
 
                 // print host information
