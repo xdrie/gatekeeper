@@ -22,7 +22,7 @@ namespace Gatekeeper.Tests.Modules.Auth {
         [Fact]
         public async Task canGetTwoFactorSetupSecret() {
             var client = fx.getClient();
-            var username = AccountRegistrar.TEST_USERNAME + "_reg";
+            var username = AccountRegistrar.TEST_USERNAME + "_setup2fa";
             var authedUser = await AccountRegistrar.registerAccount(client, username);
             client.addUserToken(authedUser);
 
@@ -35,7 +35,7 @@ namespace Gatekeeper.Tests.Modules.Auth {
         [Fact]
         public async Task canConfirmTwoFactor() {
             var client = fx.getClient();
-            var username = AccountRegistrar.TEST_USERNAME + "_reg";
+            var username = AccountRegistrar.TEST_USERNAME + "_conf2fa";
             var authedUser = await AccountRegistrar.registerAccount(client, username);
             client.addUserToken(authedUser);
             
