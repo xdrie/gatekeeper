@@ -30,7 +30,7 @@ namespace Gatekeeper.Tests.Base {
                              typeof(DbContextOptions<AppDbContext>));
 
                     if (descriptor != null) {
-                        services.Remove(descriptor);
+                        services.Remove(descripz
                     }
 
                     // Add ApplicationDbContext using an in-memory database for testing.

@@ -31,7 +31,7 @@ namespace Gatekeeper.Modules.Provider {
                 }
 
                 if (grantedScope == null) {
-                    res.StatusCode = (int) HttpStatusCode.Unauthorized;
+                    res.StatusCode = (int) HttpStatusCode.Forbidden;
                     return;
                 }
                 
