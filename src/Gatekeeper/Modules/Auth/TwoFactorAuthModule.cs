@@ -47,6 +47,8 @@ namespace Gatekeeper.Modules.Auth {
                     // totp confirmed, enable totp and lock
                     currentUser.totpEnabled = true;
                     serverContext.userManager.updateUser(currentUser);
+                    
+                    // TODO: revoke all other tokens
 
                     res.StatusCode = (int) HttpStatusCode.OK;
                     return;
