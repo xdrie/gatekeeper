@@ -20,13 +20,24 @@ namespace Gatekeeper.Config {
             return sb.ToString();
         }
 
+        public static T getField<T>(this TomlTable table, string field) {
+            return (T) table[rename(field)];
+        }
+
         public static SConfig readDocument(TomlTable tb) {
             var cfg = new SConfig();
 
-            var server = (TomlTable) tb[rename(nameof(cfg.server))];
-            #if DEBUG
-            cfg.server.development = (bool) server[rename(nameof(cfg.server.development))];
-            #endif
+            var server = tb.getField<TomlTable>(nameof(cfg.server));
+#if DEBUG
+            cfg.server.development = server.getField<bool>(nameof(cfg.server.development));
+#endif
+
+            var apps = (TomlTableArray) tb[rename(nameof(cfg.apps))];
+            foreach (var app in apps) {
+                cfg.apps.Add(new SConfig.RemoteApp {
+                    name = (string) app[rename(nameof(SConfig.RemoteApp.name))]
+                });
+            }
 
             var logging = (TomlTable) tb[rename(nameof(cfg.logging))];
             cfg.logging.logLevel = (SLogger.LogLevel) logging[rename(nameof(cfg.logging.logLevel))];

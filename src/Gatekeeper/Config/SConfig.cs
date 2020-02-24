@@ -1,5 +1,7 @@
 #region
 
+using System.Collections.Generic;
+using Gatekeeper.Models.Remote;
 using Hexagon.Services.Application;
 
 #endregion
@@ -28,6 +30,12 @@ namespace Gatekeeper.Config {
         }
 
         public Server server = new Server();
+
+        public class RemoteApp {
+            public virtual string name { get; set; }
+        }
+
+        public List<RemoteApp> apps = new List<RemoteApp>() {new GlobalRemoteApp()};
 
         public class Logging {
             /// <summary>
