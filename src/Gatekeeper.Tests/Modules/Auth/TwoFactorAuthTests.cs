@@ -1,4 +1,5 @@
 using System;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Gatekeeper.Models.Requests;
@@ -30,6 +31,15 @@ namespace Gatekeeper.Tests.Modules.Auth {
             return (client, data);
         }
 
+        public async Task confirmTotpSetup(HttpClient client, string b64Secret) {
+            var totpProvider = new TotpProvider(Convert.FromBase64String(b64Secret));
+
+            var resp = await client.PostAsJsonAsync("/a/auth/confirm2fa", new TwoFactorConfirmRequest {
+                otpcode = totpProvider.getCode()
+            });
+            resp.EnsureSuccessStatusCode();
+        }
+
         [Fact]
         public async Task canGetTwoFactorSetupSecret() {
             var username = AccountRegistrar.TEST_USERNAME + "_setup2fa";
@@ -39,21 +49,24 @@ namespace Gatekeeper.Tests.Modules.Auth {
 
         [Fact]
         public async Task canConfirmTwoFactor() {
-            var username = AccountRegistrar.TEST_USERNAME + "_setup2fa";
+            var username = AccountRegistrar.TEST_USERNAME + "_confirm2fa";
             var (client, totpSetup) = await registerAndStartTotpSetup(username);
-
-            var totpProvider = new TotpProvider(Convert.FromBase64String(totpSetup.secret));
-
-            var resp = await client.PostAsJsonAsync("/a/auth/confirm2fa", new TwoFactorConfirmRequest {
-                otpcode = totpProvider.getCode()
-            });
-            resp.EnsureSuccessStatusCode();
+            await confirmTotpSetup(client, totpSetup.secret);
+            // check the server context
+            Assert.True(fx.serverContext.userManager.findByUsername(username).totpEnabled);
         }
 
         [Fact]
         public async Task requiresOtpCodeWhenTwoFactorEnabled() {
-            // TODO: write this test
-            Assert.False(true);
+            var username = AccountRegistrar.TEST_USERNAME + "_req2fa";
+            var (client, totpSetup) = await registerAndStartTotpSetup(username);
+            await confirmTotpSetup(client, totpSetup.secret);
+            // attempt a login, which should fail with FailedDependency (requires OTP)
+            var resp = await client.PostAsJsonAsync("/a/auth/login", new UserLoginRequest {
+                username = username,
+                password = AccountRegistrar.TEST_PASSWORD
+            });
+            Assert.Equal(HttpStatusCode.FailedDependency, resp.StatusCode);
         }
     }
 }
