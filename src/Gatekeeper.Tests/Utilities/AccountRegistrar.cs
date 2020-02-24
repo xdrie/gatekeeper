@@ -19,7 +19,7 @@ namespace Gatekeeper.Tests.Utilities {
                 name = TEST_NAME,
                 email = TEST_EMAIL,
                 password = TEST_PASSWORD,
-                pronouns = Models.Identity.User.Pronouns.TheyThem.ToString(),
+                pronouns = User.Pronouns.TheyThem.ToString(),
                 isRobot = RegisterRequest.Validator.NOT_ROBOT_PROMISE
             });
             resp.EnsureSuccessStatusCode();
