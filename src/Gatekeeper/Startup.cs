@@ -34,13 +34,19 @@ namespace Gatekeeper {
                 options.OpenApi.GlobalSecurityDefinitions = new[] {GateApiConstants.Security.USER_BEARER_AUTH};
             });
 
-            // load configuration
-            var serverConfig = new SConfig(); // default configuration
-            if (File.Exists(CONFIG_FILE)) {
-                var configTxt = File.ReadAllText(CONFIG_FILE);
-                var configDoc = Toml.Parse(configTxt);
-                var configModel = configDoc.ToModel();
-                serverConfig = ConfigLoader.readDocument(configModel);
+            var serverConfig = default(SConfig);
+            var configDescriptor = services.SingleOrDefault(d => d.ServiceType == typeof(SConfig));
+            if (configDescriptor == null) {
+                // load configuration
+                serverConfig = new SConfig(); // default configuration
+                if (File.Exists(CONFIG_FILE)) {
+                    var configTxt = File.ReadAllText(CONFIG_FILE);
+                    var configDoc = Toml.Parse(configTxt);
+                    var configModel = configDoc.ToModel();
+                    serverConfig = ConfigLoader.readDocument(configModel);
+                }
+            } else {
+                serverConfig = (SConfig) configDescriptor.ImplementationInstance;
             }
 
             var context = new SContext(services, serverConfig);

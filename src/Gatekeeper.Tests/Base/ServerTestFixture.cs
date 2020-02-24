@@ -1,6 +1,7 @@
 #region
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using Gatekeeper.Config;
@@ -30,13 +31,21 @@ namespace Gatekeeper.Tests.Base {
                              typeof(DbContextOptions<AppDbContext>));
 
                     if (descriptor != null) {
-                        services.Remove(descripz
+                        services.Remove(descriptor);
                     }
 
                     // Add ApplicationDbContext using an in-memory database for testing.
                     services.AddDbContext<AppDbContext>(options => {
                         options.UseInMemoryDatabase("InMemoryDbForTesting");
                     });
+                    
+                    // add test config
+                    var testConfig = new SConfig();
+                    testConfig.apps.Add(new SConfig.RemoteApp {
+                        name = "BeanCan",
+                        paths = new List<string> {"Food/BeanCan"}
+                    });
+                    services.AddSingleton<SConfig>(testConfig);
 
                     // Build the service provider.
                     var sp = services.BuildServiceProvider();
