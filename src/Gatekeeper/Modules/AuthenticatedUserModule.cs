@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Gatekeeper.Config;
 using Gatekeeper.Models.Identity;
@@ -23,7 +24,10 @@ namespace Gatekeeper.Modules {
                 credential = serverContext.tokenAuthenticator.resolve(tokenClaim.Value).Value;
 
                 // check if at least minimum scope
-                if (!credential.scope.atLeast(minimumScope)) return false;
+                if (!credential.scope.atLeast(minimumScope)) {
+                    ctx.Response.StatusCode = (int) HttpStatusCode.Unauthorized;
+                    return false;
+                }
 
                 return true;
             };
