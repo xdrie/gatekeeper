@@ -5,6 +5,12 @@ namespace Gatekeeper.Models.Identity {
         public string name { get; set; }
         public string username { get; set; }
         public string email { get; set; }
+
+        /// <summary>
+        /// a unique identifier for the user
+        /// </summary>
+        public string uuid { get; set; }
+
         public bool emailVisible { get; set; } = false;
         public CryptSecret password { get; set; }
         public byte[]? totp { get; set; }
