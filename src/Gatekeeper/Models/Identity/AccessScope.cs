@@ -18,6 +18,7 @@ namespace Gatekeeper.Models.Identity {
         public static AccessScope parse(string path) {
             var dir = Path.GetDirectoryName(path);
             var file = Path.GetFileName(path);
+            if (path == ROOT_PATH) dir = ROOT_PATH; // check if root
             return new AccessScope(dir, file);
         }
 
