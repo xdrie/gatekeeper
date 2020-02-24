@@ -27,11 +27,16 @@ namespace Gatekeeper.Models.Identity {
 
         public override string ToString() => path;
 
-        public bool subsetOf(AccessScope scope) {
-            if (path == WILDCARD_PATH) return true; // all paths are subsets of the wildcard
-            return path.StartsWith(scope.path);
+        /// <summary>
+        /// whether this scope is greater than the given scope. for example, "/Scope" (this) is greater than "/Scope/App" (arg1)
+        /// </summary>
+        /// <param name="scope"></param>
+        /// <returns></returns>
+        public bool greaterThan(AccessScope scope) {
+            if (scope.layer == WILDCARD_PATH) return true; // anything is greater than the wildcard scope
+            return scope.path.StartsWith(path);
         }
-        
+
         public static AccessScope rootScope => new AccessScope(ROOT_PATH);
     }
 }

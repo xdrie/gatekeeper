@@ -18,16 +18,17 @@ namespace Gatekeeper.Modules.Provider {
                     res.StatusCode = (int) HttpStatusCode.NotFound;
                     return;
                 }
+
                 // load user permissions
                 var user = serverContext.userManager.loadPermissions(currentUser);
                 // check if any permission grants app access
                 var maybeGrantedScope = default(AccessScope?);
                 foreach (var permission in user.permissions) {
-                    var permissionScope = AccessScope.parse(permission.path);
-                    foreach (var appPath in appDef.scopes) {
-                        var appScope = AccessScope.parse(appPath);
-                        if (appScope.subsetOf(permissionScope)) { // if permission grants app
-                            maybeGrantedScope = permissionScope;
+                    var permissionScope = AccessScope.parse(permission.path); // permission: "/Layer" or "/Layer/App"
+                    foreach (var appDefLayer in appDef.layers) {
+                        var appScope = new AccessScope(appDefLayer, appDef.name); // scope: "/Layer/App"
+                        if (permissionScope.greaterThan(appScope)) {
+                            maybeGrantedScope = appScope; // the granted scope is the one we authorize
                         }
                     }
                 }
@@ -38,7 +39,7 @@ namespace Gatekeeper.Modules.Provider {
                 }
 
                 var grantedScope = maybeGrantedScope.Value;
-                
+
                 // issue a new token
                 // TODO: configurable timespan
                 var token = serverContext.tokenAuthenticator.issue(grantedScope, TimeSpan.FromDays(7));

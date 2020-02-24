@@ -43,11 +43,11 @@ namespace Gatekeeper.Tests.Base {
                     var testConfig = new SConfig();
                     testConfig.apps.Add(new SConfig.RemoteApp {
                         name = "BeanCan",
-                        scopes = new List<string> {"/ExpensiveFood/BeanCan"}
+                        layers = new List<string> {"/ExpensiveFood"}
                     });
                     testConfig.apps.Add(new SConfig.RemoteApp {
                         name = "SaltShaker",
-                        scopes = new List<string> {"/CheapFood/SaltShaker"}
+                        layers = new List<string> {"/CheapFood"}
                     });
                     services.AddSingleton<SConfig>(testConfig);
 

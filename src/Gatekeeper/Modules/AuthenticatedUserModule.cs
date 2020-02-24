@@ -24,7 +24,7 @@ namespace Gatekeeper.Modules {
                 credential = serverContext.tokenAuthenticator.resolve(tokenClaim.Value).Value;
 
                 // check if at least minimum scope
-                if (!credential.scope.subsetOf(minimumScope)) {
+                if (!credential.scope.greaterThan(minimumScope)) {
                     ctx.Response.StatusCode = (int) HttpStatusCode.Unauthorized;
                     return false;
                 }
