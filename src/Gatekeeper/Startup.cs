@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Carter;
 using Gatekeeper.Config;
 using Gatekeeper.Models;
@@ -80,7 +81,6 @@ namespace Gatekeeper {
                     $"running {nameof(Gatekeeper)} {SConfig.VERSION} instance '{SConfig.SERVER_NAME}'",
                     SLogger.LogLevel.Information);
 
-                // print host information
 #if DEBUG
                 // print debug banner (always)
                 serverContext.log.writeLine(
@@ -98,6 +98,12 @@ namespace Gatekeeper {
                         SLogger.LogLevel.Warning);
                 }
 #endif
+
+                var configuredAppNames = string.Join(", ", serverContext.config.apps.Select(x => x.name));
+                serverContext.log.writeLine(
+                    $"available remote application configurations[{serverContext.config.apps.Count}]: remote applications are configured: [{configuredAppNames}]",
+                    SLogger.LogLevel.Information);
+
                 app.UseRouting();
 
                 app.UseEndpoints(builder => builder.MapCarter());
