@@ -13,7 +13,7 @@ namespace Gatekeeper.Modules.Provider {
             Get("/token/{appId}", async (req, res) => {
                 var appId = req.RouteValues.As<string>("appId");
                 // check config for app layers
-                var appDef = serverContext.config.apps.FirstOrDefault(x => x.name == appId);
+                var appDef = serverContext.config.apps.SingleOrDefault(x => x.name == appId);
                 if (appDef == null) {
                     res.StatusCode = (int) HttpStatusCode.NotFound;
                     return;
