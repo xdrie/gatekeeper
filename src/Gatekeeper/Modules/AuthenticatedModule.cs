@@ -40,11 +40,17 @@ namespace Gatekeeper.Modules {
         }
     }
 
+    /// <summary>
+    /// Represents a module only available directly to an authenticated user
+    /// </summary>
     public abstract class AuthenticatedUserModule : AuthenticatedModule {
         protected AuthenticatedUserModule(string path, SContext serverContext) : base(AccessScope.rootScope,
             User.Role.User, path, serverContext) { }
     }
     
+    /// <summary>
+    /// Represents a module only available to an admin
+    /// </summary>
     public abstract class AdminModule : AuthenticatedModule {
         protected AdminModule(string path, SContext serverContext) : base(AccessScope.rootScope,
             User.Role.Admin, path, serverContext) { }
