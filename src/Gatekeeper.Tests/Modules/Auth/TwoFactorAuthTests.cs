@@ -19,31 +19,30 @@ namespace Gatekeeper.Tests.Modules.Auth {
             fx = fixture;
         }
 
-        [Fact]
-        public async Task canGetTwoFactorSetupSecret() {
+        public async Task<(HttpClient, TotpSetupResponse)> registerAndStartTotpSetup(string username) {
             var client = fx.getClient();
-            var username = AccountRegistrar.TEST_USERNAME + "_setup2fa";
             var authedUser = await AccountRegistrar.registerAccount(client, username);
             client.addUserToken(authedUser);
 
             var resp = await client.GetAsync("/a/auth/setup2fa");
             resp.EnsureSuccessStatusCode();
             var data = JsonConvert.DeserializeObject<TotpSetupResponse>(await resp.Content.ReadAsStringAsync());
-            Assert.True(Convert.FromBase64String(data.secret).Length == TotpProvider.TOTP_SECRET_LENGTH);
+            return (client, data);
+        }
+
+        [Fact]
+        public async Task canGetTwoFactorSetupSecret() {
+            var username = AccountRegistrar.TEST_USERNAME + "_setup2fa";
+            var (client, totpSetup) = await registerAndStartTotpSetup(username);
+            Assert.True(Convert.FromBase64String(totpSetup.secret).Length == TotpProvider.TOTP_SECRET_LENGTH);
         }
 
         [Fact]
         public async Task canConfirmTwoFactor() {
-            var client = fx.getClient();
-            var username = AccountRegistrar.TEST_USERNAME + "_conf2fa";
-            var authedUser = await AccountRegistrar.registerAccount(client, username);
-            client.addUserToken(authedUser);
-            
-            var twoFactorSetupResp = await client.GetAsync("/a/auth/setup2fa");
-            twoFactorSetupResp.EnsureSuccessStatusCode();
-            var setupResponse = JsonConvert.DeserializeObject<TotpSetupResponse>(await twoFactorSetupResp.Content.ReadAsStringAsync());
-            
-            var totpProvider = new TotpProvider(Convert.FromBase64String(setupResponse.secret));
+            var username = AccountRegistrar.TEST_USERNAME + "_setup2fa";
+            var (client, totpSetup) = await registerAndStartTotpSetup(username);
+
+            var totpProvider = new TotpProvider(Convert.FromBase64String(totpSetup.secret));
 
             var resp = await client.PostAsJsonAsync("/a/auth/confirm2fa", new TwoFactorConfirmRequest {
                 otpcode = totpProvider.getCode()
