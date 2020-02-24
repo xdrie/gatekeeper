@@ -9,7 +9,7 @@ using Hexagon.Services.Serialization;
 
 namespace Gatekeeper.Modules.Provider {
     public class AppAuthenticationModule : AuthenticatedUserModule {
-        public AppAuthenticationModule(SContext serverContext) : base(AccessScope.rootScope, "/app", serverContext) {
+        public AppAuthenticationModule(SContext serverContext) : base("/app", serverContext) {
             Get<GetAppToken>("/token/{appId}", async (req, res) => {
                 var appId = req.RouteValues.As<string>("appId");
                 // check config for app layers

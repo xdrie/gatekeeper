@@ -3,7 +3,6 @@ using System.Net;
 using Carter.ModelBinding;
 using Carter.Response;
 using Gatekeeper.Config;
-using Gatekeeper.Models.Identity;
 using Gatekeeper.Models.Requests;
 using Gatekeeper.Models.Responses;
 using Gatekeeper.OpenApi.Auth;
@@ -13,7 +12,7 @@ using Hexagon.Utilities;
 
 namespace Gatekeeper.Modules.Auth {
     public class TwoFactorSetupModule : AuthenticatedUserModule {
-        public TwoFactorSetupModule(SContext serverContext) : base(AccessScope.rootScope, "/auth", serverContext) {
+        public TwoFactorSetupModule(SContext serverContext) : base("/auth", serverContext) {
             Get<SetupTwoFactor>("/setup2fa", async (req, res) => {
                 // check if two-factor ALREADY enabled
                 if (currentUser.totpEnabled) {
