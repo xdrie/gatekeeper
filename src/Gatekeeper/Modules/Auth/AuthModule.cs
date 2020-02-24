@@ -6,6 +6,7 @@ using Gatekeeper.Models.Identity;
 using Gatekeeper.Models.Requests;
 using Gatekeeper.Models.Responses;
 using Gatekeeper.OpenApi.Auth;
+using Gatekeeper.Services.Auth;
 using Gatekeeper.Services.Users;
 using Hexagon.Services.Application;
 using Hexagon.Services.Serialization;
@@ -79,6 +80,42 @@ namespace Gatekeeper.Modules.Auth {
 
                 res.StatusCode = (int) HttpStatusCode.Unauthorized;
                 return;
+            });
+            
+            Post<LoginTwoFactor>("/login2fa", async (req, res) => {
+                var loginReq = await req.BindAndValidate<TwoFactorLoginRequest>();
+                if (!loginReq.ValidationResult.IsValid) {
+                    res.StatusCode = (int) HttpStatusCode.UnprocessableEntity;
+                    await res.Negotiate(loginReq.ValidationResult.GetFormattedErrors());
+                    return;
+                }
+
+                var user = serverContext.userManager.findByUsername(loginReq.Data.username);
+                if (user == null) {
+                    res.StatusCode = (int) HttpStatusCode.Unauthorized;
+                    return;
+                }
+
+                // validate password
+                if (serverContext.userManager.checkPassword(loginReq.Data.password, user)) {
+                    // use TOTP provider to check code
+                    var provider = new TotpProvider(user.totp);
+                    if (!provider.verify(loginReq.Data.otpcode)) {
+                        res.StatusCode = (int) HttpStatusCode.Unauthorized;
+                        return;
+                    }
+
+                    // issue a new token
+                    var token = serverContext.userManager.issueRootToken(user.dbid);
+
+                    // return user details
+                    res.StatusCode = (int) HttpStatusCode.OK;
+                    await res.respondSerialized(new AuthedUserResponse {
+                        user = new AuthenticatedUser(user),
+                        token = token
+                    });
+                    return;
+                }
             });
 
             Post<DeleteUser>("/delete", async (req, res) => {
