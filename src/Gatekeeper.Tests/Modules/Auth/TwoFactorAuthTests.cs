@@ -71,13 +71,15 @@ namespace Gatekeeper.Tests.Modules.Auth {
 
         [Fact]
         public async Task canLoginTwoFactor() {
-            var username = AccountRegistrar.TEST_USERNAME + "_req2fa";
+            var username = AccountRegistrar.TEST_USERNAME + "_login2fa";
             var (client, totpSetup) = await registerAndStartTotpSetup(username);
             await confirmTotpSetup(client, totpSetup.secret);
+            var totpProvider = new TotpProvider(Convert.FromBase64String(totpSetup.secret));
             // attempt a 2fa login
-            var resp = await client.PostAsJsonAsync("/a/auth/login2fa", new LoginUserRequest {
+            var resp = await client.PostAsJsonAsync("/a/auth/login2fa", new TwoFactorLoginRequest {
                 username = username,
-                password = AccountRegistrar.TEST_PASSWORD
+                password = AccountRegistrar.TEST_PASSWORD,
+                otpcode = totpProvider.getCode()
             });
             resp.EnsureSuccessStatusCode();
         }
