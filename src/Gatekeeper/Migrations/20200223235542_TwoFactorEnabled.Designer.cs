@@ -3,14 +3,16 @@ using System;
 using Gatekeeper.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Gatekeeper.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200223235542_TwoFactorEnabled")]
+    partial class TwoFactorEnabled
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -110,10 +112,6 @@ namespace Gatekeeper.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("uuid")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("verification")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -121,9 +119,6 @@ namespace Gatekeeper.Migrations
                     b.HasKey("dbid");
 
                     b.HasIndex("passworddbid");
-
-                    b.HasIndex("username", "email", "uuid")
-                        .IsUnique();
 
                     b.ToTable("users");
                 });

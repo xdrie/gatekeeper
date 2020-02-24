@@ -5,8 +5,8 @@ using Gatekeeper.Models.Requests;
 using Gatekeeper.Models.Responses;
 
 namespace Gatekeeper.OpenApi.Auth {
-    public class LoginUser : RouteMetaData {
-        public override string Description => "Login to a user account";
+    public class LoginTwoFactor : RouteMetaData {
+        public override string Description => "Login to a user account with two-factor authentication";
         public override string Tag => GateApiConstants.Tags.USER_MANAGEMENT;
 
         public override RouteMetaDataResponse[] Responses { get; } = {
@@ -20,10 +20,6 @@ namespace Gatekeeper.OpenApi.Auth {
                 Description = $"Provided credentials were not accepted",
             },
             new RouteMetaDataResponse {
-                Code = (int) HttpStatusCode.FailedDependency,
-                Description = $"Two-factor authentication is required",
-            },
-            new RouteMetaDataResponse {
                 Code = (int) HttpStatusCode.OK,
                 Description = $"The corresponding {nameof(AuthedUserResponse)} object",
                 Response = typeof(AuthedUserResponse)
@@ -32,8 +28,8 @@ namespace Gatekeeper.OpenApi.Auth {
 
         public override RouteMetaDataRequest[] Requests { get; } = {
             new RouteMetaDataRequest {
-                Description = $"A {nameof(LoginRequest)} containing credentials",
-                Request = typeof(LoginRequest)
+                Description = $"A {nameof(LoginRequestTwoFactor)} containing credentials",
+                Request = typeof(LoginRequestTwoFactor)
             }
         };
     }

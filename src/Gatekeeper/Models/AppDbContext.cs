@@ -10,7 +10,17 @@ namespace Gatekeeper.Models {
 
         protected override void OnModelCreating(ModelBuilder builder) {
             builder.Entity<User>()
-                .HasIndex(p => new {p.username, p.email, p.uuid})
+                .HasIndex(p => p.username)
+                .IsUnique();
+            builder.Entity<User>()
+                .HasIndex(p => p.email)
+                .IsUnique();
+            builder.Entity<User>()
+                .HasIndex(p => p.uuid)
+                .IsUnique();
+
+            builder.Entity<Token>()
+                .HasIndex(x => x.content)
                 .IsUnique();
         }
     }

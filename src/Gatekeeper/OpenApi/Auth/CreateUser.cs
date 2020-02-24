@@ -28,8 +28,8 @@ namespace Gatekeeper.OpenApi.Auth {
 
         public override RouteMetaDataRequest[] Requests { get; } = {
             new RouteMetaDataRequest {
-                Description = $"A {nameof(UserCreateRequest)} for a new user",
-                Request = typeof(UserCreateRequest)
+                Description = $"A {nameof(RegisterRequest)} for a new user",
+                Request = typeof(RegisterRequest)
             }
         };
     }

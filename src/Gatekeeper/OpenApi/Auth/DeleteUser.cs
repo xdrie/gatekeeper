@@ -27,8 +27,8 @@ namespace Gatekeeper.OpenApi.Auth {
 
         public override RouteMetaDataRequest[] Requests { get; } = {
             new RouteMetaDataRequest {
-                Description = $"A {nameof(UserLoginRequest)} to confirm the deletion",
-                Request = typeof(UserLoginRequest)
+                Description = $"A {nameof(LoginRequest)} to confirm the deletion",
+                Request = typeof(LoginRequest)
             }
         };
     }

@@ -28,22 +28,19 @@ namespace Gatekeeper.Tests.Modules.Auth {
         public async Task canRegisterAccount() {
             var client = fx.getClient();
             var username = AccountRegistrar.TEST_USERNAME + "_reg";
-            var resp = await AccountRegistrar.registerAccount(client, username);
-            resp.EnsureSuccessStatusCode();
-            var data = JsonConvert.DeserializeObject<AuthedUserResponse>(await resp.Content.ReadAsStringAsync());
-            Assert.Equal(username, data.user.username);
-            Assert.NotNull(data.token.content);
-            Assert.Equal(data.token.scope, AccessScope.ROOT_PATH);
+            var authedUser = await AccountRegistrar.registerAccount(client, username);
+            Assert.Equal(username, authedUser.user.username);
+            Assert.NotNull(authedUser.token.content);
+            Assert.Equal(authedUser.token.scope, AccessScope.ROOT_PATH);
         }
 
         [Fact]
         public async Task canLoginAccount() {
             var client = fx.getClient();
             var username = AccountRegistrar.TEST_USERNAME + "_login";
-            var regResponse = await AccountRegistrar.registerAccount(client, username);
-            regResponse.EnsureSuccessStatusCode();
+            await AccountRegistrar.registerAccount(client, username);
             // now attempt to log in
-            var resp = await client.PostAsJsonAsync("/a/auth/login", new UserLoginRequest {
+            var resp = await client.PostAsJsonAsync("/a/auth/login", new LoginRequest {
                 username = username,
                 password = AccountRegistrar.TEST_PASSWORD
             });
@@ -57,10 +54,8 @@ namespace Gatekeeper.Tests.Modules.Auth {
         public async Task canDeleteAccount() {
             var client = fx.getClient();
             var username = AccountRegistrar.TEST_USERNAME + "_delete";
-            var regResponse = await AccountRegistrar.registerAccount(client, username);
-            regResponse.EnsureSuccessStatusCode();
-            var regData = JObject.Parse(await regResponse.Content.ReadAsStringAsync());
-            var resp = await client.PostAsJsonAsync("/a/auth/delete", new UserLoginRequest {
+            await AccountRegistrar.registerAccount(client, username);
+            var resp = await client.PostAsJsonAsync("/a/auth/delete", new LoginRequest {
                 username = username,
                 password = AccountRegistrar.TEST_PASSWORD
             });
