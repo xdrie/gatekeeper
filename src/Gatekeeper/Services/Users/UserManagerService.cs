@@ -34,6 +34,11 @@ namespace Gatekeeper.Services.Users {
                 registered = DateTime.Now,
                 permissions = new List<Permission> {new Permission(GlobalRemoteApp.DEFAULT_PERMISSION)}
             };
+            // - set default settings
+            // add permissions from default permissions
+            foreach (var defaultLayer in serverContext.config.users.defaultLayers) {
+                user.permissions.Add(new Permission(defaultLayer));
+            }
 
 #if DEBUG
             if (serverContext.config.server.development) { // if in development, set a default verification code

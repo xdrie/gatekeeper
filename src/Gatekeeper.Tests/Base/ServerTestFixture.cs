@@ -49,6 +49,7 @@ namespace Gatekeeper.Tests.Base {
                         name = "SaltShaker",
                         layers = new List<string> {"/CheapFood"}
                     });
+                    testConfig.users.defaultLayers.Add("/CheapFood");
                     services.AddSingleton<SConfig>(testConfig);
 
                     // Build the service provider.

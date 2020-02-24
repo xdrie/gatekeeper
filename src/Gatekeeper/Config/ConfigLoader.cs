@@ -47,6 +47,9 @@ namespace Gatekeeper.Config {
                 });
             }
 
+            var users = tb.getField<TomlTable>(nameof(cfg.users));
+            users.bindField(ref cfg.users.defaultLayers, nameof(cfg.users.defaultLayers));
+
             var logging = tb.getField<TomlTable>(nameof(cfg.logging));
             logging.bindField(ref cfg.logging.logLevel, nameof(cfg.logging.logLevel));
             logging.bindField(ref cfg.logging.aspnetVerboseLogging, nameof(cfg.logging.aspnetVerboseLogging));

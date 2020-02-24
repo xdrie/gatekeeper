@@ -43,18 +43,11 @@ namespace Gatekeeper.Tests.Modules.Provider {
             var client = fx.getAuthedClient();
             // add permission to access salt shaker
             var user = fx.serverContext.userManager.findByUsername(fx.authedUser.user.username);
-            var cheapFoodPerm = new Permission("/CheapFood");
-            user.permissions.Add(cheapFoodPerm);
-            fx.serverContext.userManager.updateUser(user);
 
             var resp = await client.GetAsync("/a/app/token/SaltShaker");
             resp.EnsureSuccessStatusCode();
             var appToken = JsonConvert.DeserializeObject<Token>(await resp.Content.ReadAsStringAsync());
             Assert.Equal("/CheapFood/SaltShaker", appToken.scope);
-
-            // clean up
-            user.permissions.Remove(cheapFoodPerm);
-            fx.serverContext.userManager.updateUser(user);
         }
         
         [Fact]
