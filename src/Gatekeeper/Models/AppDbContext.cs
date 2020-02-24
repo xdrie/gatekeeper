@@ -12,6 +12,9 @@ namespace Gatekeeper.Models {
             builder.Entity<User>()
                 .HasIndex(p => new {p.username, p.email, p.uuid})
                 .IsUnique();
+
+            builder.Entity<Token>()
+                .HasIndex(x => new {x.content, x.user});
         }
     }
 }
