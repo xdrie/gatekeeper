@@ -15,44 +15,42 @@ using Microsoft.AspNetCore.Http;
 
 namespace Gatekeeper.Modules.Auth {
     public class AuthModule : ApiModule {
-        public struct ValidatedLogin<TLoginRequest> where TLoginRequest : LoginRequest {
-            public TLoginRequest request;
-            public bool isValid;
+        public class ValidatedLogin<TLoginRequest> : ValidatedRequest<TLoginRequest>
+            where TLoginRequest : LoginRequest {
             public User user;
 
-            public ValidatedLogin(TLoginRequest request, bool isValid, User user = null) {
-                this.request = request;
-                this.isValid = isValid;
+            public ValidatedLogin(TLoginRequest request, bool isValid, User user = null) : base(request, isValid) {
                 this.user = user;
             }
 
-            public static ValidatedLogin<TLoginRequest> failure() => new ValidatedLogin<TLoginRequest>(null, false);
+            public new static ValidatedLogin<TLoginRequest> failure() => new ValidatedLogin<TLoginRequest>(null, false);
         }
 
         public async Task<ValidatedLogin<TLoginRequest>> validateAndCheckPassword<TLoginRequest>(HttpRequest req,
             HttpResponse res)
             where TLoginRequest : LoginRequest {
-            var loginReq = await req.BindAndValidate<TLoginRequest>();
-            if (!loginReq.ValidationResult.IsValid) {
-                res.StatusCode = (int) HttpStatusCode.UnprocessableEntity;
-                await res.Negotiate(loginReq.ValidationResult.GetFormattedErrors());
+            // validate model
+            var validatedLoginReq = await validateRequest<TLoginRequest>(req, res);
+            if (validatedLoginReq.isValid) {
                 return ValidatedLogin<TLoginRequest>.failure();
             }
 
+            var loginReq = validatedLoginReq.request;
+
             // make sure user exists
-            var user = serverContext.userManager.findByUsername(loginReq.Data.username);
+            var user = serverContext.userManager.findByUsername(loginReq.username);
             if (user == null) {
                 res.StatusCode = (int) HttpStatusCode.Unauthorized;
                 return ValidatedLogin<TLoginRequest>.failure();
             }
 
             // validate password
-            if (!serverContext.userManager.checkPassword(loginReq.Data.password, user)) {
+            if (!serverContext.userManager.checkPassword(loginReq.password, user)) {
                 res.StatusCode = (int) HttpStatusCode.Unauthorized;
                 return ValidatedLogin<TLoginRequest>.failure();
             }
 
-            return new ValidatedLogin<TLoginRequest>(loginReq.Data, true, user);
+            return new ValidatedLogin<TLoginRequest>(loginReq, true, user);
         }
 
         public AuthModule(SContext context) : base("/auth", context) {
