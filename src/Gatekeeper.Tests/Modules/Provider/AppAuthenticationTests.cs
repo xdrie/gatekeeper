@@ -4,6 +4,7 @@ using Gatekeeper.Models.Access;
 using Gatekeeper.Models.Identity;
 using Gatekeeper.Tests.Base;
 using Gatekeeper.Tests.Meta;
+using Gatekeeper.Tests.Utilities;
 using Newtonsoft.Json;
 using Xunit;
 
@@ -31,7 +32,9 @@ namespace Gatekeeper.Tests.Modules.Provider {
             var client = fx.getAuthedClient();
 
             var resp = await client.GetAsync("/a/app/token/Global");
-            Assert.Equal(HttpStatusCode.Created, resp.StatusCode);
+            resp.EnsureSuccessStatusCode();
+            var appToken = JsonConvert.DeserializeObject<Token>(await resp.Content.ReadAsStringAsync());
+            Assert.Equal("*/Global", appToken.scope);
         }
 
         [Fact]
@@ -45,13 +48,30 @@ namespace Gatekeeper.Tests.Modules.Provider {
             fx.serverContext.userManager.updateUser(user);
 
             var resp = await client.GetAsync("/a/app/token/SaltShaker");
-            Assert.Equal(HttpStatusCode.Created, resp.StatusCode);
-            var token = JsonConvert.DeserializeObject<Token>(await resp.Content.ReadAsStringAsync());
-            Assert.Equal("/CheapFood/SaltShaker", token.scope);
+            resp.EnsureSuccessStatusCode();
+            var appToken = JsonConvert.DeserializeObject<Token>(await resp.Content.ReadAsStringAsync());
+            Assert.Equal("/CheapFood/SaltShaker", appToken.scope);
 
             // clean up
             user.permissions.Remove(cheapFoodPerm);
             fx.serverContext.userManager.updateUser(user);
+        }
+        
+        [Fact]
+        public async Task appTokensBlockedFromRootScope() {
+            await fx.initialize();
+            var client = fx.getAuthedClient();
+
+            var resp = await client.GetAsync("/a/app/token/Global");
+            resp.EnsureSuccessStatusCode();
+            var appToken = JsonConvert.DeserializeObject<Token>(await resp.Content.ReadAsStringAsync());
+            
+            // now try requesting user info, but as the "application"
+            var appClient = fx.getClient(); // set up a client as the application
+            appClient.addToken(appToken);
+            // check me page
+            var mePageResp = await client.GetAsync("/a/u/me");
+            Assert.Equal(HttpStatusCode.Unauthorized, mePageResp.StatusCode); // we should be barred, because this is a scoped token
         }
     }
 }

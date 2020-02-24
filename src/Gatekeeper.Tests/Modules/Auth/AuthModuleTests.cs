@@ -55,7 +55,7 @@ namespace Gatekeeper.Tests.Modules.Auth {
             var client = fx.getClient();
             var username = AccountRegistrar.TEST_USERNAME + "_verify";
             var authedUser = await AccountRegistrar.registerAccount(client, username);
-            client.addUserToken(authedUser);
+            client.addToken(authedUser.token);
             // fetch the verification code manually
             var verificationCode = fx.serverContext.userManager.findByUsername(username).verification;
             // now attempt to log in
