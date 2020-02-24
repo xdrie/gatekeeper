@@ -46,10 +46,6 @@ namespace Gatekeeper.Config {
                     name = app.getField<string>(nameof(SConfig.RemoteApp.name))
                 });
             }
-            // ensure all app names are unique
-            if (cfg.apps.Select(x => x.name).Distinct().Count() < cfg.apps.Count) {
-                throw new FormatException("configured app names are not unique");
-            }
 
             var logging = tb.getField<TomlTable>(nameof(cfg.logging));
             logging.bindField(ref cfg.logging.logLevel, nameof(cfg.logging.logLevel));
