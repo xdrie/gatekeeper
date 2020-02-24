@@ -22,6 +22,7 @@ namespace Gatekeeper.Tests.Modules.Users {
             
             // check me page
             var resp = await client.GetAsync("/a/u/me");
+            resp.EnsureSuccessStatusCode();
             var data = JsonConvert.DeserializeObject<AuthenticatedUser>(await resp.Content.ReadAsStringAsync());
             Assert.Equal(fx.username, data.username);
         }
