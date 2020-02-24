@@ -9,6 +9,9 @@ namespace Gatekeeper.Models {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder builder) {
+            builder.Entity<User>()
+                .HasIndex(p => new {p.username, p.email, p.uuid})
+                .IsUnique();
         }
     }
 }

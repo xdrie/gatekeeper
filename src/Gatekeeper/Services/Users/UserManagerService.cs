@@ -24,6 +24,7 @@ namespace Gatekeeper.Services.Users {
                 name = request.name,
                 username = request.username,
                 email = request.email,
+                uuid = Guid.NewGuid().ToString("N"),
                 password = cryptPassword,
                 pronouns = (User.Pronouns) Enum.Parse(typeof(User.Pronouns), request.pronouns),
                 verification = StringUtils.secureRandomString(8),
