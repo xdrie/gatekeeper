@@ -1,6 +1,9 @@
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Gatekeeper.Models.Requests;
+using Gatekeeper.Models.Responses;
+using Newtonsoft.Json;
 
 namespace Gatekeeper.Tests.Utilities {
     public static class AccountRegistrar {
@@ -9,8 +12,8 @@ namespace Gatekeeper.Tests.Utilities {
         public const string TEST_EMAIL = "test@example.com";
         public const string TEST_PASSWORD = "1234567890";
 
-        public static Task<HttpResponseMessage> registerAccount(HttpClient client, string username) {
-            return client.PostAsJsonAsync("/a/auth/create", new CreateUserRequest {
+        public static async Task<AuthedUserResponse> registerAccount(HttpClient client, string username) {
+            var resp = await client.PostAsJsonAsync("/a/auth/create", new CreateUserRequest {
                 username = username,
                 name = TEST_NAME,
                 email = TEST_EMAIL,
@@ -18,6 +21,12 @@ namespace Gatekeeper.Tests.Utilities {
                 pronouns = Models.Identity.User.Pronouns.TheyThem.ToString(),
                 isRobot = CreateUserRequest.Validator.NOT_ROBOT_PROMISE
             });
+            resp.EnsureSuccessStatusCode();
+            return JsonConvert.DeserializeObject<AuthedUserResponse>(await resp.Content.ReadAsStringAsync());
+        }
+
+        public static void addUserToken(this HttpClient client, AuthedUserResponse authedUser) {
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authedUser.token.content);
         }
     }
 }

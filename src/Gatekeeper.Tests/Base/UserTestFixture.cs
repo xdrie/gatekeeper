@@ -29,16 +29,12 @@ namespace Gatekeeper.Tests.Base {
         public async Task initialize() {
             // register account
             username = $"{AccountRegistrar.TEST_USERNAME}_{StringUtils.secureRandomString(4)}";
-            var resp = await AccountRegistrar.registerAccount(getClient(),
-                username);
-            resp.EnsureSuccessStatusCode();
-            authedUser = JsonConvert.DeserializeObject<AuthedUserResponse>(await resp.Content.ReadAsStringAsync());
+            authedUser = await AccountRegistrar.registerAccount(getClient(), username);
         }
 
         public HttpClient getAuthedClient() {
             var client = base.getClient();
-            client.DefaultRequestHeaders.Authorization =
-                new AuthenticationHeaderValue("Bearer", authedUser.token.content);
+            client.addUserToken(authedUser);
             return client;
         }
     }
