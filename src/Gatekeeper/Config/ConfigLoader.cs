@@ -1,5 +1,7 @@
 #region
 
+using System;
+using System.Linq;
 using System.Text;
 using Hexagon.Services.Application;
 using Tomlyn.Model;
@@ -43,6 +45,10 @@ namespace Gatekeeper.Config {
                 cfg.apps.Add(new SConfig.RemoteApp {
                     name = app.getField<string>(nameof(SConfig.RemoteApp.name))
                 });
+            }
+            // ensure all app names are unique
+            if (cfg.apps.Select(x => x.name).Distinct().Count() < cfg.apps.Count) {
+                throw new FormatException("configured app names are not unique");
             }
 
             var logging = tb.getField<TomlTable>(nameof(cfg.logging));
