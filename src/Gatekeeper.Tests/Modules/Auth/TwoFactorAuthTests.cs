@@ -68,5 +68,18 @@ namespace Gatekeeper.Tests.Modules.Auth {
             });
             Assert.Equal(HttpStatusCode.FailedDependency, resp.StatusCode);
         }
+
+        [Fact]
+        public async Task canLoginTwoFactor() {
+            var username = AccountRegistrar.TEST_USERNAME + "_req2fa";
+            var (client, totpSetup) = await registerAndStartTotpSetup(username);
+            await confirmTotpSetup(client, totpSetup.secret);
+            // attempt a 2fa login
+            var resp = await client.PostAsJsonAsync("/a/auth/login2fa", new UserLoginRequest {
+                username = username,
+                password = AccountRegistrar.TEST_PASSWORD
+            });
+            resp.EnsureSuccessStatusCode();
+        }
     }
 }
