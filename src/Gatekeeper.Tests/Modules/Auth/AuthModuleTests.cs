@@ -44,6 +44,7 @@ namespace Gatekeeper.Tests.Modules.Auth {
                 username = username,
                 password = AccountRegistrar.TEST_PASSWORD
             });
+            resp.EnsureSuccessStatusCode();
             var data = JsonConvert.DeserializeObject<AuthedUserResponse>(await resp.Content.ReadAsStringAsync());
             Assert.Equal(username, data.user.username);
             Assert.NotNull(data.token.content);
@@ -73,6 +74,8 @@ namespace Gatekeeper.Tests.Modules.Auth {
                 password = AccountRegistrar.TEST_PASSWORD
             });
             resp.EnsureSuccessStatusCode();
+            // now confirm that the user has been deleted
+            Assert.Null(fx.serverContext.userManager.findByUsername(username));
         }
     }
 }

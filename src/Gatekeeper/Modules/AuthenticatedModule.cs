@@ -39,6 +39,14 @@ namespace Gatekeeper.Modules {
             };
         }
     }
+    
+    /// <summary>
+    /// Represents a module available to unverified/pending users
+    /// </summary>
+    public abstract class UnverifiedUserModule : AuthenticatedModule {
+        protected UnverifiedUserModule(string path, SContext serverContext) : base(AccessScope.rootScope,
+            User.Role.Pending, path, serverContext) { }
+    }
 
     /// <summary>
     /// Represents a module only available directly to an authenticated user

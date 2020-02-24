@@ -5,7 +5,7 @@ using Gatekeeper.Models.Identity;
 using Gatekeeper.OpenApi.Auth;
 
 namespace Gatekeeper.Modules.Auth {
-    public class VerifyModule : AuthenticatedUserModule {
+    public class VerifyModule : UnverifiedUserModule {
         public VerifyModule(SContext serverContext) : base("/auth", serverContext) {
             Post<VerifyUser>("/verify/{code}", async (req, res) => {
                 // check if given code matches verification, then update role

@@ -31,7 +31,7 @@ namespace Gatekeeper.Modules.Auth {
             where TLoginRequest : LoginRequest {
             // validate model
             var validatedLoginReq = await validateRequest<TLoginRequest>(req, res);
-            if (validatedLoginReq.isValid) {
+            if (!validatedLoginReq.isValid) {
                 return ValidatedLogin<TLoginRequest>.failure();
             }
 
