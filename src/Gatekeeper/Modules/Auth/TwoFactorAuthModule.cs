@@ -3,6 +3,7 @@ using System.Net;
 using Gatekeeper.Config;
 using Gatekeeper.Models.Responses;
 using Gatekeeper.OpenApi.Auth;
+using Gatekeeper.Services.Auth;
 using Hexagon.Services.Serialization;
 using Hexagon.Utilities;
 
@@ -18,7 +19,7 @@ namespace Gatekeeper.Modules.Auth {
                 }
 
                 // we generate a new TOTP secret
-                var seed = StringUtils.secureRandomString(32);
+                var seed = StringUtils.secureRandomString(TotpProvider.TOTP_SECRET_LENGTH);
                 var seedBytes = Hasher.sha256(seed);
                 currentUser.totp = seedBytes;
                 
