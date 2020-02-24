@@ -1,9 +1,12 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using Gatekeeper.Config;
 using Gatekeeper.Models;
+using Gatekeeper.Models.Access;
 using Gatekeeper.Models.Identity;
+using Gatekeeper.Models.Remote;
 using Gatekeeper.Models.Requests;
 using Gatekeeper.Services.Auth;
 using Hexagon.Utilities;
@@ -28,8 +31,14 @@ namespace Gatekeeper.Services.Users {
                 password = cryptPassword,
                 pronouns = (User.Pronouns) Enum.Parse(typeof(User.Pronouns), request.pronouns),
                 verification = StringUtils.secureRandomString(8),
-                registered = DateTime.Now
+                registered = DateTime.Now,
+                permissions = new List<Permission> {new Permission(GlobalRemoteApp.DEFAULT_PERMISSION)}
             };
+            // - set default settings
+            // add permissions from default permissions
+            foreach (var defaultLayer in serverContext.config.users.defaultLayers) {
+                user.permissions.Add(new Permission(defaultLayer));
+            }
 
 #if DEBUG
             if (serverContext.config.server.development) { // if in development, set a default verification code
@@ -114,6 +123,14 @@ namespace Gatekeeper.Services.Users {
 
         public class UserAlreadyExistsException : ApplicationException {
             public UserAlreadyExistsException(string message) : base(message) { }
+        }
+
+        public User loadPermissions(User forUser) {
+            using (var db = serverContext.getDbContext()) {
+                var user = db.users.First(x => x.dbid == forUser.dbid);
+                db.Entry(user).Collection(x => x.permissions).Load();
+                return user;
+            }
         }
     }
 }

@@ -38,7 +38,7 @@ namespace Gatekeeper.Tests.Base {
 
         public HttpClient getAuthedClient() {
             var client = base.getClient();
-            client.addUserToken(authedUser);
+            client.addToken(authedUser.token);
             return client;
         }
     }

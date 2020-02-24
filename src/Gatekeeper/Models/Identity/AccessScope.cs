@@ -4,6 +4,7 @@ using System.IO;
 namespace Gatekeeper.Models.Identity {
     public struct AccessScope {
         public const string ROOT_PATH = "/";
+        public const string WILDCARD_PATH = "*";
 
         public string layer;
         public string app;
@@ -24,10 +25,18 @@ namespace Gatekeeper.Models.Identity {
 
         public string path => Path.Join(layer, app);
 
-        public bool atLeast(AccessScope requiredScope) {
-            return path.StartsWith(requiredScope.path);
+        public override string ToString() => path;
+
+        /// <summary>
+        /// whether this scope is greater than the given scope. for example, "/Scope" (this) is greater than "/Scope/App" (arg1)
+        /// </summary>
+        /// <param name="scope"></param>
+        /// <returns></returns>
+        public bool greaterThan(AccessScope scope) {
+            if (scope.layer == WILDCARD_PATH) return true; // anything is greater than the wildcard scope
+            return scope.path.StartsWith(path);
         }
-        
+
         public static AccessScope rootScope => new AccessScope(ROOT_PATH);
     }
 }

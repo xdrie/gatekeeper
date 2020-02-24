@@ -1,5 +1,7 @@
 #region
 
+using System;
+using System.Linq;
 using System.Text;
 using Hexagon.Services.Application;
 using Tomlyn.Model;
@@ -44,6 +46,9 @@ namespace Gatekeeper.Config {
                     name = app.getField<string>(nameof(SConfig.RemoteApp.name))
                 });
             }
+
+            var users = tb.getField<TomlTable>(nameof(cfg.users));
+            users.bindField(ref cfg.users.defaultLayers, nameof(cfg.users.defaultLayers));
 
             var logging = tb.getField<TomlTable>(nameof(cfg.logging));
             logging.bindField(ref cfg.logging.logLevel, nameof(cfg.logging.logLevel));

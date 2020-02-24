@@ -1,6 +1,7 @@
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using Gatekeeper.Models.Identity;
 using Gatekeeper.Models.Requests;
 using Gatekeeper.Models.Responses;
 using Newtonsoft.Json;
@@ -25,8 +26,8 @@ namespace Gatekeeper.Tests.Utilities {
             return JsonConvert.DeserializeObject<AuthedUserResponse>(await resp.Content.ReadAsStringAsync());
         }
 
-        public static void addUserToken(this HttpClient client, AuthedUserResponse authedUser) {
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authedUser.token.content);
+        public static void addToken(this HttpClient client, Token token) {
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.content);
         }
     }
 }

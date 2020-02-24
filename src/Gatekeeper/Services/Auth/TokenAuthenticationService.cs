@@ -12,15 +12,15 @@ namespace Gatekeeper.Services.Auth {
         public const int TOKEN_LENGTH = 32;
         public static TimeSpan ROOT_TOKEN_LIFETIME = TimeSpan.FromDays(7);
 
-        public Token issue(string scope, TimeSpan lifetime) {
+        public Token issue(AccessScope scope, TimeSpan lifetime) {
             return new Token {
                 content = StringUtils.secureRandomString(TOKEN_LENGTH),
                 expires = DateTime.Now.Add(lifetime),
-                scope = new AccessScope(AccessScope.ROOT_PATH).path
+                scope = scope.path
             };
         }
 
-        public Token issueRoot() => issue("/", ROOT_TOKEN_LIFETIME);
+        public Token issueRoot() => issue(new AccessScope(AccessScope.ROOT_PATH), ROOT_TOKEN_LIFETIME);
 
         public Credential? resolve(string tokenStr) {
             // 1. match the token string to a Token

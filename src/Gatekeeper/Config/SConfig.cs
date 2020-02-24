@@ -21,21 +21,28 @@ namespace Gatekeeper.Config {
             /// </summary>
             public string database = DEFAULT_DATABASE;
 
-            #if DEBUG
+#if DEBUG
             /// <summary>
             /// Enables development mode (sets up hardcoded/test values and "fake" services)
             /// </summary>
             public bool development = true;
-            #endif
+#endif
         }
 
         public Server server = new Server();
 
         public class RemoteApp {
             public virtual string name { get; set; }
+            public virtual List<string> layers { get; set; }
         }
 
-        public List<RemoteApp> apps = new List<RemoteApp>() {new GlobalRemoteApp()};
+        public List<RemoteApp> apps = new List<RemoteApp> {new GlobalRemoteApp()};
+
+        public class Users {
+            public List<string> defaultLayers = new List<string>();
+        }
+
+        public Users users = new Users();
 
         public class Logging {
             /// <summary>

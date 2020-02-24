@@ -23,7 +23,7 @@ namespace Gatekeeper.Tests.Modules.Auth {
         public async Task<(HttpClient, TotpSetupResponse)> registerAndStartTotpSetup(string username) {
             var client = fx.getClient();
             var authedUser = await AccountRegistrar.registerAccount(client, username);
-            client.addUserToken(authedUser);
+            client.addToken(authedUser.token);
 
             var resp = await client.GetAsync("/a/auth/setup2fa");
             resp.EnsureSuccessStatusCode();
