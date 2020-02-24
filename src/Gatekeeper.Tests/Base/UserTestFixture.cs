@@ -30,6 +30,10 @@ namespace Gatekeeper.Tests.Base {
             // register account
             username = $"{AccountRegistrar.TEST_USERNAME}_{StringUtils.secureRandomString(4)}";
             authedUser = await AccountRegistrar.registerAccount(getClient(), username);
+            // hijack the verify
+            var userToVerify = serverContext.userManager.findByUsername(username);
+            userToVerify.role = User.Role.User;
+            serverContext.userManager.updateUser(userToVerify);
         }
 
         public HttpClient getAuthedClient() {
