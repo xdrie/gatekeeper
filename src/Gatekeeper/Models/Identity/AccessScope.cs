@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 
 namespace Gatekeeper.Models.Identity {
@@ -17,9 +18,16 @@ namespace Gatekeeper.Models.Identity {
         public static AccessScope parse(string path) {
             var dir = Path.GetDirectoryName(path);
             var file = Path.GetFileName(path);
+            if (path == ROOT_PATH) dir = ROOT_PATH; // check if root
             return new AccessScope(dir, file);
         }
 
         public string path => Path.Join(layer, app);
+
+        public bool atLeast(AccessScope requiredScope) {
+            return path.StartsWith(requiredScope.path);
+        }
+        
+        public static AccessScope rootScope => new AccessScope(ROOT_PATH);
     }
 }
