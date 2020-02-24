@@ -35,14 +35,14 @@ namespace Gatekeeper.Config {
             var apps = (TomlTableArray) tb[rename(nameof(cfg.apps))];
             foreach (var app in apps) {
                 cfg.apps.Add(new SConfig.RemoteApp {
-                    name = (string) app[rename(nameof(SConfig.RemoteApp.name))]
+                    name = app.getField<string>(nameof(SConfig.RemoteApp.name))
                 });
             }
 
             var logging = (TomlTable) tb[rename(nameof(cfg.logging))];
-            cfg.logging.logLevel = (SLogger.LogLevel) logging[rename(nameof(cfg.logging.logLevel))];
-            cfg.logging.aspnetVerboseLogging = (bool) logging[rename(nameof(cfg.logging.aspnetVerboseLogging))];
-            cfg.logging.databaseLogging = (bool) logging[rename(nameof(cfg.logging.databaseLogging))];
+            cfg.logging.logLevel = logging.getField<SLogger.LogLevel>(nameof(cfg.logging.logLevel));
+            cfg.logging.aspnetVerboseLogging = logging.getField<bool>(nameof(cfg.logging.aspnetVerboseLogging));
+            cfg.logging.databaseLogging = logging.getField<bool>(nameof(cfg.logging.databaseLogging));
 
             return cfg;
         }
