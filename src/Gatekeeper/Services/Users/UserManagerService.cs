@@ -31,11 +31,11 @@ namespace Gatekeeper.Services.Users {
                 registered = DateTime.Now
             };
 
-            #if DEBUG
+#if DEBUG
             if (serverContext.config.server.development) { // if in development, set a default verification code
                 user.verification = DevelopmentConstants.DEFAULT_VERIFICATION;
             }
-            #endif
+#endif
 
             using (var db = serverContext.getDbContext()) {
                 db.users.Add(user); // add user
@@ -47,8 +47,7 @@ namespace Gatekeeper.Services.Users {
 
         public Token issueRootToken(int userId) {
             // create an access token
-            var tokenSource = new AccessTokenSource(serverContext);
-            var token = tokenSource.issueRoot();
+            var token = serverContext.tokenAuthenticator.issueRoot();
 
             using (var db = serverContext.getDbContext()) {
                 token.user = db.users.Find(userId);
@@ -86,6 +85,17 @@ namespace Gatekeeper.Services.Users {
             var hashedPassword = cryptoHelper.hashCleartext(password);
             ret = StructuralComparisons.StructuralEqualityComparer.Equals(hashedPassword, user.password.hash);
             return ret;
+        }
+
+        public void setupTotpLock(User user, Token currentToken) {
+            user.totpEnabled = true; // enable otp field
+            updateUser(user);
+            // revoke all other tokens
+            using (var db = serverContext.getDbContext()) {
+                var otherTokens = db.tokens.Where(x => x.content != currentToken.content && x.user.dbid == user.dbid);
+                db.tokens.RemoveRange(otherTokens);
+                db.SaveChanges();
+            }
         }
 
         public User? findByUsername(string username) {

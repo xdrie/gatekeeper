@@ -45,10 +45,7 @@ namespace Gatekeeper.Modules.Auth {
                 var provider = new TotpProvider(currentUser.totp);
                 if (provider.verify(confirmReq.Data.otpcode)) {
                     // totp confirmed, enable totp and lock
-                    currentUser.totpEnabled = true;
-                    serverContext.userManager.updateUser(currentUser);
-                    
-                    // TODO: revoke all other tokens
+                    serverContext.userManager.setupTotpLock(currentUser, credential.token);
 
                     res.StatusCode = (int) HttpStatusCode.OK;
                     return;
