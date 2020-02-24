@@ -24,8 +24,10 @@ namespace Gatekeeper.Models.Identity {
 
         public string path => Path.Join(layer, app);
 
-        public bool atLeast(AccessScope requiredScope) {
-            return path.StartsWith(requiredScope.path);
+        public override string ToString() => path;
+
+        public bool subsetOf(AccessScope scope) {
+            return path.StartsWith(scope.path);
         }
         
         public static AccessScope rootScope => new AccessScope(ROOT_PATH);

@@ -115,5 +115,13 @@ namespace Gatekeeper.Services.Users {
         public class UserAlreadyExistsException : ApplicationException {
             public UserAlreadyExistsException(string message) : base(message) { }
         }
+
+        public User loadPermissions(User forUser) {
+            using (var db = serverContext.getDbContext()) {
+                var user = db.users.First(x => x.dbid == forUser.dbid);
+                db.Entry(user).Collection(x => x.permissions).Load();
+                return user;
+            }
+        }
     }
 }
