@@ -71,6 +71,13 @@ namespace Gatekeeper.Services.Users {
             }
         }
 
+        public void updateUser(User user) {
+            using (var db = serverContext.getDbContext()) {
+                db.users.Update(user);
+                db.SaveChanges();
+            }
+        }
+
         public bool checkPassword(string password, User user) {
             user = loadPassword(user);
             var ret = false;

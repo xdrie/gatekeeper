@@ -1,6 +1,9 @@
 using System;
 using System.Net;
+using Carter.ModelBinding;
+using Carter.Response;
 using Gatekeeper.Config;
+using Gatekeeper.Models.Requests;
 using Gatekeeper.Models.Responses;
 using Gatekeeper.OpenApi.Auth;
 using Gatekeeper.Services.Auth;
@@ -22,11 +25,34 @@ namespace Gatekeeper.Modules.Auth {
                 var seed = StringUtils.secureRandomString(TotpProvider.TOTP_SECRET_LENGTH);
                 var seedBytes = Hasher.sha256(seed);
                 currentUser.totp = seedBytes;
-                
+                serverContext.userManager.updateUser(currentUser);
+
                 // return the seed
                 await res.respondSerialized(new TotpSetupResponse {
                     secret = Convert.ToBase64String(seedBytes)
                 });
+                return;
+            });
+
+            Post<ConfirmTwoFactor>("/confirm2fa", async (req, res) => {
+                var confirmReq = await req.BindAndValidate<TwoFactorConfirmRequest>();
+                if (!confirmReq.ValidationResult.IsValid) {
+                    res.StatusCode = (int) HttpStatusCode.UnprocessableEntity;
+                    await res.Negotiate(confirmReq.ValidationResult.GetFormattedErrors());
+                }
+
+                // use TOTP provider to check code
+                var provider = new TotpProvider(currentUser.totp);
+                if (provider.verify(confirmReq.Data.otpcode)) {
+                    // totp confirmed, enable totp and lock
+                    currentUser.totpEnabled = true;
+                    serverContext.userManager.updateUser(currentUser);
+
+                    res.StatusCode = (int) HttpStatusCode.OK;
+                    return;
+                }
+
+                res.StatusCode = (int) HttpStatusCode.Unauthorized;
                 return;
             });
         }
