@@ -4,13 +4,13 @@ using System.Net;
 using Carter.Request;
 using Gatekeeper.Config;
 using Gatekeeper.Models.Identity;
-using Gatekeeper.Models.Responses;
+using Gatekeeper.OpenApi.Provider;
 using Hexagon.Services.Serialization;
 
 namespace Gatekeeper.Modules.Provider {
     public class AppAuthenticationModule : AuthenticatedUserModule {
         public AppAuthenticationModule(SContext serverContext) : base(AccessScope.rootScope, "/app", serverContext) {
-            Get("/token/{appId}", async (req, res) => {
+            Get<GetAppToken>("/token/{appId}", async (req, res) => {
                 var appId = req.RouteValues.As<string>("appId");
                 // check config for app layers
                 var appDef = serverContext.config.apps.SingleOrDefault(x => x.name == appId);
