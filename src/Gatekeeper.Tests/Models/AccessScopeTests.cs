@@ -13,5 +13,17 @@ namespace Gatekeeper.Tests.Models {
             // ensure parsed path matches input path
             Assert.Equal(path, AccessScope.parse(path).path);
         }
+
+        [Theory]
+        [InlineData("/", "*/")]
+        [InlineData("/", "*/Test")]
+        [InlineData("/", "/Layer")]
+        [InlineData("/Layer", "/Layer/App")]
+        [InlineData("/Layer/Sublayer", "/Layer/Sublayer/App")]
+        public void canCompareScopes(string greater, string lesser) {
+            AccessScope greaterScope = AccessScope.parse(greater);
+            AccessScope lesserScope = AccessScope.parse(lesser);
+            Assert.True(greaterScope.greaterThan(lesserScope));
+        }
     }
 }
