@@ -1,10 +1,10 @@
 using FluentValidation;
 
 namespace Gatekeeper.Models.Requests {
-    public class TwoFactorLoginRequest : LoginUserRequest {
+    public class LoginRequestTwoFactor : LoginRequest {
         public string otpcode { get; set; }
 
-        public class Validator : AbstractValidator<TwoFactorLoginRequest> {
+        public new class Validator : AbstractValidator<LoginRequestTwoFactor> {
             public Validator() {
                 RuleFor(x => x.username).NotEmpty();
                 RuleFor(x => x.password).NotEmpty();

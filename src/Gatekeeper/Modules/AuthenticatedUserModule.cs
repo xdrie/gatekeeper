@@ -8,7 +8,7 @@ using Gatekeeper.Services.Auth.Security;
 namespace Gatekeeper.Modules {
     public abstract class AuthenticatedUserModule : ApiModule {
         public User currentUser { get; private set; }
-        public TokenCredential credential { get; private set; }
+        public Credential credential { get; private set; }
 
         protected AuthenticatedUserModule(string path, SContext serverContext) : base(path, serverContext) {
             // require authentication

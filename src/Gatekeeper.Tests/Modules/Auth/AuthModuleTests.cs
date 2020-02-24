@@ -40,7 +40,7 @@ namespace Gatekeeper.Tests.Modules.Auth {
             var username = AccountRegistrar.TEST_USERNAME + "_login";
             await AccountRegistrar.registerAccount(client, username);
             // now attempt to log in
-            var resp = await client.PostAsJsonAsync("/a/auth/login", new LoginUserRequest {
+            var resp = await client.PostAsJsonAsync("/a/auth/login", new LoginRequest {
                 username = username,
                 password = AccountRegistrar.TEST_PASSWORD
             });
@@ -55,7 +55,7 @@ namespace Gatekeeper.Tests.Modules.Auth {
             var client = fx.getClient();
             var username = AccountRegistrar.TEST_USERNAME + "_delete";
             await AccountRegistrar.registerAccount(client, username);
-            var resp = await client.PostAsJsonAsync("/a/auth/delete", new LoginUserRequest {
+            var resp = await client.PostAsJsonAsync("/a/auth/delete", new LoginRequest {
                 username = username,
                 password = AccountRegistrar.TEST_PASSWORD
             });
