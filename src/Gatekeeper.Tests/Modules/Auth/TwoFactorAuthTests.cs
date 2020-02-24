@@ -50,5 +50,11 @@ namespace Gatekeeper.Tests.Modules.Auth {
             });
             resp.EnsureSuccessStatusCode();
         }
+
+        [Fact]
+        public async Task requiresOtpCodeWhenTwoFactorEnabled() {
+            // TODO: write this test
+            Assert.False(true);
+        }
     }
 }
