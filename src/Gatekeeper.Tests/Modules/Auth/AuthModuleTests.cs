@@ -38,9 +38,9 @@ namespace Gatekeeper.Tests.Modules.Auth {
         public async Task canLoginAccount() {
             var client = fx.getClient();
             var username = AccountRegistrar.TEST_USERNAME + "_login";
-            var authedUser = await AccountRegistrar.registerAccount(client, username);
+            await AccountRegistrar.registerAccount(client, username);
             // now attempt to log in
-            var resp = await client.PostAsJsonAsync("/a/auth/login", new UserLoginRequest {
+            var resp = await client.PostAsJsonAsync("/a/auth/login", new LoginUserRequest {
                 username = username,
                 password = AccountRegistrar.TEST_PASSWORD
             });
@@ -54,8 +54,8 @@ namespace Gatekeeper.Tests.Modules.Auth {
         public async Task canDeleteAccount() {
             var client = fx.getClient();
             var username = AccountRegistrar.TEST_USERNAME + "_delete";
-            var authedUser = await AccountRegistrar.registerAccount(client, username);
-            var resp = await client.PostAsJsonAsync("/a/auth/delete", new UserLoginRequest {
+            await AccountRegistrar.registerAccount(client, username);
+            var resp = await client.PostAsJsonAsync("/a/auth/delete", new LoginUserRequest {
                 username = username,
                 password = AccountRegistrar.TEST_PASSWORD
             });

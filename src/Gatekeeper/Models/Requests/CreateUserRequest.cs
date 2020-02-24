@@ -2,7 +2,7 @@ using FluentValidation;
 using Gatekeeper.Models.Identity;
 
 namespace Gatekeeper.Models.Requests {
-    public class UserCreateRequest {
+    public class CreateUserRequest {
         public string username { get; set; }
         public string name { get; set; }
         public string email { get; set; }
@@ -10,7 +10,7 @@ namespace Gatekeeper.Models.Requests {
         public string pronouns { get; set; }
         public string isRobot { get; set; }
         
-        public class Validator : AbstractValidator<UserCreateRequest> {
+        public class Validator : AbstractValidator<CreateUserRequest> {
             public const string NOT_ROBOT_PROMISE = "I am not a robot";
 
             public Validator() {

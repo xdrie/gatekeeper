@@ -13,13 +13,13 @@ namespace Gatekeeper.Tests.Utilities {
         public const string TEST_PASSWORD = "1234567890";
 
         public static async Task<AuthedUserResponse> registerAccount(HttpClient client, string username) {
-            var resp = await client.PostAsJsonAsync("/a/auth/create", new UserCreateRequest {
+            var resp = await client.PostAsJsonAsync("/a/auth/create", new CreateUserRequest {
                 username = username,
                 name = TEST_NAME,
                 email = TEST_EMAIL,
                 password = TEST_PASSWORD,
                 pronouns = Models.Identity.User.Pronouns.TheyThem.ToString(),
-                isRobot = UserCreateRequest.Validator.NOT_ROBOT_PROMISE
+                isRobot = CreateUserRequest.Validator.NOT_ROBOT_PROMISE
             });
             resp.EnsureSuccessStatusCode();
             return JsonConvert.DeserializeObject<AuthedUserResponse>(await resp.Content.ReadAsStringAsync());
