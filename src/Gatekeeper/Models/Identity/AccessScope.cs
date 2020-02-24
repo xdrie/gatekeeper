@@ -4,6 +4,7 @@ using System.IO;
 namespace Gatekeeper.Models.Identity {
     public struct AccessScope {
         public const string ROOT_PATH = "/";
+        public const string WILDCARD_PATH = "*";
 
         public string layer;
         public string app;
@@ -27,6 +28,7 @@ namespace Gatekeeper.Models.Identity {
         public override string ToString() => path;
 
         public bool subsetOf(AccessScope scope) {
+            if (path == WILDCARD_PATH) return true; // all paths are subsets of the wildcard
             return path.StartsWith(scope.path);
         }
         

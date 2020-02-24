@@ -24,6 +24,15 @@ namespace Gatekeeper.Tests.Modules.Provider {
             var resp = await client.GetAsync("/a/app/token/BeanCan");
             Assert.Equal(HttpStatusCode.Forbidden, resp.StatusCode);
         }
+        
+        [Fact]
+        public async Task authorizesGlobalApp() {
+            await fx.initialize();
+            var client = fx.getAuthedClient();
+
+            var resp = await client.GetAsync("/a/app/token/Global");
+            Assert.Equal(HttpStatusCode.Created, resp.StatusCode);
+        }
 
         [Fact]
         public async Task authorizesAllowedApp() {
@@ -38,7 +47,7 @@ namespace Gatekeeper.Tests.Modules.Provider {
             var resp = await client.GetAsync("/a/app/token/SaltShaker");
             Assert.Equal(HttpStatusCode.Created, resp.StatusCode);
             var token = JsonConvert.DeserializeObject<Token>(await resp.Content.ReadAsStringAsync());
-            Assert.Equal("/CheapFood", token.scope);
+            Assert.Equal("/CheapFood/SaltShaker", token.scope);
 
             // clean up
             user.permissions.Remove(cheapFoodPerm);

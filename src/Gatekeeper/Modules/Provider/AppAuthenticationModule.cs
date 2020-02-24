@@ -24,7 +24,7 @@ namespace Gatekeeper.Modules.Provider {
                 var maybeGrantedScope = default(AccessScope?);
                 foreach (var permission in user.permissions) {
                     var permissionScope = AccessScope.parse(permission.path);
-                    foreach (var appPath in appDef.paths) {
+                    foreach (var appPath in appDef.scopes) {
                         var appScope = AccessScope.parse(appPath);
                         if (appScope.subsetOf(permissionScope)) { // if permission grants app
                             maybeGrantedScope = permissionScope;

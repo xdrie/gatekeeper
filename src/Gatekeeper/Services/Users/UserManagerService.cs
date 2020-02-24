@@ -1,9 +1,12 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using Gatekeeper.Config;
 using Gatekeeper.Models;
+using Gatekeeper.Models.Access;
 using Gatekeeper.Models.Identity;
+using Gatekeeper.Models.Remote;
 using Gatekeeper.Models.Requests;
 using Gatekeeper.Services.Auth;
 using Hexagon.Utilities;
@@ -28,7 +31,8 @@ namespace Gatekeeper.Services.Users {
                 password = cryptPassword,
                 pronouns = (User.Pronouns) Enum.Parse(typeof(User.Pronouns), request.pronouns),
                 verification = StringUtils.secureRandomString(8),
-                registered = DateTime.Now
+                registered = DateTime.Now,
+                permissions = new List<Permission> {new Permission(GlobalRemoteApp.DEFAULT_PERMISSION)}
             };
 
 #if DEBUG
