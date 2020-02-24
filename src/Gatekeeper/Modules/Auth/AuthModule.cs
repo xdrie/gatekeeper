@@ -11,6 +11,7 @@ using Gatekeeper.Services.Auth;
 using Gatekeeper.Services.Users;
 using Hexagon.Services.Application;
 using Hexagon.Services.Serialization;
+using Hexagon.Web;
 using Microsoft.AspNetCore.Http;
 
 namespace Gatekeeper.Modules.Auth {
@@ -30,7 +31,7 @@ namespace Gatekeeper.Modules.Auth {
             HttpResponse res)
             where TLoginRequest : LoginRequest {
             // validate model
-            var validatedLoginReq = await validateRequest<TLoginRequest>(req, res);
+            var validatedLoginReq = await this.validateRequest<TLoginRequest>(req, res);
             if (!validatedLoginReq.isValid) {
                 return ValidatedLogin<TLoginRequest>.failure();
             }
@@ -55,17 +56,14 @@ namespace Gatekeeper.Modules.Auth {
 
         public AuthModule(SContext context) : base("/auth", context) {
             Post<CreateUser>("/create", async (req, res) => {
-                var createReq = await req.BindAndValidate<RegisterRequest>();
-                if (!createReq.ValidationResult.IsValid) {
-                    res.StatusCode = (int) HttpStatusCode.UnprocessableEntity;
-                    await res.Negotiate(createReq.ValidationResult.GetFormattedErrors());
-                    return;
-                }
+                var validatedCreateReq = await this.validateRequest<RegisterRequest>(req, res);
+                if (!validatedCreateReq.isValid) return;
+                var createReq = validatedCreateReq.request;
 
                 // attempt to register user
                 try {
                     // register the user
-                    var user = serverContext.userManager.registerUser(createReq.Data);
+                    var user = serverContext.userManager.registerUser(createReq);
                     serverContext.log.writeLine($"registered user {user.username}",
                         SLogger.LogLevel.Information);
                     var token = serverContext.userManager.issueRootToken(user.dbid);

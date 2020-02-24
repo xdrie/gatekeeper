@@ -9,6 +9,7 @@ using Gatekeeper.OpenApi.Auth;
 using Gatekeeper.Services.Auth;
 using Hexagon.Services.Serialization;
 using Hexagon.Utilities;
+using Hexagon.Web;
 
 namespace Gatekeeper.Modules.Auth {
     public class TwoFactorSetupModule : AuthenticatedUserModule {
@@ -35,15 +36,13 @@ namespace Gatekeeper.Modules.Auth {
             });
 
             Post<ConfirmTwoFactor>("/confirm2fa", async (req, res) => {
-                var confirmReq = await req.BindAndValidate<TwoFactorConfirmRequest>();
-                if (!confirmReq.ValidationResult.IsValid) {
-                    res.StatusCode = (int) HttpStatusCode.UnprocessableEntity;
-                    await res.Negotiate(confirmReq.ValidationResult.GetFormattedErrors());
-                }
+                var validatedReq = await this.validateRequest<TwoFactorConfirmRequest>(req, res);
+                if (!validatedReq.isValid) return;
+                var confirmReq = validatedReq.request;
 
                 // use TOTP provider to check code
                 var provider = new TotpProvider(currentUser.totp);
-                if (provider.verify(confirmReq.Data.otpcode)) {
+                if (provider.verify(confirmReq.otpcode)) {
                     // totp confirmed, enable totp and lock
                     serverContext.userManager.setupTotpLock(currentUser, credential.token);
 
