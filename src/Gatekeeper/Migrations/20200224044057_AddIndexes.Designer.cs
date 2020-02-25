@@ -3,38 +3,20 @@ using System;
 using Gatekeeper.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Gatekeeper.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200224044057_AddIndexes")]
+    partial class AddIndexes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.1.2");
-
-            modelBuilder.Entity("Gatekeeper.Models.Access.Permission", b =>
-                {
-                    b.Property<int>("dbid")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int?>("Userdbid")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("path")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("dbid");
-
-                    b.HasIndex("Userdbid");
-
-                    b.ToTable("Permission");
-                });
 
             modelBuilder.Entity("Gatekeeper.Models.Identity.CryptSecret", b =>
                 {
@@ -155,13 +137,6 @@ namespace Gatekeeper.Migrations
                         .IsUnique();
 
                     b.ToTable("users");
-                });
-
-            modelBuilder.Entity("Gatekeeper.Models.Access.Permission", b =>
-                {
-                    b.HasOne("Gatekeeper.Models.Identity.User", null)
-                        .WithMany("permissions")
-                        .HasForeignKey("Userdbid");
                 });
 
             modelBuilder.Entity("Gatekeeper.Models.Identity.Token", b =>

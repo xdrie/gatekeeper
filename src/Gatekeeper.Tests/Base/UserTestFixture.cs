@@ -29,12 +29,12 @@ namespace Gatekeeper.Tests.Base {
         public async Task initialize() {
             // register account
             username = $"{AccountRegistrar.TEST_USERNAME}_{StringUtils.secureRandomString(4)}";
-            authedUser = await AccountRegistrar.registerAccount(getClient(), username);
+            authedUser = await new AccountRegistrar(serverContext).registerAccount(getClient(), username, true);
         }
 
         public HttpClient getAuthedClient() {
             var client = base.getClient();
-            client.addUserToken(authedUser);
+            client.addToken(authedUser.token);
             return client;
         }
     }

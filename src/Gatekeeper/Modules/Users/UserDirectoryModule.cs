@@ -10,7 +10,7 @@ namespace Gatekeeper.Modules.Users {
         public UserDirectoryModule(SContext serverContext) : base("/u", serverContext) {
             Get<GetPublicUser>("/{username}", async (req, res) => {
                 var user = serverContext.userManager.findByUsername(req.RouteValues.As<string>("username"));
-                if (user == null) {
+                if (user == null || user.role == User.Role.Pending) {
                     res.StatusCode = (int) HttpStatusCode.NotFound;
                     return;
                 }

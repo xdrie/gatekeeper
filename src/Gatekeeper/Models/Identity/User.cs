@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using Gatekeeper.Models.Access;
 
 namespace Gatekeeper.Models.Identity {
     public class User : DatabaseObject {
@@ -19,6 +21,7 @@ namespace Gatekeeper.Models.Identity {
         public Role role { get; set; } = Role.Pending;
         public string verification { get; set; }
         public DateTime registered { get; set; }
+        public List<Permission> permissions { get; set; } = new List<Permission>();
 
         public enum Role {
             Pending,

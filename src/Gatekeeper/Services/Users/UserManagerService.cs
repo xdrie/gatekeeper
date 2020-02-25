@@ -1,12 +1,16 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using Gatekeeper.Config;
 using Gatekeeper.Models;
+using Gatekeeper.Models.Access;
 using Gatekeeper.Models.Identity;
+using Gatekeeper.Models.Remote;
 using Gatekeeper.Models.Requests;
 using Gatekeeper.Services.Auth;
 using Hexagon.Utilities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Gatekeeper.Services.Users {
     public class UserManagerService : DependencyObject {
@@ -26,10 +30,16 @@ namespace Gatekeeper.Services.Users {
                 email = request.email,
                 uuid = Guid.NewGuid().ToString("N"),
                 password = cryptPassword,
-                pronouns = (User.Pronouns) Enum.Parse(typeof(User.Pronouns), request.pronouns),
+                pronouns = Enum.Parse<User.Pronouns>(request.pronouns, true),
                 verification = StringUtils.secureRandomString(8),
-                registered = DateTime.Now
+                registered = DateTime.Now,
+                permissions = new List<Permission> {new Permission(GlobalRemoteApp.DEFAULT_PERMISSION)}
             };
+            // - set default settings
+            // add permissions from default permissions
+            foreach (var defaultLayer in serverContext.config.users.defaultLayers) {
+                user.permissions.Add(new Permission(defaultLayer));
+            }
 
 #if DEBUG
             if (serverContext.config.server.development) { // if in development, set a default verification code
@@ -77,6 +87,23 @@ namespace Gatekeeper.Services.Users {
             }
         }
 
+        public void updatePermission(int userId, Permission permission, Permission.PermissionUpdateType updateType) {
+            using (var db = serverContext.getDbContext()) {
+                var user = db.users.Include(x => x.permissions)
+                    .SingleOrDefault(x => x.dbid == userId);
+                switch (updateType) {
+                    case Permission.PermissionUpdateType.Add:
+                        user.permissions.Add(permission);
+                        break;
+                    case Permission.PermissionUpdateType.Remove:
+                        user.permissions.RemoveAll(x => x.path == permission.path);
+                        break;
+                }
+
+                db.SaveChanges();
+            }
+        }
+
         public bool checkPassword(string password, User user) {
             user = loadPassword(user);
             var ret = false;
@@ -100,7 +127,13 @@ namespace Gatekeeper.Services.Users {
 
         public User? findByUsername(string username) {
             using (var db = serverContext.getDbContext()) {
-                return db.users.FirstOrDefault(x => x.username == username);
+                return db.users.SingleOrDefault(x => x.username == username);
+            }
+        }
+
+        public User? findByUuid(string uuid) {
+            using (var db = serverContext.getDbContext()) {
+                return db.users.SingleOrDefault(x => x.uuid == uuid);
             }
         }
 
@@ -108,6 +141,14 @@ namespace Gatekeeper.Services.Users {
             using (var db = serverContext.getDbContext()) {
                 var user = db.users.First(x => x.dbid == forUser.dbid);
                 db.Entry(user).Reference(x => x.password).Load();
+                return user;
+            }
+        }
+        
+        public User loadPermissions(User forUser) {
+            using (var db = serverContext.getDbContext()) {
+                var user = db.users.First(x => x.dbid == forUser.dbid);
+                db.Entry(user).Collection(x => x.permissions).Load();
                 return user;
             }
         }

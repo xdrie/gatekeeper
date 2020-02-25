@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Carter;
 using Gatekeeper.Config;
 using Gatekeeper.Models;
@@ -33,13 +34,19 @@ namespace Gatekeeper {
                 options.OpenApi.GlobalSecurityDefinitions = new[] {GateApiConstants.Security.USER_BEARER_AUTH};
             });
 
-            // load configuration
-            var serverConfig = new SConfig(); // default configuration
-            if (File.Exists(CONFIG_FILE)) {
-                var configTxt = File.ReadAllText(CONFIG_FILE);
-                var configDoc = Toml.Parse(configTxt);
-                var configModel = configDoc.ToModel();
-                serverConfig = ConfigLoader.readDocument(configModel);
+            var serverConfig = default(SConfig);
+            var configDescriptor = services.SingleOrDefault(d => d.ServiceType == typeof(SConfig));
+            if (configDescriptor == null) {
+                // load configuration
+                serverConfig = new SConfig(); // default configuration
+                if (File.Exists(CONFIG_FILE)) {
+                    var configTxt = File.ReadAllText(CONFIG_FILE);
+                    var configDoc = Toml.Parse(configTxt);
+                    var configModel = configDoc.ToModel();
+                    serverConfig = ConfigLoader.readDocument(configModel);
+                }
+            } else {
+                serverConfig = (SConfig) configDescriptor.ImplementationInstance;
             }
 
             var context = new SContext(services, serverConfig);
@@ -77,10 +84,9 @@ namespace Gatekeeper {
 
                 // log some server information
                 serverContext.log.writeLine(
-                    $"running {nameof(Gatekeeper)} v{SConfig.VERSION} instance '{SConfig.SERVER_NAME}'",
+                    $"running {nameof(Gatekeeper)} {SConfig.VERSION} instance '{SConfig.SERVER_NAME}'",
                     SLogger.LogLevel.Information);
 
-                // print host information
 #if DEBUG
                 // print debug banner (always)
                 serverContext.log.writeLine(
@@ -98,6 +104,12 @@ namespace Gatekeeper {
                         SLogger.LogLevel.Warning);
                 }
 #endif
+
+                var configuredAppNames = string.Join(", ", serverContext.config.apps.Select(x => x.name));
+                serverContext.log.writeLine(
+                    $"available remote application configurations[{serverContext.config.apps.Count}]: remote applications are configured: [{configuredAppNames}]",
+                    SLogger.LogLevel.Information);
+
                 app.UseRouting();
 
                 app.UseEndpoints(builder => builder.MapCarter());

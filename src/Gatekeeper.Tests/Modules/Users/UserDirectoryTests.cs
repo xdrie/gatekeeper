@@ -1,4 +1,3 @@
-using System.Net.Http;
 using System.Threading.Tasks;
 using Gatekeeper.Models.Identity;
 using Gatekeeper.Tests.Base;
@@ -8,22 +7,22 @@ using Xunit;
 
 namespace Gatekeeper.Tests.Modules.Users {
     [Collection(UserTestCollection.KEY)]
-    public class SelfModuleTests {
+    public class UserDirectoryTests {
         private readonly UserTestFixture fx;
 
-        public SelfModuleTests(UserTestFixture fixture) {
+        public UserDirectoryTests(UserTestFixture fixture) {
             fx = fixture;
         }
 
         [Fact]
-        public async Task canAccessMePage() {
+        public async Task canFetchMeFromDirectory() {
             await fx.initialize();
             var client = fx.getAuthedClient();
-            
+
             // check me page
-            var resp = await client.GetAsync("/a/u/me");
+            var resp = await client.GetAsync($"/a/u/{fx.username}");
             resp.EnsureSuccessStatusCode();
-            var data = JsonConvert.DeserializeObject<AuthenticatedUser>(await resp.Content.ReadAsStringAsync());
+            var data = JsonConvert.DeserializeObject<PublicUser>(await resp.Content.ReadAsStringAsync());
             Assert.Equal(fx.username, data.username);
         }
     }
