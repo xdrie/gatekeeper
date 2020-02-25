@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -88,17 +89,17 @@ namespace Gatekeeper {
                 // print debug banner (always)
                 serverContext.log.writeLine(
                     $"this is a DEBUG build of {nameof(Gatekeeper)}. this build should NEVER be used in production.",
-                    SLogger.LogLevel.Warning);
+                    ConsoleColor.Red);
                 if (serverContext.config.server.development) {
                     serverContext.log.writeLine(
                         $"development/test mode is enabled. default values and fake external services will be used.",
-                        SLogger.LogLevel.Warning);
+                        ConsoleColor.Red);
                 }
 #else
                 if (env.IsProduction()) {
                     serverContext.log.writeLine(
                         $"this is a release build of {nameof(Gatekeeper)}, but is not being run in PRODUCTION (it is being run in '{env.EnvironmentName}')",
-                        SLogger.LogLevel.Warning);
+                        ConsoleColor.Red);
                 }
 #endif
 
