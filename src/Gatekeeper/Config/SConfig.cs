@@ -9,7 +9,7 @@ using Hexagon.Services.Application;
 namespace Gatekeeper.Config {
     public class SConfig {
         public const string SERVER_NAME = "ALTiCU Gatekeeper";
-        public const string VERSION = "v0.0.4.2300-dev";
+        public const string VERSION = "v0.0.6.2410-dev";
 
         public class Server {
             public const string DEFAULT_DATABASE = "Data Source=database.db";
