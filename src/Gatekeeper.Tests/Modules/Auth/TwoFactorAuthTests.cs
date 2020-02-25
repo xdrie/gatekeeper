@@ -19,8 +19,6 @@ namespace Gatekeeper.Tests.Modules.Auth {
         public TwoFactorAuthTests(ServerTestFixture fixture) {
             fx = fixture;
         }
-        
-        
 
         public async Task<(HttpClient, TotpSetupResponse)> registerAndStartTotpSetup(string username) {
             var client = fx.getClient();

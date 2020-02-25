@@ -14,6 +14,8 @@ namespace Gatekeeper.Tests.Utilities {
         public const string TEST_NAME = "Test Testingtest";
         public const string TEST_EMAIL = "test@example.com";
         public const string TEST_PASSWORD = "1234567890";
+        
+        public const string TEST_ADMIN = "admin";
 
         public AccountRegistrar(SContext context) : base(context) { }
 
