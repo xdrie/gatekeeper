@@ -33,6 +33,8 @@ namespace Gatekeeper.Tests.Modules.Manager {
 
         [Fact]
         public async Task canAddAndRemovePermissions() {
+            await fx.initialize();
+            
             var username = AccountRegistrar.TEST_ADMIN + "_mgperms";
             var adminClient = await registerAdminAccount(username);
 
@@ -46,7 +48,7 @@ namespace Gatekeeper.Tests.Modules.Manager {
             addResp.EnsureSuccessStatusCode();
             // ensure that it was added
             var addedToUser = fx.serverContext.userManager.findByUsername(fx.username);
-            fx.serverContext.userManager.loadPermissions(addedToUser);
+            addedToUser = fx.serverContext.userManager.loadPermissions(addedToUser);
             Assert.Contains(addedToUser.permissions, x => x.path == testPerm);
             // remove the permission
             var removeResp = await adminClient.PatchAsJsonAsync("/a/perms/update", new UpdatePermissionRequest {
@@ -57,8 +59,8 @@ namespace Gatekeeper.Tests.Modules.Manager {
             removeResp.EnsureSuccessStatusCode();
             // ensure that it was removed
             var removedFromUser = fx.serverContext.userManager.findByUsername(fx.username);
-            fx.serverContext.userManager.loadPermissions(removedFromUser);
-            Assert.DoesNotContain(addedToUser.permissions, x => x.path == testPerm);
+            removedFromUser = fx.serverContext.userManager.loadPermissions(removedFromUser);
+            Assert.DoesNotContain(removedFromUser.permissions, x => x.path == testPerm);
         }
     }
 }

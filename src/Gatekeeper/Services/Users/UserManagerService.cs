@@ -10,6 +10,7 @@ using Gatekeeper.Models.Remote;
 using Gatekeeper.Models.Requests;
 using Gatekeeper.Services.Auth;
 using Hexagon.Utilities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Gatekeeper.Services.Users {
     public class UserManagerService : DependencyObject {
@@ -86,6 +87,23 @@ namespace Gatekeeper.Services.Users {
             }
         }
 
+        public void updatePermission(int userId, Permission permission, Permission.PermissionUpdateType updateType) {
+            using (var db = serverContext.getDbContext()) {
+                var user = db.users.Include(x => x.permissions)
+                    .SingleOrDefault(x => x.dbid == userId);
+                switch (updateType) {
+                    case Permission.PermissionUpdateType.Add:
+                        user.permissions.Add(permission);
+                        break;
+                    case Permission.PermissionUpdateType.Remove:
+                        user.permissions.RemoveAll(x => x.path == permission.path);
+                        break;
+                }
+
+                db.SaveChanges();
+            }
+        }
+
         public bool checkPassword(string password, User user) {
             user = loadPassword(user);
             var ret = false;
@@ -112,7 +130,7 @@ namespace Gatekeeper.Services.Users {
                 return db.users.SingleOrDefault(x => x.username == username);
             }
         }
-        
+
         public User? findByUuid(string uuid) {
             using (var db = serverContext.getDbContext()) {
                 return db.users.SingleOrDefault(x => x.uuid == uuid);
@@ -126,17 +144,17 @@ namespace Gatekeeper.Services.Users {
                 return user;
             }
         }
-
-        public class UserAlreadyExistsException : ApplicationException {
-            public UserAlreadyExistsException(string message) : base(message) { }
-        }
-
+        
         public User loadPermissions(User forUser) {
             using (var db = serverContext.getDbContext()) {
                 var user = db.users.First(x => x.dbid == forUser.dbid);
                 db.Entry(user).Collection(x => x.permissions).Load();
                 return user;
             }
+        }
+
+        public class UserAlreadyExistsException : ApplicationException {
+            public UserAlreadyExistsException(string message) : base(message) { }
         }
     }
 }

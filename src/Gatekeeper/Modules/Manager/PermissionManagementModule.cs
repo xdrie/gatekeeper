@@ -15,21 +15,11 @@ namespace Gatekeeper.Modules.Manager {
 
                 // fetch the user and update their permissions
                 var user = serverContext.userManager.findByUuid(updateReq.userUuid);
-                serverContext.userManager.loadPermissions(user);
                 var updateType =
-                    Enum.Parse<UpdatePermissionRequest.PermissionUpdateType>(updateReq.type, true);
+                    Enum.Parse<Permission.PermissionUpdateType>(updateReq.type, true);
                 foreach (var permission in updateReq.permissions) {
-                    switch (updateType) {
-                        case UpdatePermissionRequest.PermissionUpdateType.Add:
-                            user.permissions.Add(new Permission(permission));
-                            break;
-                        case UpdatePermissionRequest.PermissionUpdateType.Remove:
-                            user.permissions.RemoveAll(x => x.path == permission);
-                            break;
-                    }
+                    serverContext.userManager.updatePermission(user.dbid, new Permission(permission), updateType);
                 }
-                // save the user
-                serverContext.userManager.updateUser(user);
             });
         }
     }

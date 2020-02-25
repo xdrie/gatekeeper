@@ -5,5 +5,10 @@ namespace Gatekeeper.Models.Access {
         public Permission(string path) {
             this.path = path;
         }
+
+        public enum PermissionUpdateType {
+            Add,
+            Remove
+        }
     }
 }
