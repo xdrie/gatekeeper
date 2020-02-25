@@ -29,7 +29,7 @@ namespace Gatekeeper.Services.Users {
                 email = request.email,
                 uuid = Guid.NewGuid().ToString("N"),
                 password = cryptPassword,
-                pronouns = Enum.Parse<User.Pronouns>(request.pronouns),
+                pronouns = Enum.Parse<User.Pronouns>(request.pronouns, true),
                 verification = StringUtils.secureRandomString(8),
                 registered = DateTime.Now,
                 permissions = new List<Permission> {new Permission(GlobalRemoteApp.DEFAULT_PERMISSION)}

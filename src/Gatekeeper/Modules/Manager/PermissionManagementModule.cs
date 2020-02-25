@@ -17,7 +17,7 @@ namespace Gatekeeper.Modules.Manager {
                 var user = serverContext.userManager.findByUuid(updateReq.userUuid);
                 serverContext.userManager.loadPermissions(user);
                 var updateType =
-                    Enum.Parse<UpdatePermissionRequest.PermissionUpdateType>(updateReq.type);
+                    Enum.Parse<UpdatePermissionRequest.PermissionUpdateType>(updateReq.type, true);
                 foreach (var permission in updateReq.permissions) {
                     switch (updateType) {
                         case UpdatePermissionRequest.PermissionUpdateType.Add:
