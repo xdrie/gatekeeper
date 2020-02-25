@@ -82,11 +82,8 @@ namespace Gatekeeper {
                     // context.Database.EnsureCreated();
                 }
 
-                // log some server information
-                serverContext.log.writeLine(
-                    $"running {nameof(Gatekeeper)} {SConfig.VERSION} instance '{SConfig.SERVER_NAME}'",
-                    SLogger.LogLevel.Information);
-
+                // show banner and log some server information
+                SBoot.display(serverContext);
 #if DEBUG
                 // print debug banner (always)
                 serverContext.log.writeLine(

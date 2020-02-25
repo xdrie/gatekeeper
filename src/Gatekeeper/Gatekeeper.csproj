@@ -21,4 +21,10 @@
     <ItemGroup>
         <ProjectReference Include="..\..\lib\Hexagon\src\Hexagon\Hexagon.csproj" />
     </ItemGroup>
+
+    <ItemGroup>
+        <EmbeddedResource Include="..\..\media\boot.txt">
+            <Link>Data\boot.txt</Link>
+        </EmbeddedResource>
+    </ItemGroup>
 </Project>
