@@ -28,7 +28,7 @@ namespace Gatekeeper.Tests.Modules.Auth {
         public async Task canRegisterAccount() {
             var client = fx.getClient();
             var username = AccountRegistrar.TEST_USERNAME + "_reg";
-            var authedUser = await AccountRegistrar.registerAccount(client, username);
+            var authedUser = await new AccountRegistrar(fx.serverContext).registerAccount(client, username);
             Assert.Equal(username, authedUser.user.username);
             Assert.NotNull(authedUser.token.content);
             Assert.Equal(authedUser.token.scope, AccessScope.ROOT_PATH);
@@ -38,12 +38,13 @@ namespace Gatekeeper.Tests.Modules.Auth {
         public async Task canLoginAccount() {
             var client = fx.getClient();
             var username = AccountRegistrar.TEST_USERNAME + "_login";
-            await AccountRegistrar.registerAccount(client, username);
+            var authedUser = await new AccountRegistrar(fx.serverContext).registerAccount(client, username);
             // now attempt to log in
             var resp = await client.PostAsJsonAsync("/a/auth/login", new LoginRequest {
                 username = username,
                 password = AccountRegistrar.TEST_PASSWORD
             });
+            resp.EnsureSuccessStatusCode();
             var data = JsonConvert.DeserializeObject<AuthedUserResponse>(await resp.Content.ReadAsStringAsync());
             Assert.Equal(username, data.user.username);
             Assert.NotNull(data.token.content);
@@ -54,7 +55,7 @@ namespace Gatekeeper.Tests.Modules.Auth {
         public async Task canVerifyAccount() {
             var client = fx.getClient();
             var username = AccountRegistrar.TEST_USERNAME + "_verify";
-            var authedUser = await AccountRegistrar.registerAccount(client, username);
+            var authedUser = await new AccountRegistrar(fx.serverContext).registerAccount(client, username);
             client.addToken(authedUser.token);
             // fetch the verification code manually
             var verificationCode = fx.serverContext.userManager.findByUsername(username).verification;
@@ -67,12 +68,14 @@ namespace Gatekeeper.Tests.Modules.Auth {
         public async Task canDeleteAccount() {
             var client = fx.getClient();
             var username = AccountRegistrar.TEST_USERNAME + "_delete";
-            await AccountRegistrar.registerAccount(client, username);
+            var authedUser = await new AccountRegistrar(fx.serverContext).registerAccount(client, username);
             var resp = await client.PostAsJsonAsync("/a/auth/delete", new LoginRequest {
                 username = username,
                 password = AccountRegistrar.TEST_PASSWORD
             });
             resp.EnsureSuccessStatusCode();
+            // now confirm that the user has been deleted
+            Assert.Null(fx.serverContext.userManager.findByUsername(username));
         }
     }
 }

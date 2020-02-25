@@ -5,7 +5,7 @@ using Gatekeeper.OpenApi.Users;
 
 namespace Gatekeeper.Modules.Users {
     public class SelfModule : AuthenticatedUserModule {
-        public SelfModule(SContext serverContext) : base(AccessScope.rootScope, "/u", serverContext) {
+        public SelfModule(SContext serverContext) : base("/u", serverContext) {
             Get<GetMyself>("/me", async (req, res) => { await res.Negotiate(new AuthenticatedUser(currentUser)); });
         }
     }
