@@ -76,29 +76,29 @@ namespace Gatekeeper.Server.Config {
 
             var appsTables = tb.getField<TomlTableArray>(nameof(apps));
             foreach (var appTable in appsTables) {
-                var app = new RemoteApp {
+                var loadedApp = new RemoteApp {
                     name = appTable.getField<string>(nameof(RemoteApp.name)),
                     secret = appTable.getField<string>(nameof(RemoteApp.secret)),
+                    layers = appTable.getField<TomlArray>(nameof(RemoteApp.layers))
+                        .Select(x => x.ToString())
+                        .ToList(),
                 };
-                app.layers = appTable.getField<TomlArray>(nameof(RemoteApp.layers))
-                    .Select(x => x.ToString())
-                    .ToList();
-                apps.Add(app);
+                apps.Add(loadedApp);
             }
 
             var groupsTables = tb.getField<TomlTableArray>(nameof(groups));
             foreach (var groupTable in groupsTables) {
-                var group = new Group {
+                var loadedGroup = new Group {
                     name = groupTable.getField<string>(nameof(Group.name)),
                     priority = groupTable.getField<long>(nameof(Group.priority))
                 };
                 // validate group name
-                if (!StringValidator.isIdentifier(group.name)) {
-                    throw new FormatException($"group name {group.name} is not a valid identifier.");
+                if (!StringValidator.isIdentifier(loadedGroup.name)) {
+                    throw new FormatException($"group name {loadedGroup.name} is not a valid identifier.");
                 }
 
                 // load permissions and rules
-                group.permissions = groupTable.getField<TomlArray>(nameof(Group.permissions))
+                loadedGroup.permissions = groupTable.getField<TomlArray>(nameof(Group.permissions))
                     .Select(x => new Permission(x.ToString()))
                     .ToList();
                 var groupRules = groupTable.getField<TomlTable>(nameof(Group.rules));
@@ -106,11 +106,11 @@ namespace Gatekeeper.Server.Config {
                     var ruleApp = appRulesTablePair.Key;
                     var rulesTable = (TomlTable) appRulesTablePair.Value;
                     foreach (var appRule in rulesTable) {
-                        group.rules.Add(new AccessRule(ruleApp, appRule.Key, appRule.Value.ToString()));
+                        loadedGroup.rules.Add(new AccessRule(ruleApp, appRule.Key, appRule.Value.ToString()));
                     }
                 }
 
-                groups.Add(group);
+                groups.Add(loadedGroup);
             }
 
             var usersTable = tb.getField<TomlTable>(nameof(users));
