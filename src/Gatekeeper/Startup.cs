@@ -29,10 +29,17 @@ namespace Gatekeeper {
                     {
                         GateApiConstants.Security.USER_BEARER_AUTH,
                         new OpenApiSecurity {Type = OpenApiSecurityType.http, Scheme = "bearer"}
+                    }, {
+                        GateApiConstants.Security.REMOTE_APP_APIKEY,
+                        new OpenApiSecurity
+                            {Type = OpenApiSecurityType.apiKey, In = OpenApiIn.header, Name = "X-App-Secret"}
                     },
                     // { "ApiKey", new OpenApiSecurity { Type = OpenApiSecurityType.apiKey, Name = "X-API-KEY", In = OpenApiIn.header } }
                 };
-                options.OpenApi.GlobalSecurityDefinitions = new[] {GateApiConstants.Security.USER_BEARER_AUTH};
+                options.OpenApi.GlobalSecurityDefinitions = new[] {
+                    GateApiConstants.Security.USER_BEARER_AUTH,
+                    GateApiConstants.Security.REMOTE_APP_APIKEY
+                };
             });
 
             var serverConfig = default(SConfig);
@@ -46,7 +53,8 @@ namespace Gatekeeper {
                     var configModel = configDoc.ToModel();
                     serverConfig = ConfigLoader.readDocument(configModel);
                 }
-            } else {
+            }
+            else {
                 serverConfig = (SConfig) configDescriptor.ImplementationInstance;
             }
 

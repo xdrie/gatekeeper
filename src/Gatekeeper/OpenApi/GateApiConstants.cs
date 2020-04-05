@@ -6,10 +6,12 @@ namespace Gatekeeper.OpenApi {
             public const string ADMIN = "Administration";
             public const string USER_DIRECTORY = "User Directory";
             public const string AUTH_PROVIDER = "Authentication Provider";
+            public const string REMOTE_APP = "Remote App";
         }
 
         public static class Security {
-            public const string USER_BEARER_AUTH = "BearerAuth";
+            public const string USER_BEARER_AUTH = "UserBearerAuth";
+            public const string REMOTE_APP_APIKEY = "RemoteBearerAuth";
         }
     }
 }

@@ -34,6 +34,7 @@ namespace Gatekeeper.Config {
         public class RemoteApp {
             public virtual string name { get; set; }
             public virtual List<string> layers { get; set; } = new List<string>();
+            public virtual string secret { get; set; }
         }
 
         public List<RemoteApp> apps = new List<RemoteApp> {new GlobalRemoteApp()};

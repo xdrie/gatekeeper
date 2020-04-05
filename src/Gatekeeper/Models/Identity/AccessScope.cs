@@ -38,5 +38,6 @@ namespace Gatekeeper.Models.Identity {
         }
 
         public static AccessScope rootScope => new AccessScope(ROOT_PATH);
+        public static AccessScope globalScope => new AccessScope(WILDCARD_PATH);
     }
 }

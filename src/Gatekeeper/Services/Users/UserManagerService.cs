@@ -33,7 +33,7 @@ namespace Gatekeeper.Services.Users {
                 pronouns = Enum.Parse<User.Pronouns>(request.pronouns, true),
                 verification = StringUtils.secureRandomString(8),
                 registered = DateTime.Now,
-                permissions = new List<Permission> {new Permission(GlobalRemoteApp.DEFAULT_PERMISSION)}
+                permissions = new List<Permission>()
             };
             // - set default settings
             // add permissions from default permissions
@@ -59,6 +59,10 @@ namespace Gatekeeper.Services.Users {
             // create an access token
             var token = serverContext.tokenAuthenticator.issueRoot();
 
+            return issueTokenFor(userId, token);
+        }
+
+        public Token issueTokenFor(int userId, Token token) {
             using (var db = serverContext.getDbContext()) {
                 token.user = db.users.Find(userId);
                 db.tokens.Add(token); // add token

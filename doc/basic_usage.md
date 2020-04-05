@@ -47,6 +47,7 @@ as a demonstration, we will configure an app called `FrenchFry` that belongs to 
 [[apps]]
 name = "FrenchFry"
 layers = [ "/Food" ]
+secret = "VERY_SECURE"
 ```
 
 ## admin permission management
@@ -63,3 +64,9 @@ to get your permissions as a user, use `GET /a/perms`. this will return all perm
 ## issuing an app token
 
 for our `FrenchFry` app, `GET /a/app/token/FrenchFry` to request that the server grant an app token. if the user has been granted permission to the app, a token will be returned.
+
+## fetching user info
+
+once the remote app recieves an app token, it can use the remote app api to access relevant information.
+
+use `GET /a/remote/user` to get public user details, respecting their privacy settings.

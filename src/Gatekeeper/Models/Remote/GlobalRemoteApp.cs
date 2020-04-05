@@ -4,8 +4,11 @@ using Gatekeeper.Models.Identity;
 
 namespace Gatekeeper.Models.Remote {
     public class GlobalRemoteApp : SConfig.RemoteApp {
-        public const string DEFAULT_PERMISSION = "/Default";
-        public override string name => "Global";
-        public override List<string> layers => new List<string> { AccessScope.WILDCARD_PATH, "Default" };
+        public const string GLOBAL_APP = "Global";
+        public const string GLOBAL_SECRET = "secret";
+        
+        public override string name => GLOBAL_APP;
+        public override List<string> layers => new List<string> { AccessScope.WILDCARD_PATH };
+        public override string secret => GLOBAL_SECRET;
     }
 }
