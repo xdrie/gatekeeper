@@ -41,7 +41,7 @@ namespace Gatekeeper.Tests.Modules.Manager {
             // get the friends group
             var luxGroup = fx.serverContext.config.groups.Single(x => x.name == "Luxurious");
             // attempt to add a permission
-            var addResp = await adminClient.PatchAsJsonAsync("/a/perms/update", new UpdateGroupRequest {
+            var addResp = await adminClient.PatchAsJsonAsync("/a/groups/update", new UpdateGroupRequest {
                 userUuid = fx.authedUser.user.uuid,
                 type = "add",
                 groups = new[] {luxGroup.name}
@@ -52,7 +52,7 @@ namespace Gatekeeper.Tests.Modules.Manager {
             addedToUser = fx.serverContext.userManager.loadGroups(addedToUser);
             Assert.Contains(addedToUser.groups, x => x == luxGroup.name);
             // remove the permission
-            var removeResp = await adminClient.PatchAsJsonAsync("/a/perms/update", new UpdateGroupRequest {
+            var removeResp = await adminClient.PatchAsJsonAsync("/a/groups/update", new UpdateGroupRequest {
                 userUuid = fx.authedUser.user.uuid,
                 type = "remove",
                 groups = new[] {luxGroup.name}

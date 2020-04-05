@@ -8,7 +8,7 @@ using Hexagon.Web;
 
 namespace Gatekeeper.Modules.Manager {
     public class GroupManagementModule : AdminModule {
-        public GroupManagementModule(SContext serverContext) : base("/perms", serverContext) {
+        public GroupManagementModule(SContext serverContext) : base("/groups", serverContext) {
             Patch<UpdateGroups>("/update", async (req, res) => {
                 var validatedReq = await this.validateRequest<UpdateGroupRequest>(req, res);
                 if (!validatedReq.isValid) return;
