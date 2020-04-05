@@ -30,7 +30,7 @@ namespace Gatekeeper.Config {
                     .ToList();
                 cfg.apps.Add(appCfg);
             }
-            
+
             var groups = tb.getField<TomlTableArray>(nameof(cfg.groups));
             foreach (var group in groups) {
                 var groupCfg = new Group {
@@ -40,6 +40,20 @@ namespace Gatekeeper.Config {
                 if (!StringValidator.isIdentifier(groupCfg.name)) {
                     throw new FormatException($"group name {groupCfg.name} is not a valid identifier.");
                 }
+
+                // load permissions and rules
+                groupCfg.permissions = group.getField<TomlArray>(nameof(Group.permissions))
+                    .Select(x => new Permission(x.ToString()))
+                    .ToList();
+                var groupRules = group.getField<TomlTable>(nameof(Group.rules));
+                foreach (var appRulesTablePair in groupRules) {
+                    var ruleApp = appRulesTablePair.Key;
+                    var rulesTable = (TomlTable) appRulesTablePair.Value;
+                    foreach (var appRule in rulesTable) {
+                        groupCfg.rules.Add(new AccessRule(ruleApp, appRule.Key, appRule.Value.ToString()));
+                    }
+                }
+
                 cfg.groups.Add(groupCfg);
             }
 
