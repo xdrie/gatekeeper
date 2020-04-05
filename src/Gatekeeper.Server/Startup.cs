@@ -29,12 +29,8 @@ namespace Gatekeeper.Server {
             services.AddOptions();
 
             // enable Razor Pages
-            var mvcBuilder = services.AddRazorPages();
-#if DEBUG
-            if (hostEnv.IsDevelopment()) {
-                mvcBuilder.AddRazorRuntimeCompilation();
-            }
-#endif
+            services.AddRazorPages()
+                .AddRazorRuntimeCompilation();
 
             // install Carter
             services.AddCarter(options => {
