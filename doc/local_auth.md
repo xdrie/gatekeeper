@@ -1,5 +1,7 @@
 
-# auth quickstart
+# local auth overview
+
+this provides a brief introduction to the functionality a frontend to Gatekeeper should provide.
 
 all specific REST api documentation is available via OpenAPI, which is built in to the server.
 the openapi file can be found at `GET /openapi`, and the web documentation browser through Swagger can be found at `GET /swagger`.
@@ -29,3 +31,7 @@ other basic account operations are available under the `User Management` module.
 ## get user account info
 
 `GET /a/u/me` to get information about the currently authenticated user.
+
+## two-factor authentication
+
+TODO
