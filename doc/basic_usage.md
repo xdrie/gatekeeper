@@ -57,3 +57,5 @@ however, if the administrator wishes to create a layer only available to specifi
 an admin account is needed for using admin functions. follow the basic account creation steps again. at the end, this time, update the database to set the user's role to `Admin`.
 
 to modify permissions, use `PATCH /a/perms/update` with a user uuid, a type specifying whether to `add` or `remove` permissions, and an array of permission paths (of the format `/Layer`).
+
+to get your permissions as a user, use `GET /a/perms`. this will return all permissions associated with a given user account.
