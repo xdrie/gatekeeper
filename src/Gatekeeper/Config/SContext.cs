@@ -2,7 +2,7 @@ using System;
 using Gatekeeper.Models;
 using Gatekeeper.Services.Auth;
 using Gatekeeper.Services.Users;
-using Hexagon.Services.Application;
+using Hexagon.Logging;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Gatekeeper.Config {

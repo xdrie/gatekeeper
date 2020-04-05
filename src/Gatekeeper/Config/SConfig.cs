@@ -2,7 +2,7 @@
 
 using System.Collections.Generic;
 using Gatekeeper.Models.Remote;
-using Hexagon.Services.Application;
+using Hexagon.Logging;
 
 #endregion
 

@@ -6,7 +6,7 @@ using Carter;
 using Gatekeeper.Config;
 using Gatekeeper.Models;
 using Gatekeeper.OpenApi;
-using Hexagon.Services.Application;
+using Hexagon.Logging;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;

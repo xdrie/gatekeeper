@@ -1,6 +1,6 @@
 using System.IO;
 using System.Reflection;
-using Hexagon.Services.Application;
+using Hexagon.Logging;
 
 namespace Gatekeeper.Config {
     public class SBoot {

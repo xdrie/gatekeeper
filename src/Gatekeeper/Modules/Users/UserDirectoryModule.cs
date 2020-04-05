@@ -3,7 +3,7 @@ using Carter.Request;
 using Gatekeeper.Config;
 using Gatekeeper.Models.Identity;
 using Gatekeeper.OpenApi.Users;
-using Hexagon.Services.Serialization;
+using Hexagon.Serialization;
 
 namespace Gatekeeper.Modules.Users {
     public class UserDirectoryModule : ApiModule {

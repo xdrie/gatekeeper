@@ -10,7 +10,6 @@ using Gatekeeper.Models;
 using Gatekeeper.Models.Identity;
 using Gatekeeper.Models.Responses;
 using Gatekeeper.Tests.Utilities;
-using Hexagon.Services.Application;
 using Hexagon.Utilities;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
