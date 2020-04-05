@@ -10,7 +10,8 @@ namespace Gatekeeper.OpenApi {
         }
 
         public static class Security {
-            public const string USER_BEARER_AUTH = "BearerAuth";
+            public const string USER_BEARER_AUTH = "UserBearerAuth";
+            public const string REMOTE_APP_APIKEY = "RemoteBearerAuth";
         }
     }
 }

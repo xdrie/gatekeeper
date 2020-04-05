@@ -7,7 +7,7 @@ namespace Gatekeeper.OpenApi.App {
     public class RemoteGetUser : RouteMetaData {
         public override string Description => "Get remote user information";
         public override string Tag => GateApiConstants.Tags.REMOTE_APP;
-        public override string SecuritySchema => GateApiConstants.Security.USER_BEARER_AUTH;
+        public override string SecuritySchema => GateApiConstants.Security.REMOTE_APP_APIKEY;
 
         public override RouteMetaDataResponse[] Responses { get; } = {
             new RouteMetaDataResponse {
