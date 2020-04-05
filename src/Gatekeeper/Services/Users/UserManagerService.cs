@@ -32,13 +32,11 @@ namespace Gatekeeper.Services.Users {
                 pronouns = Enum.Parse<User.Pronouns>(request.pronouns, true),
                 verification = StringUtils.secureRandomString(8),
                 registered = DateTime.Now,
-                groups = new List<string>()
+                groups = new string[0]
             };
             // - set default settings
             // add groups from default groups
-            foreach (var group in serverContext.config.users.defaultGroups) {
-                user.groups.Add(group);
-            }
+            user.groups = serverContext.config.users.defaultGroups.ToArray();
 
 #if DEBUG
             if (serverContext.config.server.development) {
@@ -97,10 +95,10 @@ namespace Gatekeeper.Services.Users {
                     .SingleOrDefault(x => x.dbid == userId);
                 switch (updateType) {
                     case Group.UpdateType.Add:
-                        user.groups.Add(groupName);
+                        user.groups = user.groups.Concat(new[] {groupName}).ToArray();
                         break;
                     case Group.UpdateType.Remove:
-                        user.groups.RemoveAll(x => x == groupName);
+                        user.groups = user.groups.Except(new[] {groupName}).ToArray();
                         break;
                 }
 

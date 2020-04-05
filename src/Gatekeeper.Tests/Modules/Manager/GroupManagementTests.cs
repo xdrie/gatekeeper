@@ -10,10 +10,10 @@ using Xunit;
 
 namespace Gatekeeper.Tests.Modules.Manager {
     [Collection(UserTestCollection.KEY)]
-    public class PermissionManagementTests {
+    public class GroupManagementTests {
         private readonly UserTestFixture fx;
 
-        public PermissionManagementTests(UserTestFixture fixture) {
+        public GroupManagementTests(UserTestFixture fixture) {
             fx = fixture;
         }
 
@@ -32,35 +32,36 @@ namespace Gatekeeper.Tests.Modules.Manager {
         }
 
         [Fact]
-        public async Task canAddAndRemovePermissions() {
+        public async Task canAddAndRemoveGroups() {
             await fx.initialize();
-            
+
             var username = AccountRegistrar.TEST_ADMIN + "_mgperms";
             var adminClient = await registerAdminAccount(username);
 
-            var testPerm = "/AdminTestScope";
+            // get the friends group
+            var friendsGroup = fx.serverContext.config.groups.Single(x => x.name == "Friends");
             // attempt to add a permission
             var addResp = await adminClient.PatchAsJsonAsync("/a/perms/update", new UpdateGroupRequest {
                 userUuid = fx.authedUser.user.uuid,
                 type = "add",
-                groups = new[] {testPerm}
+                groups = new[] {friendsGroup.name}
             });
             addResp.EnsureSuccessStatusCode();
             // ensure that it was added
             var addedToUser = fx.serverContext.userManager.findByUsername(fx.username);
             addedToUser = fx.serverContext.userManager.loadGroups(addedToUser);
-            Assert.Contains(addedToUser.permissions, x => x.path == testPerm);
+            Assert.Contains(addedToUser.groups, x => x == friendsGroup.name);
             // remove the permission
             var removeResp = await adminClient.PatchAsJsonAsync("/a/perms/update", new UpdateGroupRequest {
                 userUuid = fx.authedUser.user.uuid,
                 type = "remove",
-                groups = new[] {testPerm}
+                groups = new[] {friendsGroup.name}
             });
             removeResp.EnsureSuccessStatusCode();
             // ensure that it was removed
             var removedFromUser = fx.serverContext.userManager.findByUsername(fx.username);
             removedFromUser = fx.serverContext.userManager.loadGroups(removedFromUser);
-            Assert.DoesNotContain(removedFromUser.permissions, x => x.path == testPerm);
+            Assert.DoesNotContain(removedFromUser.groups, x => x == friendsGroup.name);
         }
     }
 }
