@@ -1,6 +1,6 @@
+using System.Net.Http;
 using System.Threading.Tasks;
 using Gatekeeper.Models.Identity;
-using Gatekeeper.Models.Remote;
 using Gatekeeper.Services.Auth;
 using Gatekeeper.Tests.Base;
 using Gatekeeper.Tests.Meta;
@@ -17,8 +17,7 @@ namespace Gatekeeper.Tests.Modules.Provider {
             fx = fixture;
         }
 
-        [Fact]
-        public async Task appTokensGetUserInfo() {
+        private async Task<Token> getSaltAppToken() {
             await fx.initialize();
             var client = fx.getAuthedClient();
 
@@ -26,11 +25,21 @@ namespace Gatekeeper.Tests.Modules.Provider {
             resp.EnsureSuccessStatusCode();
             var appToken = JsonConvert.DeserializeObject<Token>(await resp.Content.ReadAsStringAsync());
             Assert.Equal("/Food/Salt", appToken.scope);
+            return appToken;
+        }
 
-            // now try requesting user info, but as the "application"
-            var appClient = fx.getClient(); // set up a client as the application
+        private HttpClient getAppClient(Token appToken) {
+            // authenticate a client on behalf of the application
+            var appClient = fx.getClient();
             appClient.addToken(appToken);
             appClient.DefaultRequestHeaders.Add(ApiAuthenticator.APP_SECRET_HEADER, Constants.Apps.APP_SECRET);
+            return appClient;
+        }
+
+        [Fact]
+        public async Task getRemoteUserInfo() {
+            var appClient = getAppClient(await getSaltAppToken());
+
             // request user info
             var userInfoResp = await appClient.GetAsync("/a/remote/user");
             userInfoResp.EnsureSuccessStatusCode(); // valid user info
