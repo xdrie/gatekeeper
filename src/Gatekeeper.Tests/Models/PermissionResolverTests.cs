@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using Gatekeeper.Models.Access;
-using Gatekeeper.Services.Users;
+using Gatekeeper.Server.Services.Users;
 using Xunit;
 
 namespace Gatekeeper.Tests.Models {

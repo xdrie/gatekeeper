@@ -10,7 +10,6 @@ using Gatekeeper.Tests.Base;
 using Gatekeeper.Tests.Meta;
 using Gatekeeper.Tests.Utilities;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using Xunit;
 
 #endregion
