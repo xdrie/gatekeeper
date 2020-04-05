@@ -1,6 +1,7 @@
 #region
 
 using System.Collections.Generic;
+using Gatekeeper.Models.Access;
 using Gatekeeper.Models.Remote;
 using Hexagon.Logging;
 
@@ -31,13 +32,9 @@ namespace Gatekeeper.Config {
 
         public Server server = new Server();
 
-        public class RemoteApp {
-            public virtual string name { get; set; }
-            public virtual List<string> layers { get; set; } = new List<string>();
-            public virtual string secret { get; set; }
-        }
-
         public List<RemoteApp> apps = new List<RemoteApp> {new GlobalRemoteApp()};
+        
+        public List<Group> groups = new List<Group>();
 
         public class Users {
             public List<string> defaultLayers = new List<string>();
