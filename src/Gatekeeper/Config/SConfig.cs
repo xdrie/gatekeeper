@@ -37,7 +37,8 @@ namespace Gatekeeper.Config {
             public string secret { get; set; }
         }
 
-        public List<RemoteApp> apps = new List<RemoteApp> {new GlobalRemoteApp()};
+        // public List<RemoteApp> apps = new List<RemoteApp> {new GlobalRemoteApp()};
+        public List<RemoteApp> apps = new List<RemoteApp> {};
 
         public class Users {
             public List<string> defaultLayers = new List<string>();
