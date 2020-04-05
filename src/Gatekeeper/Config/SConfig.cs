@@ -32,8 +32,8 @@ namespace Gatekeeper.Config {
 
         public Server server = new Server();
 
-        public List<RemoteApp> apps = new List<RemoteApp> {new GlobalRemoteApp()};
-        
+        public List<RemoteApp> apps = new List<RemoteApp> { };
+
         public List<Group> groups = new List<Group>();
 
         public class Users {
