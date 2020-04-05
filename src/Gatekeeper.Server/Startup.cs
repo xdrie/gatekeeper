@@ -5,6 +5,7 @@ using System.Linq;
 using Carter;
 using Gatekeeper.Models;
 using Gatekeeper.Server.Config;
+using Gatekeeper.Server.Models;
 using Gatekeeper.Server.OpenApi;
 using Hexagon.Logging;
 using Microsoft.AspNetCore.Builder;
