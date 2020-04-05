@@ -5,15 +5,12 @@ using System.Linq;
 using Carter;
 using Gatekeeper.Models;
 using Gatekeeper.Server.Config;
-using Gatekeeper.Server.Models;
 using Gatekeeper.Server.OpenApi;
 using Hexagon.Logging;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Tomlyn;
 
 namespace Gatekeeper.Server {
     public class Startup {
@@ -50,9 +47,7 @@ namespace Gatekeeper.Server {
                 serverConfig = new SConfig(); // default configuration
                 if (File.Exists(CONFIG_FILE)) {
                     var configTxt = File.ReadAllText(CONFIG_FILE);
-                    var configDoc = Toml.Parse(configTxt);
-                    var configModel = configDoc.ToModel();
-                    serverConfig.load(configModel);
+                    serverConfig.load(configTxt);
                 }
             }
             else {

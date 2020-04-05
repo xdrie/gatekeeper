@@ -68,7 +68,7 @@ namespace Gatekeeper.Server.Config {
 
         #region Configuration Loading
 
-        public override void load(TomlTable tb) {
+        protected override void load(TomlTable tb) {
             var serverTable = tb.getField<TomlTable>(nameof(server));
 #if DEBUG
             serverTable.bindField(ref server.development, nameof(Server.development));
