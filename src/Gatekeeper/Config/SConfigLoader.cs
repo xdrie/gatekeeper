@@ -1,36 +1,12 @@
 #region
 
-using System;
-using System.Linq;
-using System.Text;
+using Hexagon.Utilities;
 using Tomlyn.Model;
 
 #endregion
 
 namespace Gatekeeper.Config {
-    public static class ConfigLoader {
-        private static string rename(string name) {
-            var sb = new StringBuilder();
-            foreach (var ch in name) {
-                if (char.IsUpper(ch))
-                    sb.Append("_");
-
-                sb.Append(ch.ToString().ToLower());
-            }
-
-            return sb.ToString();
-        }
-
-        public static T getField<T>(this TomlTable table, string field) {
-            return (T) table[rename(field)];
-        }
-
-        public static void bindField<T>(this TomlTable table, ref T target, string fieldName) {
-            if (table.ContainsKey(fieldName)) {
-                target = table.getField<T>(fieldName);
-            }
-        }
-
+    public class ConfigLoader {
         public static SConfig readDocument(TomlTable tb) {
             var cfg = new SConfig();
 
