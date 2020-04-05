@@ -91,8 +91,7 @@ namespace Gatekeeper.Services.Users {
 
         public void updateGroupMembership(int userId, string groupName, Group.UpdateType updateType) {
             using (var db = serverContext.getDbContext()) {
-                var user = db.users.Include(x => x.groups)
-                    .SingleOrDefault(x => x.dbid == userId);
+                var user = db.users.SingleOrDefault(x => x.dbid == userId);
                 switch (updateType) {
                     case Group.UpdateType.Add:
                         user.groups = user.groups.Concat(new[] {groupName}).ToArray();
@@ -150,7 +149,8 @@ namespace Gatekeeper.Services.Users {
         public User loadGroups(User forUser) {
             using (var db = serverContext.getDbContext()) {
                 var user = db.users.First(x => x.dbid == forUser.dbid);
-                db.Entry(user).Collection(x => x.groups).Load();
+                // disable, because we are currently using array-backed serialization
+                // db.Entry(user).Collection(x => x.groups).Load();
                 return user;
             }
         }

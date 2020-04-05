@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using Gatekeeper.Models.Access;
 
 namespace Gatekeeper.Models.Identity {
@@ -21,7 +22,13 @@ namespace Gatekeeper.Models.Identity {
         public Role role { get; set; } = Role.Pending;
         public string verification { get; set; }
         public DateTime registered { get; set; }
-        public string[] groups { get; set; }
+        public string groupList { get; set; }
+
+        [NotMapped]
+        public string[] groups {
+            get => groupList.Split(',');
+            set => groupList = string.Join(",", value);
+        }
 
         public enum Role {
             Pending,
