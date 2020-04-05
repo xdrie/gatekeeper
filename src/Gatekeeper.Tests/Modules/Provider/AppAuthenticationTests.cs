@@ -42,8 +42,6 @@ namespace Gatekeeper.Tests.Modules.Provider {
         public async Task authorizesAllowedApp() {
             await fx.initialize();
             var client = fx.getAuthedClient();
-            // add permission to access salt shaker
-            var user = fx.serverContext.userManager.findByUsername(fx.authedUser.user.username);
 
             var resp = await client.GetAsync("/a/app/token/SaltShaker");
             resp.EnsureSuccessStatusCode();

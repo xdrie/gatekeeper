@@ -33,7 +33,7 @@ namespace Gatekeeper.Services.Users {
                 pronouns = Enum.Parse<User.Pronouns>(request.pronouns, true),
                 verification = StringUtils.secureRandomString(8),
                 registered = DateTime.Now,
-                permissions = new List<Permission> {new Permission(GlobalRemoteApp.DEFAULT_PERMISSION)}
+                permissions = new List<Permission>()
             };
             // - set default settings
             // add permissions from default permissions
