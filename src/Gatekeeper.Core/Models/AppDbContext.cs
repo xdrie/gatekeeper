@@ -1,7 +1,7 @@
-using Gatekeeper.Server.Models.Identity;
+using Gatekeeper.Models.Identity;
 using Microsoft.EntityFrameworkCore;
 
-namespace Gatekeeper.Server.Models {
+namespace Gatekeeper.Models {
     public class AppDbContext : DbContext {
         public DbSet<User> users { get; set; }
         public DbSet<Token> tokens { get; set; }

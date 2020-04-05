@@ -1,7 +1,6 @@
 using System.Net;
 using Carter.OpenApi;
-using Gatekeeper.Server.Models.Identity;
-using Gatekeeper.Server.Models.Requests;
+using Gatekeeper.Models.Requests;
 
 namespace Gatekeeper.Server.OpenApi.Manager {
     public class UpdateGroups : RouteMetaData {

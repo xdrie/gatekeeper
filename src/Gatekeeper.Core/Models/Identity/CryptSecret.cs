@@ -1,12 +1,8 @@
 #region
 
-using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
-
 #endregion
 
-namespace Gatekeeper.Server.Models.Identity {
+namespace Gatekeeper.Models.Identity {
     public class CryptSecret : DatabaseObject {
         public byte[] salt { get; set; }
 

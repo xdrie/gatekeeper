@@ -2,7 +2,6 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Security.Claims;
-using Gatekeeper.Server.Models.Identity;
 using Gatekeeper.Server.Config;
 using Gatekeeper.Server.Models;
 

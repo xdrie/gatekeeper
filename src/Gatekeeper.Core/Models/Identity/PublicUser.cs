@@ -1,6 +1,6 @@
 using System;
 
-namespace Gatekeeper.Server.Models.Identity {
+namespace Gatekeeper.Models.Identity {
     /// <summary>
     /// Represents user information visible publicly
     /// </summary>

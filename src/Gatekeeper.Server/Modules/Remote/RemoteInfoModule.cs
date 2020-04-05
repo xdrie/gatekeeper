@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using Carter.Response;
+using Gatekeeper.Models.Access;
+using Gatekeeper.Models.Identity;
 using Gatekeeper.Server.Config;
-using Gatekeeper.Server.Models.Access;
-using Gatekeeper.Server.Models.Identity;
 using Gatekeeper.Server.OpenApi.Remote;
 using Gatekeeper.Server.Services.Users;
 

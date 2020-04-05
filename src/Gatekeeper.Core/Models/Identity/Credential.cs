@@ -1,4 +1,4 @@
-namespace Gatekeeper.Server.Models.Identity {
+namespace Gatekeeper.Models.Identity {
     public struct Credential {
         public Token token;
         public AccessScope scope;

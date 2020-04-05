@@ -1,8 +1,7 @@
 using System.Collections.Generic;
 using System.Net;
 using Carter.OpenApi;
-using Gatekeeper.Server.Models.Responses;
-using Gatekeeper.Server.Models.Requests;
+using Gatekeeper.Models.Requests;
 
 namespace Gatekeeper.Server.OpenApi.Auth {
     public class DeleteUser : RouteMetaData {

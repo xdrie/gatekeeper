@@ -1,4 +1,5 @@
 using System;
+using Gatekeeper.Models;
 using Gatekeeper.Server.Models;
 using Gatekeeper.Server.Services.Auth;
 using Gatekeeper.Server.Services.Users;

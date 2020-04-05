@@ -1,5 +1,5 @@
+using Gatekeeper.Models.Meta;
 using Gatekeeper.Server.Config;
-using Gatekeeper.Server.Models.Meta;
 using Gatekeeper.Server.OpenApi.Meta;
 using Hexagon.Serialization;
 

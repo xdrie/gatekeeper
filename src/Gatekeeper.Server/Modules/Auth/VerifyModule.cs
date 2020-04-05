@@ -1,7 +1,7 @@
 using System.Net;
 using Carter.Request;
+using Gatekeeper.Models.Identity;
 using Gatekeeper.Server.Config;
-using Gatekeeper.Server.Models.Identity;
 using Gatekeeper.Server.OpenApi.Auth;
 
 namespace Gatekeeper.Server.Modules.Auth {

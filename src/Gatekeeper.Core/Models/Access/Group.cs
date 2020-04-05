@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Gatekeeper.Server.Models.Access {
+namespace Gatekeeper.Models.Access {
     public class Group {
         public string name { get; set; }
         public long priority { get; set; } = 0;

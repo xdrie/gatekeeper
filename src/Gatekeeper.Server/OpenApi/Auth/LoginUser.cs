@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Net;
 using Carter.OpenApi;
-using Gatekeeper.Server.Models.Requests;
-using Gatekeeper.Server.Models.Responses;
+using Gatekeeper.Models.Requests;
+using Gatekeeper.Models.Responses;
 
 namespace Gatekeeper.Server.OpenApi.Auth {
     public class LoginUser : RouteMetaData {

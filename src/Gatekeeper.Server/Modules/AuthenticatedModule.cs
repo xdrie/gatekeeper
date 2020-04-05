@@ -1,9 +1,9 @@
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using Gatekeeper.Models.Identity;
+using Gatekeeper.Models.Remote;
 using Gatekeeper.Server.Config;
-using Gatekeeper.Server.Models.Identity;
-using Gatekeeper.Server.Models.Remote;
 using Gatekeeper.Server.Services.Auth;
 using Gatekeeper.Server.Services.Auth.Security;
 

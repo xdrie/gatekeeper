@@ -1,6 +1,6 @@
 using FluentValidation;
 
-namespace Gatekeeper.Server.Models.Requests {
+namespace Gatekeeper.Models.Requests {
     public class TwoFactorConfirmRequest {
         public string otpcode { get; set; }
         

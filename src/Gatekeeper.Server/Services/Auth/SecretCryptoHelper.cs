@@ -2,7 +2,7 @@
 
 using System.Security.Cryptography;
 using System.Text;
-using Gatekeeper.Server.Models.Identity;
+using Gatekeeper.Models.Identity;
 
 #endregion
 

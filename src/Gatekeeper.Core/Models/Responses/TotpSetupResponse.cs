@@ -1,4 +1,4 @@
-namespace Gatekeeper.Server.Models.Responses {
+namespace Gatekeeper.Models.Responses {
     public class TotpSetupResponse {
         /// <summary>
         /// base-64 encoded TOTP secret

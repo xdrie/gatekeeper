@@ -1,6 +1,6 @@
 using System.Net;
 using Carter.OpenApi;
-using Gatekeeper.Server.Models.Meta;
+using Gatekeeper.Models.Meta;
 
 namespace Gatekeeper.Server.OpenApi.Meta {
     public class GetMeta : RouteMetaData {

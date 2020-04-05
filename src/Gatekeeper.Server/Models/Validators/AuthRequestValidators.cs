@@ -1,20 +1,14 @@
 using FluentValidation;
-using Gatekeeper.Server.Models.Identity;
+using Gatekeeper.Models.Identity;
+using Gatekeeper.Models.Requests;
 using Hexagon.Utilities;
 
-namespace Gatekeeper.Server.Models.Requests {
-    public class RegisterRequest {
-        public string username { get; set; }
-        public string name { get; set; }
-        public string email { get; set; }
-        public string password { get; set; }
-        public string pronouns { get; set; }
-        public string isRobot { get; set; }
-
-        public class Validator : AbstractValidator<RegisterRequest> {
+namespace Gatekeeper.Server.Models.Validators {
+    public static class AuthRequestValidators {
+        public class RegisterRequestValidator : AbstractValidator<RegisterRequest> {
             public const string NOT_ROBOT_PROMISE = "I am not a robot";
 
-            public Validator() {
+            public RegisterRequestValidator() {
                 RuleFor(x => x.username).NotEmpty().Length(4, 32).Matches(StringValidator.identifierRegex);
                 RuleFor(x => x.name).NotEmpty().MaximumLength(32);
                 RuleFor(x => x.email).NotEmpty().EmailAddress();

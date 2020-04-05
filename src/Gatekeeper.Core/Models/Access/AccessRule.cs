@@ -1,4 +1,4 @@
-namespace Gatekeeper.Server.Models.Access {
+namespace Gatekeeper.Models.Access {
     public class AccessRule {
         public string app { get; }
         public string key { get; }

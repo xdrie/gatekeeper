@@ -1,8 +1,8 @@
 #region
 
 using System.Collections.Generic;
-using Gatekeeper.Server.Models.Access;
-using Gatekeeper.Server.Models.Remote;
+using Gatekeeper.Models.Access;
+using Gatekeeper.Models.Remote;
 using Hexagon.Logging;
 
 #endregion

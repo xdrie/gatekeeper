@@ -1,9 +1,9 @@
 using System;
 using System.Linq;
 using System.Net;
+using Gatekeeper.Models.Access;
+using Gatekeeper.Models.Requests;
 using Gatekeeper.Server.Config;
-using Gatekeeper.Server.Models.Access;
-using Gatekeeper.Server.Models.Requests;
 using Gatekeeper.Server.OpenApi.Manager;
 using Hexagon.Web;
 

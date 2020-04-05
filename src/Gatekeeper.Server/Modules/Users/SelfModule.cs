@@ -1,6 +1,6 @@
 using Carter.Response;
+using Gatekeeper.Models.Identity;
 using Gatekeeper.Server.Config;
-using Gatekeeper.Server.Models.Identity;
 using Gatekeeper.Server.OpenApi.Users;
 using Gatekeeper.Server.Services.Users;
 

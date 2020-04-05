@@ -2,8 +2,8 @@
 
 using System;
 using System.Linq;
-using Gatekeeper.Server.Models.Access;
-using Gatekeeper.Server.Models.Remote;
+using Gatekeeper.Models.Access;
+using Gatekeeper.Models.Remote;
 using Hexagon.Utilities;
 using Tomlyn.Model;
 

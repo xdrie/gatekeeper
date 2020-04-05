@@ -1,9 +1,7 @@
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using Gatekeeper.Server.Models.Access;
 
-namespace Gatekeeper.Server.Models.Identity {
+namespace Gatekeeper.Models.Identity {
     public class User : DatabaseObject {
         public string name { get; set; }
         public string username { get; set; }

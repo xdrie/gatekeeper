@@ -2,7 +2,7 @@ using System;
 using MsgPack.Serialization;
 using Newtonsoft.Json;
 
-namespace Gatekeeper.Server.Models.Identity {
+namespace Gatekeeper.Models.Identity {
     public class Token : DatabaseObject {
         [JsonIgnore]
         [MessagePackIgnore]

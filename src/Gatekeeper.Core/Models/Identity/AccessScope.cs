@@ -1,7 +1,6 @@
-using System;
 using System.IO;
 
-namespace Gatekeeper.Server.Models.Identity {
+namespace Gatekeeper.Models.Identity {
     public struct AccessScope {
         public const string ROOT_PATH = "/";
         public const string WILDCARD_PATH = "*";

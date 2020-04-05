@@ -1,4 +1,4 @@
-namespace Gatekeeper.Server.Models.Identity {
+namespace Gatekeeper.Models.Identity {
     /// <summary>
     /// Represents user information visible to an authenticator
     /// </summary>

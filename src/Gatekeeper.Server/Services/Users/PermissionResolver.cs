@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
+using Gatekeeper.Models.Access;
+using Gatekeeper.Models.Identity;
 using Gatekeeper.Server.Config;
 using Gatekeeper.Server.Models;
-using Gatekeeper.Server.Models.Access;
-using Gatekeeper.Server.Models.Identity;
 
 namespace Gatekeeper.Server.Services.Users {
     public class PermissionResolver : DependencyObject {

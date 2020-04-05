@@ -3,9 +3,9 @@
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Gatekeeper.Server.Models.Identity;
-using Gatekeeper.Server.Models.Requests;
-using Gatekeeper.Server.Models.Responses;
+using Gatekeeper.Models.Identity;
+using Gatekeeper.Models.Requests;
+using Gatekeeper.Models.Responses;
 using Gatekeeper.Tests.Base;
 using Gatekeeper.Tests.Meta;
 using Gatekeeper.Tests.Utilities;

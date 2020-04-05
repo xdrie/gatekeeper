@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Gatekeeper.Server.Models.Access;
+using Gatekeeper.Models.Access;
 using Gatekeeper.Server.Services.Users;
 using Xunit;
 

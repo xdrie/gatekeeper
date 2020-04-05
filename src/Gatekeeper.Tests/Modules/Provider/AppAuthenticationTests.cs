@@ -1,6 +1,6 @@
 using System.Net;
 using System.Threading.Tasks;
-using Gatekeeper.Server.Models.Identity;
+using Gatekeeper.Models.Identity;
 using Gatekeeper.Tests.Base;
 using Gatekeeper.Tests.Meta;
 using Gatekeeper.Tests.Utilities;

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Net;
 using Carter.OpenApi;
-using Gatekeeper.Server.Models.Access;
+using Gatekeeper.Models.Access;
 
 namespace Gatekeeper.Server.OpenApi.Users {
     public class GetMyRules : RouteMetaData {
