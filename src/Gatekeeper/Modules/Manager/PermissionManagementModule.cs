@@ -1,4 +1,5 @@
 using System;
+using System.Net;
 using Gatekeeper.Config;
 using Gatekeeper.Models.Access;
 using Gatekeeper.Models.Requests;
@@ -15,6 +16,10 @@ namespace Gatekeeper.Modules.Manager {
 
                 // fetch the user and update their permissions
                 var user = serverContext.userManager.findByUuid(updateReq.userUuid);
+                if (user == null) {
+                    res.StatusCode = (int) HttpStatusCode.NotFound;
+                    return;
+                }
                 var updateType =
                     Enum.Parse<Permission.PermissionUpdateType>(updateReq.type, true);
                 foreach (var permission in updateReq.permissions) {
