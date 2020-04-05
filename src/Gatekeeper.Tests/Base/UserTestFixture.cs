@@ -24,14 +24,18 @@ namespace Gatekeeper.Tests.Base {
     public class UserTestFixture : ServerTestFixture {
         public string username;
         public AuthedUserResponse authedUser;
+        private bool initialized = false;
 
         public async Task initialize() {
+            if (initialized) throw new InvalidOperationException("already initialized");
+            initialized = true;
             // register account
             username = $"{AccountRegistrar.TEST_USERNAME}_{StringUtils.secureRandomString(4)}";
             authedUser = await new AccountRegistrar(serverContext).registerAccount(getClient(), username, true);
         }
 
-        public HttpClient getAuthedClient() {
+        public async Task<HttpClient> getAuthedClient() {
+            await initialize();
             var client = base.getClient();
             client.addToken(authedUser.token);
             return client;

@@ -20,8 +20,7 @@ namespace Gatekeeper.Tests.Modules.Provider {
 
         [Fact]
         public async Task rejectsUnauthorizedApp() {
-            await fx.initialize();
-            var client = fx.getAuthedClient();
+            var client = await fx.getAuthedClient();
 
             var resp = await client.GetAsync("/a/app/token/Hotels");
             Assert.Equal(HttpStatusCode.Forbidden, resp.StatusCode);
@@ -29,8 +28,7 @@ namespace Gatekeeper.Tests.Modules.Provider {
 
         [Fact]
         public async Task authorizesAllowedApp() {
-            await fx.initialize();
-            var client = fx.getAuthedClient();
+            var client = await fx.getAuthedClient();
 
             var resp = await client.GetAsync("/a/app/token/Salt");
             resp.EnsureSuccessStatusCode();
@@ -40,8 +38,7 @@ namespace Gatekeeper.Tests.Modules.Provider {
 
         [Fact]
         public async Task appTokensBlockedFromRootScope() {
-            await fx.initialize();
-            var client = fx.getAuthedClient();
+            var client = await fx.getAuthedClient();
 
             var resp = await client.GetAsync("/a/app/token/Salt");
             resp.EnsureSuccessStatusCode();

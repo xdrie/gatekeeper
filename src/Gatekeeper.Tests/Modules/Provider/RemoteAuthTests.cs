@@ -18,8 +18,7 @@ namespace Gatekeeper.Tests.Modules.Provider {
         }
 
         private async Task<Token> getSaltAppToken() {
-            await fx.initialize();
-            var client = fx.getAuthedClient();
+            var client = await fx.getAuthedClient();
 
             var resp = await client.GetAsync("/a/app/token/Salt");
             resp.EnsureSuccessStatusCode();

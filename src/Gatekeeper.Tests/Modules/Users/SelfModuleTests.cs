@@ -17,8 +17,7 @@ namespace Gatekeeper.Tests.Modules.Users {
 
         [Fact]
         public async Task canAccessMePage() {
-            await fx.initialize();
-            var client = fx.getAuthedClient();
+            var client = await fx.getAuthedClient();
 
             // check me page
             var resp = await client.GetAsync("/a/u/me");
@@ -29,8 +28,7 @@ namespace Gatekeeper.Tests.Modules.Users {
 
         [Fact]
         public async Task canGetGroupMembership() {
-            await fx.initialize();
-            var client = fx.getAuthedClient();
+            var client = await fx.getAuthedClient();
 
             var resp = await client.GetAsync("/a/u/groups");
             resp.EnsureSuccessStatusCode();
@@ -41,8 +39,7 @@ namespace Gatekeeper.Tests.Modules.Users {
 
         [Fact]
         public async Task canGetAppAccessRules() {
-            await fx.initialize();
-            var client = fx.getAuthedClient();
+            var client = await fx.getAuthedClient();
 
             var resp = await client.GetAsync("/a/u/rules");
             resp.EnsureSuccessStatusCode();
