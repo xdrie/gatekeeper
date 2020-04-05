@@ -26,7 +26,7 @@ namespace Gatekeeper.Models.Identity {
 
         [NotMapped]
         public string[] groups {
-            get => groupList.Split(',');
+            get => groupList.Split(',', StringSplitOptions.RemoveEmptyEntries);
             set => groupList = string.Join(",", value);
         }
 
