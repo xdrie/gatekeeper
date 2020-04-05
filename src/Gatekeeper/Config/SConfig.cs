@@ -2,14 +2,14 @@
 
 using System.Collections.Generic;
 using Gatekeeper.Models.Remote;
-using Hexagon.Services.Application;
+using Hexagon.Logging;
 
 #endregion
 
 namespace Gatekeeper.Config {
     public class SConfig {
         public const string SERVER_NAME = "ALTiCU Gatekeeper";
-        public const string VERSION = "v0.0.4.2300-dev";
+        public const string VERSION = "0.0.7-dev";
 
         public class Server {
             public const string DEFAULT_DATABASE = "Data Source=database.db";
@@ -33,7 +33,7 @@ namespace Gatekeeper.Config {
 
         public class RemoteApp {
             public virtual string name { get; set; }
-            public virtual List<string> layers { get; set; }
+            public virtual List<string> layers { get; set; } = new List<string>();
         }
 
         public List<RemoteApp> apps = new List<RemoteApp> {new GlobalRemoteApp()};

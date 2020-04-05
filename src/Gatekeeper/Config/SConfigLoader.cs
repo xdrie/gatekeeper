@@ -1,37 +1,13 @@
 #region
 
-using System;
 using System.Linq;
-using System.Text;
-using Hexagon.Services.Application;
+using Hexagon.Utilities;
 using Tomlyn.Model;
 
 #endregion
 
 namespace Gatekeeper.Config {
-    public static class ConfigLoader {
-        private static string rename(string name) {
-            var sb = new StringBuilder();
-            foreach (var ch in name) {
-                if (char.IsUpper(ch))
-                    sb.Append("_");
-
-                sb.Append(ch.ToString().ToLower());
-            }
-
-            return sb.ToString();
-        }
-
-        public static T getField<T>(this TomlTable table, string field) {
-            return (T) table[rename(field)];
-        }
-
-        public static void bindField<T>(this TomlTable table, ref T target, string fieldName) {
-            if (table.ContainsKey(fieldName)) {
-                target = table.getField<T>(fieldName);
-            }
-        }
-
+    public class ConfigLoader {
         public static SConfig readDocument(TomlTable tb) {
             var cfg = new SConfig();
 
@@ -42,9 +18,12 @@ namespace Gatekeeper.Config {
 
             var apps = tb.getField<TomlTableArray>(nameof(cfg.apps));
             foreach (var app in apps) {
-                cfg.apps.Add(new SConfig.RemoteApp {
-                    name = app.getField<string>(nameof(SConfig.RemoteApp.name))
-                });
+                var appCfg = new SConfig.RemoteApp {
+                    name = app.getField<string>(nameof(SConfig.RemoteApp.name)),
+                };
+                appCfg.layers = app.getField<TomlArray>(nameof(SConfig.RemoteApp.layers)).Select(x => x.ToString())
+                    .ToList();
+                cfg.apps.Add(appCfg);
             }
 
             var users = tb.getField<TomlTable>(nameof(cfg.users));

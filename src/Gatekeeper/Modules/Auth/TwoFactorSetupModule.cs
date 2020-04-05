@@ -7,7 +7,7 @@ using Gatekeeper.Models.Requests;
 using Gatekeeper.Models.Responses;
 using Gatekeeper.OpenApi.Auth;
 using Gatekeeper.Services.Auth;
-using Hexagon.Services.Serialization;
+using Hexagon.Serialization;
 using Hexagon.Utilities;
 using Hexagon.Web;
 

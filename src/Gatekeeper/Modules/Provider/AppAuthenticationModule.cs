@@ -5,7 +5,7 @@ using Carter.Request;
 using Gatekeeper.Config;
 using Gatekeeper.Models.Identity;
 using Gatekeeper.OpenApi.Provider;
-using Hexagon.Services.Serialization;
+using Hexagon.Serialization;
 
 namespace Gatekeeper.Modules.Provider {
     public class AppAuthenticationModule : AuthenticatedUserModule {

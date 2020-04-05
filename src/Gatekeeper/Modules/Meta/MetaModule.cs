@@ -1,7 +1,7 @@
 using Gatekeeper.Config;
 using Gatekeeper.Models.Meta;
 using Gatekeeper.OpenApi.Meta;
-using Hexagon.Services.Serialization;
+using Hexagon.Serialization;
 
 namespace Gatekeeper.Modules.Meta {
     public class MetaModule : ApiModule {

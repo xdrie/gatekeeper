@@ -9,8 +9,8 @@ using Gatekeeper.Models.Responses;
 using Gatekeeper.OpenApi.Auth;
 using Gatekeeper.Services.Auth;
 using Gatekeeper.Services.Users;
-using Hexagon.Services.Application;
-using Hexagon.Services.Serialization;
+using Hexagon.Logging;
+using Hexagon.Serialization;
 using Hexagon.Web;
 using Microsoft.AspNetCore.Http;
 
