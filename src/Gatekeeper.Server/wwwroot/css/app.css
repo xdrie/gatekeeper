@@ -16,3 +16,11 @@ span.tiny-version {
     font-size: 0.8rem;
     vertical-align: top;
 }
+
+.card {
+    border-color: #353d48;
+}
+
+img.emote {
+    height: 2em;
+}

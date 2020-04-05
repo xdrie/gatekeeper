@@ -14,8 +14,9 @@ using Tomlyn.Model;
 
 namespace Gatekeeper.Server.Config {
     public class SConfig : ServerConfiguration {
+        public const string BRAND = "GaTE";
         public const string SERVER_NAME = "ALTiCU Gatekeeper.Server";
-        public const string VERSION = "0.1.0-dev";
+        public const string VERSION = "0.1.0";
 
         public class Server {
             public const string DEFAULT_DATABASE = "Data Source=database.db";
