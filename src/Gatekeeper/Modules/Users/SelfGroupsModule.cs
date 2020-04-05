@@ -7,7 +7,7 @@ namespace Gatekeeper.Modules.Users {
         public SelfGroupsModule(SContext serverContext) : base("/perms", serverContext) {
             Get<GetMyGroups>("/", async (req, res) => {
                 // load user permissions
-                var user = serverContext.userManager.loadPermissions(currentUser);
+                var user = serverContext.userManager.loadGroups(currentUser);
                 await res.Negotiate(user.groups);
             });
         }

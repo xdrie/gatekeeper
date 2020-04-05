@@ -37,7 +37,7 @@ namespace Gatekeeper.Config {
         public List<Group> groups = new List<Group>();
 
         public class Users {
-            public List<string> defaultLayers = new List<string>();
+            public List<string> defaultGroups = new List<string>();
         }
 
         public Users users = new Users();

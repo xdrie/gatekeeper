@@ -21,6 +21,7 @@ namespace Gatekeeper.Models.Identity {
         public Role role { get; set; } = Role.Pending;
         public string verification { get; set; }
         public DateTime registered { get; set; }
+        public List<string> groups { get; set; }
 
         public enum Role {
             Pending,

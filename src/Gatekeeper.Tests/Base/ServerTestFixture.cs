@@ -51,7 +51,7 @@ namespace Gatekeeper.Tests.Base {
                         layers = new List<string> {"/CheapFood"},
                         secret = Constants.Apps.APP_SECRET
                     });
-                    testConfig.users.defaultLayers.Add("/CheapFood");
+                    testConfig.users.defaultGroups.Add("/CheapFood");
                     services.AddSingleton<SConfig>(testConfig);
 
                     // Build the service provider.

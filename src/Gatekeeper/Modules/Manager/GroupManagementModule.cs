@@ -7,10 +7,10 @@ using Gatekeeper.OpenApi.Manager;
 using Hexagon.Web;
 
 namespace Gatekeeper.Modules.Manager {
-    public class PermissionManagementModule : AdminModule {
-        public PermissionManagementModule(SContext serverContext) : base("/perms", serverContext) {
-            Patch<UpdatePerms>("/update", async (req, res) => {
-                var validatedReq = await this.validateRequest<UpdatePermissionRequest>(req, res);
+    public class GroupManagementModule : AdminModule {
+        public GroupManagementModule(SContext serverContext) : base("/perms", serverContext) {
+            Patch<UpdateGroups>("/update", async (req, res) => {
+                var validatedReq = await this.validateRequest<UpdateGroupRequest>(req, res);
                 if (!validatedReq.isValid) return;
                 var updateReq = validatedReq.request;
 
@@ -20,10 +20,11 @@ namespace Gatekeeper.Modules.Manager {
                     res.StatusCode = (int) HttpStatusCode.NotFound;
                     return;
                 }
+
                 var updateType =
-                    Enum.Parse<Permission.PermissionUpdateType>(updateReq.type, true);
-                foreach (var permission in updateReq.permissions) {
-                    serverContext.userManager.updatePermission(user.dbid, new Permission(permission), updateType);
+                    Enum.Parse<Group.UpdateType>(updateReq.type, true);
+                foreach (var group in updateReq.groups) {
+                    serverContext.userManager.updateGroupMembership(user.dbid, group, updateType);
                 }
             });
         }
