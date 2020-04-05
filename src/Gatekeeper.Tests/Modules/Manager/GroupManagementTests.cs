@@ -39,29 +39,29 @@ namespace Gatekeeper.Tests.Modules.Manager {
             var adminClient = await registerAdminAccount(username);
 
             // get the friends group
-            var friendsGroup = fx.serverContext.config.groups.Single(x => x.name == "Friends");
+            var luxGroup = fx.serverContext.config.groups.Single(x => x.name == "Luxurious");
             // attempt to add a permission
             var addResp = await adminClient.PatchAsJsonAsync("/a/perms/update", new UpdateGroupRequest {
                 userUuid = fx.authedUser.user.uuid,
                 type = "add",
-                groups = new[] {friendsGroup.name}
+                groups = new[] {luxGroup.name}
             });
             addResp.EnsureSuccessStatusCode();
             // ensure that it was added
             var addedToUser = fx.serverContext.userManager.findByUsername(fx.username);
             addedToUser = fx.serverContext.userManager.loadGroups(addedToUser);
-            Assert.Contains(addedToUser.groups, x => x == friendsGroup.name);
+            Assert.Contains(addedToUser.groups, x => x == luxGroup.name);
             // remove the permission
             var removeResp = await adminClient.PatchAsJsonAsync("/a/perms/update", new UpdateGroupRequest {
                 userUuid = fx.authedUser.user.uuid,
                 type = "remove",
-                groups = new[] {friendsGroup.name}
+                groups = new[] {luxGroup.name}
             });
             removeResp.EnsureSuccessStatusCode();
             // ensure that it was removed
             var removedFromUser = fx.serverContext.userManager.findByUsername(fx.username);
             removedFromUser = fx.serverContext.userManager.loadGroups(removedFromUser);
-            Assert.DoesNotContain(removedFromUser.groups, x => x == friendsGroup.name);
+            Assert.DoesNotContain(removedFromUser.groups, x => x == luxGroup.name);
         }
     }
 }

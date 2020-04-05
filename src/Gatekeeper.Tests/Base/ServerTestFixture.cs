@@ -80,23 +80,31 @@ namespace Gatekeeper.Tests.Base {
                 
                 // - apps
                 testConfig.apps.Add(new RemoteApp {
-                    name = "BeanCan",
-                    layers = new List<string> {"/Food_Expensive"},
+                    name = "Hotels",
+                    layers = new List<string> {"/Housing"},
                     secret = Constants.Apps.APP_SECRET
                 });
                 testConfig.apps.Add(new RemoteApp {
-                    name = "SaltShaker",
-                    layers = new List<string> {"/Food_Cheap"},
+                    name = "Salt",
+                    layers = new List<string> {"/Food"},
                     secret = Constants.Apps.APP_SECRET
                 });
                 
                 // - groups
                 testConfig.groups.Add(new Group {
-                    name = "Friends",
+                    name = "Luxurious",
                     permissions = {
-                        new Permission("/Food_Cheap")
+                        new Permission("/Housing")
                     }
                 });
+                testConfig.groups.Add(new Group {
+                    name = "Friends",
+                    permissions = {
+                        new Permission("/Food")
+                    }
+                });
+
+                testConfig.users.defaultGroups = new List<string> { "Friends" };
 
                 return testConfig;
             }
