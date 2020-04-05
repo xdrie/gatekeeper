@@ -26,5 +26,18 @@ namespace Gatekeeper.Tests.Modules.Users {
             var data = JsonConvert.DeserializeObject<AuthenticatedUser>(await resp.Content.ReadAsStringAsync());
             Assert.Equal(fx.username, data.username);
         }
+
+        [Fact]
+        public async Task canGetGroupMembership() {
+            await fx.initialize();
+            var client = fx.getAuthedClient();
+            
+            // check me page
+            var resp = await client.GetAsync("/a/u/groups");
+            resp.EnsureSuccessStatusCode();
+            var groupList = JsonConvert.DeserializeObject<string[]>(await resp.Content.ReadAsStringAsync());
+            var userModel = fx.serverContext.userManager.findByUsername(fx.username);
+            Assert.Equal(userModel.groups, groupList);
+        }
     }
 }
