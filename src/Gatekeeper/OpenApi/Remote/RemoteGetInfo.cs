@@ -3,8 +3,8 @@ using Carter.OpenApi;
 using Gatekeeper.Models.Identity;
 
 namespace Gatekeeper.OpenApi.Remote {
-    public class RemoteGetUser : RouteMetaData {
-        public override string Description => "Get remote user information";
+    public class RemoteGetInfo : RouteMetaData {
+        public override string Description => "Get remote authentication information";
         public override string Tag => GateApiConstants.Tags.REMOTE_APP;
         public override string SecuritySchema => GateApiConstants.Security.REMOTE_APP_APIKEY;
 
@@ -15,8 +15,8 @@ namespace Gatekeeper.OpenApi.Remote {
             },
             new RouteMetaDataResponse {
                 Code = (int) HttpStatusCode.OK,
-                Description = $"A {nameof(PublicUser)} representing the current user",
-                Response = typeof(PublicUser)
+                Description = $"A {nameof(RemoteAuthentication)} representing the current authentication",
+                Response = typeof(RemoteAuthentication)
             }
         };
     }

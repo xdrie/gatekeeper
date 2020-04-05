@@ -1,10 +1,11 @@
+using System.Collections.Generic;
 using System.Net;
 using Carter.OpenApi;
-using Gatekeeper.Models.Identity;
+using Gatekeeper.Models.Access;
 
 namespace Gatekeeper.OpenApi.Remote {
-    public class RemoteGetUser : RouteMetaData {
-        public override string Description => "Get remote user information";
+    public class RemoteGetRules : RouteMetaData {
+        public override string Description => "Remotely get app rules";
         public override string Tag => GateApiConstants.Tags.REMOTE_APP;
         public override string SecuritySchema => GateApiConstants.Security.REMOTE_APP_APIKEY;
 
@@ -15,8 +16,8 @@ namespace Gatekeeper.OpenApi.Remote {
             },
             new RouteMetaDataResponse {
                 Code = (int) HttpStatusCode.OK,
-                Description = $"A {nameof(PublicUser)} representing the current user",
-                Response = typeof(PublicUser)
+                Description = $"A {nameof(IEnumerable<AccessRule>)} with app rules",
+                Response = typeof(IEnumerable<AccessRule>)
             }
         };
     }

@@ -22,8 +22,8 @@ namespace Gatekeeper.Services.Users {
         public List<AccessRule> aggregateRules() =>
             new GroupPermissionResolver(groups).aggregateRules();
 
-        public IEnumerable<AccessRule> aggregateRulesForApp() =>
-            new GroupPermissionResolver(groups).aggregateRules();
+        public IEnumerable<AccessRule> aggregateRulesForApp(string appName) =>
+            new GroupPermissionResolver(groups).aggregateRulesForApp(appName);
 
         public class GroupPermissionResolver {
             private readonly IEnumerable<Group> groups;
