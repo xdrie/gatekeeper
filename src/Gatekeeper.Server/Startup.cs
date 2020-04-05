@@ -20,6 +20,15 @@ namespace Gatekeeper.Server {
         public void ConfigureServices(IServiceCollection services) {
             // Adds services required for using options.
             services.AddOptions();
+            
+            // enable Razor Pages
+            var mvcBuilder = services.AddRazorPages();
+#if DEBUG
+            // if (Env.IsDevelopment()) {
+            mvcBuilder.AddRazorRuntimeCompilation();
+            // }
+#endif
+            
             // install Carter
             services.AddCarter(options => {
                 options.OpenApi.DocumentTitle = SConfig.SERVER_NAME;
@@ -113,9 +122,10 @@ namespace Gatekeeper.Server {
                     $"available remote application configurations[{serverContext.config.apps.Count}]: remote applications are configured: [{configuredAppNames}]",
                     SLogger.LogLevel.Information);
 
+                app.UseStaticFiles();
                 app.UseRouting();
-
                 app.UseEndpoints(builder => builder.MapCarter());
+                app.UseEndpoints(endpoints => { endpoints.MapRazorPages(); });
                 app.UseSwaggerUi3(settings => { settings.DocumentPath = "/openapi"; });
             }
         }
