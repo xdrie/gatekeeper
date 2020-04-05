@@ -14,6 +14,30 @@ on the server side, a group called `Insiders` is defined.
 the `Insiders` group has access to the `/Food` layer, and the rule `FrenchFry.quota = 100`, entitling each member to that many monthly fries.
 there is also a group called `Friends`, which can also access the `/Food` layer, but has rule `FrenchFry.quota = 10`.
 
+the corresponding configuration is shown here:
+
+```toml
+
+[[apps]]
+name = "FrenchFry"
+layers = [ "/Food" ]
+secret = "yeet"
+
+[[groups]]
+name = "Friends"
+priority = 1
+permissions = [ "/Food" ]
+    [groups.rules]
+    FrenchFry.quota = 10
+
+[[groups]]
+name = "Insiders"
+priority = 10
+permissions = [ "/Food" ]
+    [groups.rules]
+    FrenchFry.quota = 100
+```
+
 ## login
 
 the user wants to get authorized to the fry order page.
