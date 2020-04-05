@@ -3,7 +3,7 @@ using Gatekeeper.Config;
 using Gatekeeper.Models.Identity;
 
 namespace Gatekeeper.Models.Remote {
-    public class GlobalRemoteApp : SConfig.RemoteApp {
+    public class GlobalRemoteApp : RemoteApp {
         public const string GLOBAL_APP = "Global";
         public const string GLOBAL_SECRET = "secret";
         

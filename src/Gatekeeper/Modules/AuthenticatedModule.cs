@@ -3,6 +3,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Gatekeeper.Config;
 using Gatekeeper.Models.Identity;
+using Gatekeeper.Models.Remote;
 using Gatekeeper.Services.Auth;
 using Gatekeeper.Services.Auth.Security;
 
@@ -68,6 +69,8 @@ namespace Gatekeeper.Modules {
     /// Represents a module only available to application tokens
     /// </summary>
     public abstract class RemoteApplicationModule : AuthenticatedModule {
+        public RemoteApp remoteApp { get; private set; }
+        
         protected RemoteApplicationModule(string path, SContext serverContext) : base(AccessScope.globalScope,
             User.Role.User, path, serverContext) {
             this.Before += async (ctx) => {
@@ -79,8 +82,8 @@ namespace Gatekeeper.Modules {
                 }
                 
                 // match the token to an app
-                var app = serverContext.config.apps.SingleOrDefault(x => x.name == credential.scope.app);
-                if (app == null || app.secret != appSecret) {
+                remoteApp = serverContext.config.apps.SingleOrDefault(x => x.name == credential.scope.app);
+                if (remoteApp == null || remoteApp.secret != appSecret) {
                     ctx.Response.StatusCode = (int) HttpStatusCode.Unauthorized;
                     return false;
                 }

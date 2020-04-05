@@ -16,8 +16,7 @@ namespace Gatekeeper.Tests.Modules.Users {
 
         [Fact]
         public async Task canFetchMeFromDirectory() {
-            await fx.initialize();
-            var client = fx.getAuthedClient();
+            var client = await fx.getAuthedClient();
 
             // check me page
             var resp = await client.GetAsync($"/a/u/{fx.username}");

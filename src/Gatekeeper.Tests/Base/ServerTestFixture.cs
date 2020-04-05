@@ -6,6 +6,8 @@ using System.Linq;
 using System.Net.Http;
 using Gatekeeper.Config;
 using Gatekeeper.Models;
+using Gatekeeper.Models.Access;
+using Gatekeeper.Models.Remote;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
@@ -38,21 +40,10 @@ namespace Gatekeeper.Tests.Base {
                     services.AddDbContext<AppDbContext>(options => {
                         options.UseInMemoryDatabase("InMemoryDbForTesting");
                     });
-                    
+
                     // add test config
-                    var testConfig = new SConfig();
-                    testConfig.apps.Add(new SConfig.RemoteApp {
-                        name = "BeanCan",
-                        layers = new List<string> {"/ExpensiveFood"},
-                        secret = Constants.Apps.APP_SECRET
-                    });
-                    testConfig.apps.Add(new SConfig.RemoteApp {
-                        name = "SaltShaker",
-                        layers = new List<string> {"/CheapFood"},
-                        secret = Constants.Apps.APP_SECRET
-                    });
-                    testConfig.users.defaultLayers.Add("/CheapFood");
-                    services.AddSingleton<SConfig>(testConfig);
+                    var testConfig = createTestConfig();
+                    services.AddSingleton(testConfig);
 
                     // Build the service provider.
                     var sp = services.BuildServiceProvider();
@@ -82,6 +73,40 @@ namespace Gatekeeper.Tests.Base {
                         }
                     }
                 });
+            }
+
+            private SConfig createTestConfig() {
+                var testConfig = new SConfig();
+                
+                // - apps
+                testConfig.apps.Add(new RemoteApp {
+                    name = "Hotels",
+                    layers = new List<string> {"/Housing"},
+                    secret = Constants.Apps.APP_SECRET
+                });
+                testConfig.apps.Add(new RemoteApp {
+                    name = "Salt",
+                    layers = new List<string> {"/Food"},
+                    secret = Constants.Apps.APP_SECRET
+                });
+                
+                // - groups
+                testConfig.groups.Add(new Group {
+                    name = "Luxurious",
+                    permissions = {
+                        new Permission("/Housing")
+                    }
+                });
+                testConfig.groups.Add(new Group {
+                    name = "Friends",
+                    permissions = {
+                        new Permission("/Food")
+                    }
+                });
+
+                testConfig.users.defaultGroups = new List<string> { "Friends" };
+
+                return testConfig;
             }
         }
 
