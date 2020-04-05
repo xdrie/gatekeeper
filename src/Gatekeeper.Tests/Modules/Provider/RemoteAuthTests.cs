@@ -43,14 +43,6 @@ namespace Gatekeeper.Tests.Modules.Provider {
             var resp = await appClient.GetAsync("/a/remote/user");
             resp.EnsureSuccessStatusCode(); // valid user info
         }
-        
-        [Fact]
-        public async Task getRemoteUserRules() {
-            var appClient = getAppClient(await getSaltAppToken());
-
-            var resp = await appClient.GetAsync("/a/remote/rules");
-            resp.EnsureSuccessStatusCode();
-        }
 
         [Fact]
         public async Task getRemoteAuthInfo() {

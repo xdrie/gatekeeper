@@ -12,7 +12,6 @@ namespace Gatekeeper.Modules.Remote {
             Get<RemoteGetInfo>("/",
                 async (req, res) => { await res.Negotiate(new RemoteAuthentication(getUser(), getRules())); });
             Get<RemoteGetUser>("/user", async (req, res) => { await res.Negotiate(getUser()); });
-            Get<RemoteGetRules>("/rules", async (req, res) => { await res.Negotiate(getRules()); });
         }
 
         private PublicUser getUser() => new PublicUser(currentUser);
