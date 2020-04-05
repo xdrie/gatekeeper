@@ -1,5 +1,6 @@
 #region
 
+using System;
 using System.Linq;
 using Gatekeeper.Models.Access;
 using Gatekeeper.Models.Remote;
@@ -35,6 +36,10 @@ namespace Gatekeeper.Config {
                 var groupCfg = new Group {
                     name = group.getField<string>(nameof(Group.name))
                 };
+                // validate group name
+                if (!StringValidator.isIdentifier(groupCfg.name)) {
+                    throw new FormatException($"group name {groupCfg.name} is not a valid identifier.");
+                }
                 cfg.groups.Add(groupCfg);
             }
 
