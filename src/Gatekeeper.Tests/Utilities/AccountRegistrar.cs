@@ -6,6 +6,7 @@ using Gatekeeper.Models.Requests;
 using Gatekeeper.Models.Responses;
 using Gatekeeper.Server.Config;
 using Gatekeeper.Server.Models;
+using Gatekeeper.Server.Models.Validators;
 using Newtonsoft.Json;
 
 namespace Gatekeeper.Tests.Utilities {
@@ -27,7 +28,7 @@ namespace Gatekeeper.Tests.Utilities {
                 email = TEST_EMAIL,
                 password = TEST_PASSWORD,
                 pronouns = User.Pronouns.TheyThem.ToString(),
-                isRobot = RegisterRequest.Validator.NOT_ROBOT_PROMISE
+                isRobot = AuthRequestValidators.RegisterRequestValidator.NOT_ROBOT_PROMISE
             });
             resp.EnsureSuccessStatusCode();
             if (verify) {
