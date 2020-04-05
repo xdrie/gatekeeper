@@ -5,6 +5,7 @@ using Carter.Request;
 using Gatekeeper.Config;
 using Gatekeeper.Models.Identity;
 using Gatekeeper.OpenApi.Provider;
+using Gatekeeper.Services.Users;
 using Hexagon.Serialization;
 
 namespace Gatekeeper.Modules.Provider {
@@ -19,11 +20,13 @@ namespace Gatekeeper.Modules.Provider {
                     return;
                 }
 
-                // load user permissions
-                var user = serverContext.userManager.loadPermissions(currentUser);
+                // load user groups, and aggregate their permissions
+                var user = serverContext.userManager.loadGroups(currentUser);
+                var userPermissions = new PermissionResolver(serverContext, user)
+                    .aggregatePermissions();
                 // check if any permission grants app access
                 var maybeGrantedScope = default(AccessScope?);
-                foreach (var permission in user.permissions) {
+                foreach (var permission in userPermissions) {
                     var permissionScope = AccessScope.parse(permission.path); // permission: "/Layer" or "/Layer/App"
                     foreach (var appDefLayer in appDef.layers) {
                         var appScope = new AccessScope(appDefLayer, appDef.name); // scope: "/Layer/App"

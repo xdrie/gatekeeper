@@ -31,7 +31,8 @@ namespace Gatekeeper.Tests.Base {
             authedUser = await new AccountRegistrar(serverContext).registerAccount(getClient(), username, true);
         }
 
-        public HttpClient getAuthedClient() {
+        public async Task<HttpClient> getAuthedClient() {
+            await initialize();
             var client = base.getClient();
             client.addToken(authedUser.token);
             return client;

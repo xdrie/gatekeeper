@@ -6,7 +6,6 @@ using Gatekeeper.Config;
 using Gatekeeper.Models;
 using Gatekeeper.Models.Access;
 using Gatekeeper.Models.Identity;
-using Gatekeeper.Models.Remote;
 using Gatekeeper.Models.Requests;
 using Gatekeeper.Services.Auth;
 using Hexagon.Utilities;
@@ -33,16 +32,15 @@ namespace Gatekeeper.Services.Users {
                 pronouns = Enum.Parse<User.Pronouns>(request.pronouns, true),
                 verification = StringUtils.secureRandomString(8),
                 registered = DateTime.Now,
-                permissions = new List<Permission>()
+                groups = new string[0]
             };
             // - set default settings
-            // add permissions from default permissions
-            foreach (var defaultLayer in serverContext.config.users.defaultLayers) {
-                user.permissions.Add(new Permission(defaultLayer));
-            }
+            // add groups from default groups
+            user.groups = serverContext.config.users.defaultGroups.ToArray();
 
 #if DEBUG
-            if (serverContext.config.server.development) { // if in development, set a default verification code
+            if (serverContext.config.server.development) {
+                // if in development, set a default verification code
                 user.verification = DevelopmentConstants.DEFAULT_VERIFICATION;
             }
 #endif
@@ -91,16 +89,15 @@ namespace Gatekeeper.Services.Users {
             }
         }
 
-        public void updatePermission(int userId, Permission permission, Permission.PermissionUpdateType updateType) {
+        public void updateGroupMembership(int userId, string groupName, Group.UpdateType updateType) {
             using (var db = serverContext.getDbContext()) {
-                var user = db.users.Include(x => x.permissions)
-                    .SingleOrDefault(x => x.dbid == userId);
+                var user = db.users.SingleOrDefault(x => x.dbid == userId);
                 switch (updateType) {
-                    case Permission.PermissionUpdateType.Add:
-                        user.permissions.Add(permission);
+                    case Group.UpdateType.Add:
+                        user.groups = user.groups.Concat(new[] {groupName}).ToArray();
                         break;
-                    case Permission.PermissionUpdateType.Remove:
-                        user.permissions.RemoveAll(x => x.path == permission.path);
+                    case Group.UpdateType.Remove:
+                        user.groups = user.groups.Except(new[] {groupName}).ToArray();
                         break;
                 }
 
@@ -148,11 +145,12 @@ namespace Gatekeeper.Services.Users {
                 return user;
             }
         }
-        
-        public User loadPermissions(User forUser) {
+
+        public User loadGroups(User forUser) {
             using (var db = serverContext.getDbContext()) {
                 var user = db.users.First(x => x.dbid == forUser.dbid);
-                db.Entry(user).Collection(x => x.permissions).Load();
+                // disable, because we are currently using array-backed serialization
+                // db.Entry(user).Collection(x => x.groups).Load();
                 return user;
             }
         }
