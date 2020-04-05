@@ -1,11 +1,11 @@
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using Gatekeeper.Config;
-using Gatekeeper.Models;
-using Gatekeeper.Models.Identity;
-using Gatekeeper.Models.Requests;
-using Gatekeeper.Models.Responses;
+using Gatekeeper.Server.Config;
+using Gatekeeper.Server.Models;
+using Gatekeeper.Server.Models.Identity;
+using Gatekeeper.Server.Models.Requests;
+using Gatekeeper.Server.Models.Responses;
 using Newtonsoft.Json;
 
 namespace Gatekeeper.Tests.Utilities {

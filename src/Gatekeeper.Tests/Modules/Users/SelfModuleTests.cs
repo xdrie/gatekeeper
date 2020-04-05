@@ -1,6 +1,5 @@
-using System.Net.Http;
 using System.Threading.Tasks;
-using Gatekeeper.Models.Identity;
+using Gatekeeper.Server.Models.Identity;
 using Gatekeeper.Tests.Base;
 using Gatekeeper.Tests.Meta;
 using Newtonsoft.Json;

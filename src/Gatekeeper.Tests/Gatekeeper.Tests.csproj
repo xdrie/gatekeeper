@@ -14,7 +14,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Gatekeeper\Gatekeeper.csproj" />
+      <ProjectReference Include="..\Gatekeeper.Server\Gatekeeper.Server.csproj" />
     </ItemGroup>
 
 </Project>

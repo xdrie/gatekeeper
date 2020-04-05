@@ -1,4 +1,4 @@
-using Gatekeeper.Models.Identity;
+using Gatekeeper.Server.Models.Identity;
 using Xunit;
 
 namespace Gatekeeper.Tests.Models {
