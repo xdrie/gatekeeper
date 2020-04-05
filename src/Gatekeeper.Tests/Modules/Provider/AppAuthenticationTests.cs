@@ -1,7 +1,7 @@
 using System.Net;
 using System.Threading.Tasks;
-using Gatekeeper.Models.Access;
 using Gatekeeper.Models.Identity;
+using Gatekeeper.Models.Remote;
 using Gatekeeper.Services.Auth;
 using Gatekeeper.Tests.Base;
 using Gatekeeper.Tests.Meta;
@@ -80,7 +80,7 @@ namespace Gatekeeper.Tests.Modules.Provider {
             // now try requesting user info, but as the "application"
             var appClient = fx.getClient(); // set up a client as the application
             appClient.addToken(appToken);
-            appClient.DefaultRequestHeaders.Add(ApiAuthenticator.APP_SECRET_HEADER, Constants.Apps.APP_SECRET);
+            appClient.DefaultRequestHeaders.Add(ApiAuthenticator.APP_SECRET_HEADER, GlobalRemoteApp.GLOBAL_SECRET);
             // request user info
             var userInfoResp = await appClient.GetAsync("/a/remote/user");
             userInfoResp.EnsureSuccessStatusCode(); // valid user info
