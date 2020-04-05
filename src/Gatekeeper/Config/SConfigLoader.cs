@@ -20,6 +20,7 @@ namespace Gatekeeper.Config {
             foreach (var app in apps) {
                 var appCfg = new SConfig.RemoteApp {
                     name = app.getField<string>(nameof(SConfig.RemoteApp.name)),
+                    secret = app.getField<string>(nameof(SConfig.RemoteApp.secret)),
                 };
                 appCfg.layers = app.getField<TomlArray>(nameof(SConfig.RemoteApp.layers)).Select(x => x.ToString())
                     .ToList();

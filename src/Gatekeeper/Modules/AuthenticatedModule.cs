@@ -69,6 +69,24 @@ namespace Gatekeeper.Modules {
     /// </summary>
     public abstract class RemoteApplicationModule : AuthenticatedModule {
         protected RemoteApplicationModule(string path, SContext serverContext) : base(AccessScope.globalScope,
-            User.Role.User, path, serverContext) { }
+            User.Role.User, path, serverContext) {
+            this.Before += async (ctx) => {
+                // verify the app secret
+                var appSecret = ctx.Request.Headers["X-App-Secret"];
+                if (string.IsNullOrEmpty(appSecret)) {
+                    ctx.Response.StatusCode = (int) HttpStatusCode.Unauthorized;
+                    return false;
+                }
+                
+                // match the token to an app
+                var app = serverContext.config.apps.SingleOrDefault(x => x.name == credential.scope.app);
+                if (app == null || app.secret != appSecret) {
+                    ctx.Response.StatusCode = (int) HttpStatusCode.Unauthorized;
+                    return false;
+                }
+                
+                return true;
+            };
+        }
     }
 }
