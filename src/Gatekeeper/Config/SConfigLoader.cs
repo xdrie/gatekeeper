@@ -1,5 +1,6 @@
 #region
 
+using System.Linq;
 using Hexagon.Utilities;
 using Tomlyn.Model;
 
@@ -17,9 +18,12 @@ namespace Gatekeeper.Config {
 
             var apps = tb.getField<TomlTableArray>(nameof(cfg.apps));
             foreach (var app in apps) {
-                cfg.apps.Add(new SConfig.RemoteApp {
-                    name = app.getField<string>(nameof(SConfig.RemoteApp.name))
-                });
+                var appCfg = new SConfig.RemoteApp {
+                    name = app.getField<string>(nameof(SConfig.RemoteApp.name)),
+                };
+                appCfg.layers = app.getField<TomlArray>(nameof(SConfig.RemoteApp.layers)).Select(x => x.ToString())
+                    .ToList();
+                cfg.apps.Add(appCfg);
             }
 
             var users = tb.getField<TomlTable>(nameof(cfg.users));
