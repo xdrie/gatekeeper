@@ -31,7 +31,7 @@ namespace Gatekeeper.Tests.Modules.Auth {
             return (client, data);
         }
 
-        public async Task confirmTotpSetup(HttpClient client, string b64Secret) {
+        private async Task confirmTotpSetup(HttpClient client, string b64Secret) {
             var totpProvider = new TotpProvider(Convert.FromBase64String(b64Secret));
 
             var resp = await client.PostAsJsonAsync("/a/auth/confirm2fa", new TwoFactorConfirmRequest {

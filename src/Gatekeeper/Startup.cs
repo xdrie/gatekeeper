@@ -23,7 +23,7 @@ namespace Gatekeeper {
             services.AddOptions();
             // install Carter
             services.AddCarter(options => {
-                options.OpenApi.DocumentTitle = "ALTiCU Unified Authentication Service";
+                options.OpenApi.DocumentTitle = SConfig.SERVER_NAME;
                 options.OpenApi.ServerUrls = new[] {"http://localhost:5000"};
                 options.OpenApi.Securities = new Dictionary<string, OpenApiSecurity> {
                     {

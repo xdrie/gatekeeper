@@ -20,44 +20,30 @@ namespace Gatekeeper.Tests.Modules.Provider {
 
         [Fact]
         public async Task rejectsUnauthorizedApp() {
-            await fx.initialize();
-            var client = fx.getAuthedClient();
+            var client = await fx.getAuthedClient();
 
-            var resp = await client.GetAsync("/a/app/token/BeanCan");
+            var resp = await client.GetAsync("/a/app/token/Hotels");
             Assert.Equal(HttpStatusCode.Forbidden, resp.StatusCode);
-        }
-        
-        [Fact]
-        public async Task authorizesGlobalApp() {
-            await fx.initialize();
-            var client = fx.getAuthedClient();
-
-            var resp = await client.GetAsync("/a/app/token/Global");
-            resp.EnsureSuccessStatusCode();
-            var appToken = JsonConvert.DeserializeObject<Token>(await resp.Content.ReadAsStringAsync());
-            Assert.Equal("*/Global", appToken.scope);
         }
 
         [Fact]
         public async Task authorizesAllowedApp() {
-            await fx.initialize();
-            var client = fx.getAuthedClient();
+            var client = await fx.getAuthedClient();
 
-            var resp = await client.GetAsync("/a/app/token/SaltShaker");
+            var resp = await client.GetAsync("/a/app/token/Salt");
             resp.EnsureSuccessStatusCode();
             var appToken = JsonConvert.DeserializeObject<Token>(await resp.Content.ReadAsStringAsync());
-            Assert.Equal("/CheapFood/SaltShaker", appToken.scope);
+            Assert.Equal("/Food/Salt", appToken.scope);
         }
 
         [Fact]
         public async Task appTokensBlockedFromRootScope() {
-            await fx.initialize();
-            var client = fx.getAuthedClient();
+            var client = await fx.getAuthedClient();
 
-            var resp = await client.GetAsync("/a/app/token/Global");
+            var resp = await client.GetAsync("/a/app/token/Salt");
             resp.EnsureSuccessStatusCode();
             var appToken = JsonConvert.DeserializeObject<Token>(await resp.Content.ReadAsStringAsync());
-            Assert.Equal("*/Global", appToken.scope);
+            Assert.Equal("/Food/Salt", appToken.scope);
             
             // now try requesting user info, but as the "application"
             var appClient = fx.getClient(); // set up a client as the application
@@ -65,25 +51,6 @@ namespace Gatekeeper.Tests.Modules.Provider {
             // check me page
             var mePageResp = await appClient.GetAsync("/a/u/me");
             Assert.Equal(HttpStatusCode.Unauthorized, mePageResp.StatusCode); // we should be barred, because this is a scoped token
-        }
-        
-        [Fact]
-        public async Task appTokensGetUserInfo() {
-            await fx.initialize();
-            var client = fx.getAuthedClient();
-
-            var resp = await client.GetAsync("/a/app/token/Global");
-            resp.EnsureSuccessStatusCode();
-            var appToken = JsonConvert.DeserializeObject<Token>(await resp.Content.ReadAsStringAsync());
-            Assert.Equal("*/Global", appToken.scope);
-            
-            // now try requesting user info, but as the "application"
-            var appClient = fx.getClient(); // set up a client as the application
-            appClient.addToken(appToken);
-            appClient.DefaultRequestHeaders.Add(ApiAuthenticator.APP_SECRET_HEADER, GlobalRemoteApp.GLOBAL_SECRET);
-            // request user info
-            var userInfoResp = await appClient.GetAsync("/a/remote/user");
-            userInfoResp.EnsureSuccessStatusCode(); // valid user info
         }
     }
 }

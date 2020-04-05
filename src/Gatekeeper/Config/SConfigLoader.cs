@@ -1,6 +1,9 @@
 #region
 
+using System;
 using System.Linq;
+using Gatekeeper.Models.Access;
+using Gatekeeper.Models.Remote;
 using Hexagon.Utilities;
 using Tomlyn.Model;
 
@@ -18,17 +21,45 @@ namespace Gatekeeper.Config {
 
             var apps = tb.getField<TomlTableArray>(nameof(cfg.apps));
             foreach (var app in apps) {
-                var appCfg = new SConfig.RemoteApp {
-                    name = app.getField<string>(nameof(SConfig.RemoteApp.name)),
-                    secret = app.getField<string>(nameof(SConfig.RemoteApp.secret)),
+                var appCfg = new RemoteApp {
+                    name = app.getField<string>(nameof(RemoteApp.name)),
+                    secret = app.getField<string>(nameof(RemoteApp.secret)),
                 };
-                appCfg.layers = app.getField<TomlArray>(nameof(SConfig.RemoteApp.layers)).Select(x => x.ToString())
+                appCfg.layers = app.getField<TomlArray>(nameof(RemoteApp.layers))
+                    .Select(x => x.ToString())
                     .ToList();
                 cfg.apps.Add(appCfg);
             }
 
+            var groups = tb.getField<TomlTableArray>(nameof(cfg.groups));
+            foreach (var group in groups) {
+                var groupCfg = new Group {
+                    name = group.getField<string>(nameof(Group.name)),
+                    priority = group.getField<long>(nameof(Group.priority))
+                };
+                // validate group name
+                if (!StringValidator.isIdentifier(groupCfg.name)) {
+                    throw new FormatException($"group name {groupCfg.name} is not a valid identifier.");
+                }
+
+                // load permissions and rules
+                groupCfg.permissions = group.getField<TomlArray>(nameof(Group.permissions))
+                    .Select(x => new Permission(x.ToString()))
+                    .ToList();
+                var groupRules = group.getField<TomlTable>(nameof(Group.rules));
+                foreach (var appRulesTablePair in groupRules) {
+                    var ruleApp = appRulesTablePair.Key;
+                    var rulesTable = (TomlTable) appRulesTablePair.Value;
+                    foreach (var appRule in rulesTable) {
+                        groupCfg.rules.Add(new AccessRule(ruleApp, appRule.Key, appRule.Value.ToString()));
+                    }
+                }
+
+                cfg.groups.Add(groupCfg);
+            }
+
             var users = tb.getField<TomlTable>(nameof(cfg.users));
-            users.bindField(ref cfg.users.defaultLayers, nameof(cfg.users.defaultLayers));
+            users.bindField(ref cfg.users.defaultGroups, nameof(cfg.users.defaultGroups));
 
             var logging = tb.getField<TomlTable>(nameof(cfg.logging));
             logging.bindField(ref cfg.logging.logLevel, nameof(cfg.logging.logLevel));
