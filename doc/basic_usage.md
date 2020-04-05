@@ -41,12 +41,12 @@ in order to enable providing authorization for external applications, the admini
 ## app configuration
 
 apps are configured in the `apps` node array.
-as a demonstration, we will configure an app called `FrenchFry` that belongs to the layer `Food`.
+as a demonstration, we will configure an app called `FrenchFry` that belongs to the layer `/Food`.
 
 ```toml
 [[apps]]
 name = "FrenchFry"
-layers = [ "Food" ]
+layers = [ "/Food" ]
 ```
 
 ## admin permission management
@@ -59,3 +59,7 @@ an admin account is needed for using admin functions. follow the basic account c
 to modify permissions, use `PATCH /a/perms/update` with a user uuid, a type specifying whether to `add` or `remove` permissions, and an array of permission paths (of the format `/Layer`).
 
 to get your permissions as a user, use `GET /a/perms`. this will return all permissions associated with a given user account.
+
+## issuing an app token
+
+for our `FrenchFry` app, `GET /a/app/token/FrenchFry` to request that the server grant an app token. if the user has been granted permission to the app, a token will be returned.
