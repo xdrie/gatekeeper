@@ -106,11 +106,17 @@ namespace Gatekeeper.Server {
 
                 // show banner and log some server information
                 SBoot.display(serverContext);
+                
+                if (hostEnv.IsDevelopment()) {
+                    app.UseDeveloperExceptionPage();
+                } else {
+                    app.UseExceptionHandler("/Error");
+                }
 
                 app.UseStaticFiles();
                 app.UseRouting();
-                app.UseEndpoints(builder => builder.MapCarter());
-                app.UseEndpoints(endpoints => { endpoints.MapRazorPages(); });
+                app.UseEndpoints(endpoints => endpoints.MapCarter());
+                app.UseEndpoints(endpoints => endpoints.MapRazorPages());
                 app.UseSwaggerUi3(settings => { settings.DocumentPath = "/openapi"; });
             }
         }
