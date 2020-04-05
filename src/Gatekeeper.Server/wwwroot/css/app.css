@@ -1,0 +1,18 @@
+﻿/* app wide css */
+
+.t-centered {
+    text-align: center;
+}
+
+.bg-color-x1 {
+    background-color: #72837b;
+}
+
+.navbar a {
+    color: inherit;
+}
+
+span.tiny-version {
+    font-size: 0.8rem;
+    vertical-align: top;
+}
