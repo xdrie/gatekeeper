@@ -52,7 +52,7 @@ namespace Gatekeeper.Server {
                     var configTxt = File.ReadAllText(CONFIG_FILE);
                     var configDoc = Toml.Parse(configTxt);
                     var configModel = configDoc.ToModel();
-                    serverConfig = ConfigLoader.readDocument(configModel);
+                    serverConfig.load(configModel);
                 }
             }
             else {
