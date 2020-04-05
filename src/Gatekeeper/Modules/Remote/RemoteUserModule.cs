@@ -1,9 +1,9 @@
 using Carter.Response;
 using Gatekeeper.Config;
 using Gatekeeper.Models.Identity;
-using Gatekeeper.OpenApi.App;
+using Gatekeeper.OpenApi.Remote;
 
-namespace Gatekeeper.Modules.Provider {
+namespace Gatekeeper.Modules.Remote {
     public class RemoteUserModule : RemoteApplicationModule {
         public RemoteUserModule(SContext serverContext) : base("/remote", serverContext) {
             Get<RemoteGetUser>("/user", async (req, res) => {

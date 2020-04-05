@@ -1,7 +1,6 @@
 using System.Net;
 using Carter.OpenApi;
 using Gatekeeper.Models.Identity;
-using Gatekeeper.OpenApi.Users;
 
 namespace Gatekeeper.OpenApi.App {
     public class RemoteGetUser : RouteMetaData {
