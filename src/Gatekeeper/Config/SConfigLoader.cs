@@ -34,7 +34,8 @@ namespace Gatekeeper.Config {
             var groups = tb.getField<TomlTableArray>(nameof(cfg.groups));
             foreach (var group in groups) {
                 var groupCfg = new Group {
-                    name = group.getField<string>(nameof(Group.name))
+                    name = group.getField<string>(nameof(Group.name)),
+                    priority = group.getField<long>(nameof(Group.priority))
                 };
                 // validate group name
                 if (!StringValidator.isIdentifier(groupCfg.name)) {
