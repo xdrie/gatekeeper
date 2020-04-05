@@ -10,6 +10,8 @@ namespace Gatekeeper.Services.Auth {
     public class ApiAuthenticator : DependencyObject {
         public ApiAuthenticator(SContext context) : base(context) { }
 
+        public const string APP_SECRET_HEADER = "X-App-Secret";
+
         public const string CLAIM_USERNAME = "username";
         public const string CLAIM_TOKEN = "token";
 

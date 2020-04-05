@@ -72,7 +72,7 @@ namespace Gatekeeper.Modules {
             User.Role.User, path, serverContext) {
             this.Before += async (ctx) => {
                 // verify the app secret
-                var appSecret = ctx.Request.Headers["X-App-Secret"];
+                var appSecret = ctx.Request.Headers[ApiAuthenticator.APP_SECRET_HEADER];
                 if (string.IsNullOrEmpty(appSecret)) {
                     ctx.Response.StatusCode = (int) HttpStatusCode.Unauthorized;
                     return false;
