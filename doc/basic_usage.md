@@ -68,5 +68,6 @@ for our `FrenchFry` app, `GET /a/app/token/FrenchFry` to request that the server
 ## fetching user info
 
 once the remote app recieves an app token, it can use the remote app api to access relevant information.
+the remote api is accessible under `/a/remote`.
 
 use `GET /a/remote/user` to get public user details, respecting their privacy settings.
