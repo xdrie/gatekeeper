@@ -1,34 +1,41 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Carter;
-using Gatekeeper.Models;
 using Gatekeeper.Server.Config;
 using Gatekeeper.Server.Models;
 using Gatekeeper.Server.OpenApi;
-using Hexagon.Logging;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace Gatekeeper.Server {
     public class Startup {
         private const string CONFIG_FILE = "config.toml";
 
+        public Startup(IConfiguration aspnetConfig, IWebHostEnvironment hostEnv) {
+            this.aspnetConfig = aspnetConfig;
+            this.hostEnv = hostEnv;
+        }
+
+        public IConfiguration aspnetConfig { get; }
+        public IWebHostEnvironment hostEnv { get; }
+
         public void ConfigureServices(IServiceCollection services) {
             // Adds services required for using options.
             services.AddOptions();
-            
+
             // enable Razor Pages
             var mvcBuilder = services.AddRazorPages();
 #if DEBUG
-            // if (Env.IsDevelopment()) {
-            mvcBuilder.AddRazorRuntimeCompilation();
-            // }
+            if (hostEnv.IsDevelopment()) {
+                mvcBuilder.AddRazorRuntimeCompilation();
+            }
 #endif
-            
+
             // install Carter
             services.AddCarter(options => {
                 options.OpenApi.DocumentTitle = SConfig.SERVER_NAME;
@@ -82,7 +89,7 @@ namespace Gatekeeper.Server {
             // context.build();
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env) {
+        public void Configure(IApplicationBuilder app) {
             // update the database
             using (var serviceScope = app.ApplicationServices
                 .GetRequiredService<IServiceScopeFactory>()
@@ -99,28 +106,6 @@ namespace Gatekeeper.Server {
 
                 // show banner and log some server information
                 SBoot.display(serverContext);
-#if DEBUG
-                // print debug banner (always)
-                serverContext.log.writeLine(
-                    $"this is a DEBUG build of {nameof(Server)}. this build should NEVER be used in production.",
-                    ConsoleColor.Red);
-                if (serverContext.config.server.development) {
-                    serverContext.log.writeLine(
-                        $"development/test mode is enabled. default values and fake external services will be used.",
-                        ConsoleColor.Red);
-                }
-#else
-                if (env.IsProduction()) {
-                    serverContext.log.writeLine(
-                        $"this is a release build of {nameof(Gatekeeper.Server)}, but is not being run in PRODUCTION (it is being run in '{env.EnvironmentName}')",
-                        ConsoleColor.Red);
-                }
-#endif
-
-                var configuredAppNames = string.Join(", ", serverContext.config.apps.Select(x => x.name));
-                serverContext.log.writeLine(
-                    $"available remote application configurations[{serverContext.config.apps.Count}]: remote applications are configured: [{configuredAppNames}]",
-                    SLogger.LogLevel.Information);
 
                 app.UseStaticFiles();
                 app.UseRouting();

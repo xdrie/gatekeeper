@@ -1,4 +1,6 @@
+using System;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using Hexagon.Logging;
 
@@ -12,6 +14,29 @@ namespace Gatekeeper.Server.Config {
                 context.log.writeLine($"\n{sr.ReadToEnd()}\nv{SConfig.VERSION} instance '{SConfig.SERVER_NAME}'",
                     SLogger.LogLevel.Information);
             }
+            
+#if DEBUG
+            // print debug banner (always)
+            context.log.writeLine(
+                $"this is a DEBUG build of {nameof(Server)}. this build should NEVER be used in production.",
+                ConsoleColor.Red);
+            if (context.config.server.development) {
+                context.log.writeLine(
+                    $"development/test mode is enabled. default values and fake external services will be used.",
+                    ConsoleColor.Red);
+            }
+#else
+                if (env.IsProduction()) {
+                    context.log.writeLine(
+                        $"this is a release build of {nameof(Gatekeeper.Server)}, but is not being run in PRODUCTION (it is being run in '{env.EnvironmentName}')",
+                        ConsoleColor.Red);
+                }
+#endif
+
+            var configuredAppNames = string.Join(", ", context.config.apps.Select(x => x.name));
+            context.log.writeLine(
+                $"available remote application configurations[{context.config.apps.Count}]: remote applications are configured: [{configuredAppNames}]",
+                SLogger.LogLevel.Information);
         }
     }
 }
