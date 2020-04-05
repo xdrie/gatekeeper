@@ -16,8 +16,48 @@ namespace Gatekeeper.Services.Users {
         private IEnumerable<Group> groups =>
             user.groups.Select(x => serverContext.config.groups.Single(g => g.name == x));
 
-        public IEnumerable<Permission> aggregatePermissions() {
-            return groups.SelectMany(x => x.permissions);
+        public IEnumerable<Permission> aggregatePermissions() =>
+            new GroupPermissionResolver(groups).aggregatePermissions();
+
+        public List<AccessRule> aggregateRules() =>
+            new GroupPermissionResolver(groups).aggregateRules();
+
+        public IEnumerable<AccessRule> aggregateRulesForApp() =>
+            new GroupPermissionResolver(groups).aggregateRules();
+
+        public class GroupPermissionResolver {
+            private readonly IEnumerable<Group> groups;
+
+            public GroupPermissionResolver(IEnumerable<Group> groups) {
+                this.groups = groups;
+            }
+
+            public IEnumerable<Permission> aggregatePermissions() {
+                return groups.SelectMany(x => x.permissions);
+            }
+
+            public List<AccessRule> aggregateRules() {
+                // get all valid rules for the user]
+                // this needs to take into account group priority
+                // 1. sort group memberships
+                var rankedGroups = groups.OrderByDescending(x => x.priority);
+                // 2. take all unique rules
+                var rules = new List<AccessRule>();
+                foreach (var group in rankedGroups) {
+                    foreach (var groupRule in group.rules) {
+                        // ensure no rule with the same app and key exists
+                        if (!rules.Any(x => x.app == groupRule.app && x.key == groupRule.key)) {
+                            rules.Add(groupRule);
+                        }
+                    }
+                }
+
+                return rules;
+            }
+
+            public IEnumerable<AccessRule> aggregateRulesForApp(string appName) {
+                return aggregateRules().Where(x => x.app == appName);
+            }
         }
     }
 }
