@@ -31,7 +31,3 @@ other basic account operations are available under the `User Management` module.
 ## get user account info
 
 `GET /a/u/me` to get information about the currently authenticated user.
-
-## two-factor authentication
-
-TODO
