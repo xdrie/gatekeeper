@@ -49,7 +49,7 @@ namespace Gatekeeper.Tests.Modules.Provider {
             var appToken = JsonConvert.DeserializeObject<Token>(await resp.Content.ReadAsStringAsync());
             Assert.Equal("/CheapFood/SaltShaker", appToken.scope);
         }
-        
+
         [Fact]
         public async Task appTokensBlockedFromRootScope() {
             await fx.initialize();
@@ -66,6 +66,24 @@ namespace Gatekeeper.Tests.Modules.Provider {
             // check me page
             var mePageResp = await appClient.GetAsync("/a/u/me");
             Assert.Equal(HttpStatusCode.Unauthorized, mePageResp.StatusCode); // we should be barred, because this is a scoped token
+        }
+        
+        [Fact]
+        public async Task appTokensGetUserInfo() {
+            await fx.initialize();
+            var client = fx.getAuthedClient();
+
+            var resp = await client.GetAsync("/a/app/token/Global");
+            resp.EnsureSuccessStatusCode();
+            var appToken = JsonConvert.DeserializeObject<Token>(await resp.Content.ReadAsStringAsync());
+            Assert.Equal("*/Global", appToken.scope);
+            
+            // now try requesting user info, but as the "application"
+            var appClient = fx.getClient(); // set up a client as the application
+            appClient.addToken(appToken);
+            // request user info
+            var userInfoResp = await appClient.GetAsync("/a/app/user");
+            userInfoResp.EnsureSuccessStatusCode(); // valid user info
         }
     }
 }
