@@ -4,8 +4,8 @@ using Carter.OpenApi;
 using Gatekeeper.Models.Access;
 
 namespace Gatekeeper.OpenApi.Users {
-    public class GetMyGroups : RouteMetaData {
-        public override string Description => "Get current user group membership";
+    public class GetMyRules : RouteMetaData {
+        public override string Description => "Get current user app access rules";
         public override string Tag => GateApiConstants.Tags.USER_DIRECTORY;
         public override string SecuritySchema => GateApiConstants.Security.USER_BEARER_AUTH;
 
@@ -16,8 +16,8 @@ namespace Gatekeeper.OpenApi.Users {
             },
             new RouteMetaDataResponse {
                 Code = (int) HttpStatusCode.OK,
-                Description = $"A {nameof(IEnumerable<Group>)} containing the user's groups",
-                Response = typeof(IEnumerable<Group>)
+                Description = $"A {nameof(List<AccessRule>)} containing the user's rules",
+                Response = typeof(List<AccessRule>)
             }
         };
     }

@@ -19,7 +19,7 @@ namespace Gatekeeper.Tests.Modules.Users {
         public async Task canAccessMePage() {
             await fx.initialize();
             var client = fx.getAuthedClient();
-            
+
             // check me page
             var resp = await client.GetAsync("/a/u/me");
             resp.EnsureSuccessStatusCode();
@@ -31,13 +31,21 @@ namespace Gatekeeper.Tests.Modules.Users {
         public async Task canGetGroupMembership() {
             await fx.initialize();
             var client = fx.getAuthedClient();
-            
-            // check me page
+
             var resp = await client.GetAsync("/a/u/groups");
             resp.EnsureSuccessStatusCode();
             var groupList = JsonConvert.DeserializeObject<string[]>(await resp.Content.ReadAsStringAsync());
             var userModel = fx.serverContext.userManager.findByUsername(fx.username);
             Assert.Equal(userModel.groups, groupList);
+        }
+
+        [Fact]
+        public async Task canGetAppAccessRules() {
+            await fx.initialize();
+            var client = fx.getAuthedClient();
+
+            var resp = await client.GetAsync("/a/u/rules");
+            resp.EnsureSuccessStatusCode();
         }
     }
 }
