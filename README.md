@@ -1,6 +1,8 @@
 
 # gatekeeper
 
+![icon](media/app.png)
+
 Gatekeeper is ALTiCU's unified authentication service.
 
 ## key features
