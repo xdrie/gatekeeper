@@ -40,7 +40,14 @@ async function auth_login(data) {
         const resp = await client.post('/auth/login', data);
         console.log(resp);
         storeAuthorization(resp.data);
-        window.location.href = "/user/dash"; // successfully logged in
+        // successful login
+        // check if there was a continuation, otherwise send to dash
+        let args = parseQuery(window.location.search);
+        let returnUri = '/user/dash';
+        if ('t' in args) {
+            returnUri = decodeURIComponent(args['t']);
+        }
+        window.location.href = returnUri;
     } catch (err) {
         show_auth_error(err);
     }

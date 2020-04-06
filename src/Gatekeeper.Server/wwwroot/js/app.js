@@ -118,7 +118,14 @@ async function authGuard(cb) {
     } catch (err) {
         console.error(err);
         // send back to login
-        window.location.href = "/login";
+        // include current location in return
+        let ret = window.location.pathname + window.location.search;
+        if (ret && ret != '/login') { // make sure ret isn't a loop
+            let encodedRetPath = encodeURIComponent(ret);
+            window.location.href = `/login?t=${encodedRetPath}`;
+        } else {
+            window.location.href = '/login';
+        }
     }
 }
 
