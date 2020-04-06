@@ -61,7 +61,12 @@ function wireLinking(user) {
     }
 
     $("#cancel").on("click", e => {
-        window.history.back();
+        if (window.opener && window.opener !== window) {
+            window.close();
+        } else {
+            // default cancel, return to home
+            window.location.href = '/';
+        }
     });
 
     $("#link").on("submit", e => {
