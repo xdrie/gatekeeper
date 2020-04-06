@@ -34,11 +34,12 @@ async function linkApplication(app, cbUri) {
     // request an app token
     try {
         const client = get_client();
-        const resp = await client.get(`/app/token/${app}`);
+        const resp = await client.get(`/app/login/${app}`);
         console.log(resp);
         // we successfully obtained our app token.
-        let appToken = resp.data;
-        console.log('app token', appToken);
+        let appUser = resp.data.user;
+        let appToken = resp.data.token;
+        console.log('authenticated as', appUser.username, 'app token', appToken);
         // now, we need to post to the callback uri
         redirectPost(cbUri, appToken);
     } catch (err) {
