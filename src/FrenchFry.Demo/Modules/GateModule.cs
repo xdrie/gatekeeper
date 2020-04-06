@@ -1,9 +1,11 @@
 using System;
 using System.Net;
 using Carter.ModelBinding;
+using Carter.Response;
 using FrenchFry.Demo.Config;
 using Gatekeeper.Models.Identity;
 using Hexagon.Modules;
+using Hexagon.Serialization;
 using Hexagon.Web;
 
 namespace FrenchFry.Demo.Modules {
@@ -27,6 +29,8 @@ namespace FrenchFry.Demo.Modules {
                     return;
                 }
                 res.StatusCode = (int) HttpStatusCode.Accepted;
+                // display the user's info
+                await res.respondSerialized(identity);
             });
         }
     }
