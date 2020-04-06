@@ -4,10 +4,11 @@ using System.Linq;
 using System.Security.Claims;
 using Gatekeeper.Server.Config;
 using Gatekeeper.Server.Models;
+using Hexagon.Models;
 using Hexagon.Services;
 
 namespace Gatekeeper.Server.Services.Auth {
-    public class ApiAuthenticator : DependencyObject, IApiAuthenticator {
+    public class ApiAuthenticator : DependencyService<SContext>, IApiAuthenticator {
         public ApiAuthenticator(SContext context) : base(context) { }
 
         public const string APP_SECRET_HEADER = "X-App-Secret";

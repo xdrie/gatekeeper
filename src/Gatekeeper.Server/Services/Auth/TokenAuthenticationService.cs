@@ -3,10 +3,11 @@ using System.Linq;
 using Gatekeeper.Models.Identity;
 using Gatekeeper.Server.Config;
 using Gatekeeper.Server.Models;
+using Hexagon.Models;
 using Hexagon.Utilities;
 
 namespace Gatekeeper.Server.Services.Auth {
-    public class TokenAuthenticationService : DependencyObject {
+    public class TokenAuthenticationService : DependencyService<SContext> {
         public TokenAuthenticationService(SContext context) : base(context) { }
         
         public const int TOKEN_LENGTH = 32;

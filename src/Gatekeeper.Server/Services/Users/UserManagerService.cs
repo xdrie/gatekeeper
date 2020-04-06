@@ -8,11 +8,12 @@ using Gatekeeper.Models.Requests;
 using Gatekeeper.Server.Config;
 using Gatekeeper.Server.Models;
 using Gatekeeper.Server.Services.Auth;
+using Hexagon.Models;
 using Hexagon.Utilities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Gatekeeper.Server.Services.Users {
-    public class UserManagerService : DependencyObject {
+    public class UserManagerService : DependencyService<SContext> {
         public UserManagerService(SContext context) : base(context) { }
 
         public User registerUser(RegisterRequest request) {
@@ -133,7 +134,7 @@ namespace Gatekeeper.Server.Services.Users {
                 return db.users.SingleOrDefault(x => x.username == username);
             }
         }
-        
+
         public User? findByEmail(string email) {
             using (var db = serverContext.getDbContext()) {
                 return db.users.SingleOrDefault(x => x.email == email);

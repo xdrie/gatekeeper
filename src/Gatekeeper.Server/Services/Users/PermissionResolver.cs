@@ -4,9 +4,10 @@ using Gatekeeper.Models.Access;
 using Gatekeeper.Models.Identity;
 using Gatekeeper.Server.Config;
 using Gatekeeper.Server.Models;
+using Hexagon.Models;
 
 namespace Gatekeeper.Server.Services.Users {
-    public class PermissionResolver : DependencyObject {
+    public class PermissionResolver : DependencyService<SContext> {
         public User user { get; }
 
         public PermissionResolver(SContext context, User user) : base(context) {
