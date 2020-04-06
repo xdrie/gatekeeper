@@ -13,19 +13,20 @@ namespace FrenchFry.Demo.Config {
         public const string GATE_APP = "FrenchFry";
         public const string GATE_SERVER = "http://localhost:5000";
         public const string GATE_SECRET = "yeet";
-        
-        public override IBearerAuthenticator getAuthenticator() => new BearerAuthenticator<SContext>(this);
-        
+
         public ISessionResolver sessionResolver { get; }
         public GateAuthClient gateAuthClient { get; }
         public UserManager userManager { get; }
-        public AppDbContext getDbContext() => services.BuildServiceProvider().GetService<AppDbContext>();
+        public override IBearerAuthenticator authenticator { get; }
 
         public SContext(IServiceCollection services) : base(services) {
             sessionResolver = new SessionResolver<SContext>(this);
             gateAuthClient = new GateAuthClient(GATE_APP, new Uri(GATE_SERVER), GATE_SECRET);
             userManager = new UserManager(this);
+            authenticator = new BearerAuthenticator<SContext>(this);
         }
+        
+        public AppDbContext getDbContext() => services.BuildServiceProvider().GetService<AppDbContext>();
 
         public void start() {
             getDbContext().Database.EnsureCreated();

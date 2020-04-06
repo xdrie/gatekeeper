@@ -8,7 +8,7 @@ namespace Gatekeeper.Server.Services.Auth {
         public BearerAuthenticator(SContext context) : base(context) { }
 
         public ClaimsPrincipal resolve(string token) {
-            serverContext.tokenResolver.tick();
+            serverContext.tickService.tick();
             var maybeCred = serverContext.tokenResolver.resolve(token);
             if (maybeCred == null) return null;
             var cred = maybeCred.Value;
