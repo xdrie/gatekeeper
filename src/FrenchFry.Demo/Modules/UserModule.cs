@@ -4,12 +4,8 @@ using FrenchFry.Demo.Config;
 using Hexagon.Serialization;
 
 namespace FrenchFry.Demo.Modules {
-    public class UserModule : GateAuthModule<SContext> {
+    public class UserModule : BridgeAuthModule<SContext> {
         public UserModule(SContext serverContext) : base("/u", serverContext) {
-            Get("/me", async (req, res) => {
-                // display user info
-                await res.respondSerialized(remoteUser);
-            });
             Get("/status", async (req, res) => {
                 remoteUser.rules
                     .getAppRule<long>(SContext.GATE_APP, "quota", 0, out var fryQuota);

@@ -44,6 +44,7 @@ async function linkApplication(config) {
             // post message to parent window
             console.log('posting auth to parent');
             window.opener.postMessage(auth, config.cb);
+            window.close();
         } else {
             redirectPost(config.cb, auth.token);
         }
