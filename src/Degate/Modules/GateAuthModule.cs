@@ -9,7 +9,7 @@ using Hexagon.Services;
 namespace Degate.Modules {
     public abstract class GateAuthModule<TContext> : ApiModule<TContext>
         where TContext : ServerContext, IDegateContext {
-        public RemoteAuthentication user { get; private set; }
+        public RemoteAuthentication remoteUser { get; private set; }
 
         protected GateAuthModule(string path, TContext serverContext) : base(path, serverContext) {
             // require authentication
@@ -18,7 +18,7 @@ namespace Degate.Modules {
             Before += async (ctx) => {
                 // get the user
                 var tokenClaim = ctx.User.Claims.First(x => x.Type == IBearerAuthenticator.CLAIM_TOKEN);
-                user = serverContext.sessionTokenResolver.resolve(tokenClaim.Value);
+                remoteUser = serverContext.sessionTokenResolver.resolve(tokenClaim.Value);
 
                 return true;
             };
