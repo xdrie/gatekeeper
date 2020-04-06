@@ -7,7 +7,7 @@ namespace Degate.Services {
         where TContext : ServerContext {
         public SessionResolver(TContext context) : base(context) { }
 
-        public RemoteAuthentication resolveSessionToken(string token) {
+        public virtual RemoteAuthentication resolveSessionToken(string token) {
             // resolve user by token
 
             // 1. get matching session
@@ -16,6 +16,14 @@ namespace Degate.Services {
             var sess = serverContext.sessions.get(token);
             var user = sess.jar.Resolve<RemoteAuthentication>();
             return user;
+        }
+
+        public virtual string getSessionToken(string userId) {
+            // encrompt user id
+        }
+
+        public virtual string getUserId(string sessionToken) {
+            // decrompt user id
         }
     }
 }

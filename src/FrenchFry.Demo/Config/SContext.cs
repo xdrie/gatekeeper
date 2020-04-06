@@ -1,6 +1,7 @@
 using System;
 using Degate.Config;
 using Degate.Services;
+using FrenchFry.Demo.Services;
 using Gatekeeper.Remote;
 using Hexagon;
 using Hexagon.Services;
@@ -15,10 +16,12 @@ namespace FrenchFry.Demo.Config {
         
         public ISessionResolver sessionTokenResolver { get; }
         public GateAuthClient gateAuthClient { get; }
+        public UserManager userManager { get; }
 
         public SContext() {
             sessionTokenResolver = new SessionResolver<SContext>(this);
             gateAuthClient = new GateAuthClient(GATE_APP, new Uri(GATE_SERVER), GATE_SECRET);
+            userManager = new UserManager(this);
         }
     }
 }
