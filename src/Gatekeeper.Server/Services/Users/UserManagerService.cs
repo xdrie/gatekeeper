@@ -44,7 +44,7 @@ namespace Gatekeeper.Server.Services.Users {
 #if DEBUG
             if (serverContext.config.server.development) {
                 // if in development, set a default verification code
-                user.verification = DevelopmentConstants.DEFAULT_VERIFICATION;
+                user.verification = Constants.DEFAULT_VERIFICATION;
             }
 #endif
 

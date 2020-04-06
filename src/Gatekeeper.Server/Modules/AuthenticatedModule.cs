@@ -1,6 +1,5 @@
 using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
 using Gatekeeper.Models.Identity;
 using Gatekeeper.Models.Remote;
 using Gatekeeper.Server.Config;
@@ -75,7 +74,7 @@ namespace Gatekeeper.Server.Modules {
             User.Role.User, path, serverContext) {
             this.Before += async (ctx) => {
                 // verify the app secret
-                var appSecret = ctx.Request.Headers[ApiAuthenticator.APP_SECRET_HEADER];
+                var appSecret = ctx.Request.Headers[Constants.APP_SECRET_HEADER];
                 if (string.IsNullOrEmpty(appSecret)) {
                     ctx.Response.StatusCode = (int) HttpStatusCode.Unauthorized;
                     return false;

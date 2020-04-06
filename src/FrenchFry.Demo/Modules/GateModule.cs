@@ -17,9 +17,15 @@ namespace FrenchFry.Demo.Modules {
 
                 if (!serverContext.gateAuthClient.validate(gateReq)) {
                     res.StatusCode = (int) HttpStatusCode.UnprocessableEntity; // invalid
+                    return;
                 }
                 
                 // now, import the identity
+                var identity = await serverContext.gateAuthClient.getRemoteIdentity(gateReq);
+                if (identity == null) {
+                    res.StatusCode = (int) HttpStatusCode.Unauthorized;
+                    return;
+                }
                 res.StatusCode = (int) HttpStatusCode.Accepted;
             });
         }
