@@ -1,6 +1,6 @@
 function toast_error(msg) {
     $('#error').innerText = msg;
-    $('#error').show()
+    $('#error').show();
 }
 
 function show_auth_error(err) {
@@ -81,6 +81,7 @@ $("#auth").addEventListener("submit", ev => {
 
     $('#auth-container').hide();
     $('#load').show();
+    $('#error').hide();
 
     let task = null;
     switch (mode) {
