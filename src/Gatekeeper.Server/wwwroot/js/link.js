@@ -30,18 +30,23 @@ function show_link_error(err) {
     toast_error(msg);
 }
 
-async function linkApplication(app, cbUri) {
+async function linkApplication(config) {
     // request an app token
     try {
         const client = get_client();
-        const resp = await client.get(`/app/login/${app}`);
+        const resp = await client.get(`/app/login/${config.app}`);
         console.log(resp);
         // we successfully obtained our app token.
-        let appUser = resp.data.user;
-        let appToken = resp.data.token;
-        console.log('authenticated as', appUser.username, 'app token', appToken);
-        // now, we need to post to the callback uri
-        redirectPost(cbUri, appToken);
+        let auth = resp.data;
+        console.log('authenticated as', auth.user.username, 'app token', auth.token);
+        // return data to callback
+        if ('p' in config) {
+            // post message to parent window
+            console.log('posting auth to parent');
+            window.opener.postMessage(auth, config.cb);
+        } else {
+            redirectPost(config.cb, auth.token);
+        }
     } catch (err) {
         show_link_error(err);
     }
@@ -69,10 +74,12 @@ function wireLinking(user) {
         }
     });
 
+    const config = args;
+
     $("#link").on("submit", e => {
         // do the linking
         console.log('link requested');
-        linkApplication(args.app, args.cb);
+        linkApplication(config);
         e.preventDefault();
     });
 }

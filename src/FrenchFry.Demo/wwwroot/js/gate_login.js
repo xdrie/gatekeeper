@@ -1,5 +1,10 @@
-function _gklogin_recieve(data) {
 
+function _gklogin_recieve(config, event) {
+    // ensure event is from auth server
+    if (event.origin !== config.server) return;
+    let auth = event.data;
+    console.log('received login', auth);
+    window[config.cb](auth);
 }
 
 (async () => {
@@ -31,9 +36,13 @@ function _gklogin_recieve(data) {
             console.log("requesting login", config);
 
             // popup gatekeeper link
-            let gklink = window.open(`${config.server}/link?app=${config.app}`)
-
-            window[config.cb](token);
+            let origin = window.location.origin;
+            let gk_window = window.open(`${config.server}/link?app=${config.app}&cb=${origin}&p=1`);
+            
+            // register callback
+            window.addEventListener("message",
+                (e) => _gklogin_recieve(config, e),
+                false);
         });
     });
 

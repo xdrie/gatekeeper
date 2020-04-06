@@ -1,6 +1,6 @@
 
 // frenchfry auth
 
-function onsignin(user) {
-    alert('signed in: ' + user);
+function onsignin(auth) {
+    console.log(`welcome, ${auth.user.name}!`);
 }
