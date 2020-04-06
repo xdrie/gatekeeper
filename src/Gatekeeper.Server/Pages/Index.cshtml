@@ -1,0 +1,32 @@
+@page
+@using Gatekeeper.Server.Config
+@{
+    ViewBag.Title = "Home";
+    Layout = "_ShowLayout";
+}
+
+<article>
+    <h1 class="t-centered">
+        @SConfig.BRAND<span class="tiny-version">@($"v{SConfig.VERSION}")</span>
+    </h1>
+    <p>
+        Yeah, it's another ALTiCU Service.
+        This time, it's an authentication server.
+        We got annoyed (quite reasonably might I say) with OAuth and
+        OpenID, and decided to take the good parts of both and roll them
+        into our very own authentication protocol.
+        Once again, I just wanted something to fill up a bit of space.
+        It's not even slightly useful or necessary, just makes the page
+        look less empty while I'm developing this application.
+        But if you're going to be reading filler text on every web
+        application you see, I want to help you by making it a little
+        more interesting and enjoyable UwU.
+        Have a great day.
+    </p>
+    <p>
+        <img class="emote" src="https://alt.icu/assets/e/egguwu.png"/>
+        <img class="emote" src="https://alt.icu/assets/e/bcth.png"/>
+    </p>
+
+    <a href="https://alt.icu" class="btn btn-primary">ALTiCU Home</a>
+</article>

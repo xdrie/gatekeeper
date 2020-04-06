@@ -8,16 +8,19 @@ using Gatekeeper.Models.Requests;
 using Gatekeeper.Server.Config;
 using Gatekeeper.Server.Models;
 using Gatekeeper.Server.Services.Auth;
+using Hexagon.Models;
 using Hexagon.Utilities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Gatekeeper.Server.Services.Users {
-    public class UserManagerService : DependencyObject {
+    public class UserManagerService : DependencyService<SContext> {
         public UserManagerService(SContext context) : base(context) { }
 
         public User registerUser(RegisterRequest request) {
             if (findByUsername(request.username) != null)
                 throw new UserAlreadyExistsException("a user with the same username already exists");
+            if (findByEmail(request.email) != null)
+                throw new UserAlreadyExistsException("a user with the same email already exists");
             // encrypt the password
             var cryptPassword = CryptSecret.withDefaultParameters();
             var cryptoHelper = new SecretCryptoHelper(cryptPassword);
@@ -41,7 +44,7 @@ namespace Gatekeeper.Server.Services.Users {
 #if DEBUG
             if (serverContext.config.server.development) {
                 // if in development, set a default verification code
-                user.verification = DevelopmentConstants.DEFAULT_VERIFICATION;
+                user.verification = Constants.DEFAULT_VERIFICATION;
             }
 #endif
 
@@ -55,7 +58,7 @@ namespace Gatekeeper.Server.Services.Users {
 
         public Token issueRootToken(int userId) {
             // create an access token
-            var token = serverContext.tokenAuthenticator.issueRoot();
+            var token = serverContext.tokenResolver.issueRoot();
 
             return issueTokenFor(userId, token);
         }
@@ -129,6 +132,12 @@ namespace Gatekeeper.Server.Services.Users {
         public User? findByUsername(string username) {
             using (var db = serverContext.getDbContext()) {
                 return db.users.SingleOrDefault(x => x.username == username);
+            }
+        }
+
+        public User? findByEmail(string email) {
+            using (var db = serverContext.getDbContext()) {
+                return db.users.SingleOrDefault(x => x.email == email);
             }
         }
 

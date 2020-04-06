@@ -1,7 +1,6 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 using Gatekeeper.Models.Identity;
-using Gatekeeper.Server.Services.Auth;
 using Gatekeeper.Tests.Base;
 using Gatekeeper.Tests.Meta;
 using Gatekeeper.Tests.Utilities;
@@ -31,7 +30,7 @@ namespace Gatekeeper.Tests.Modules.Provider {
             // authenticate a client on behalf of the application
             var appClient = fx.getClient();
             appClient.addToken(appToken);
-            appClient.DefaultRequestHeaders.Add(ApiAuthenticator.APP_SECRET_HEADER, Constants.Apps.APP_SECRET);
+            appClient.DefaultRequestHeaders.Add(Gatekeeper.Constants.APP_SECRET_HEADER, Constants.Apps.APP_SECRET);
             return appClient;
         }
 

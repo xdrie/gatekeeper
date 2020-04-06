@@ -1,0 +1,52 @@
+﻿@using Gatekeeper.Server.Config
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- meta -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1,
+        shrink-to-fit=no">
+    <link rel="icon" href="~/img/app.png">
+    <!--
+    @SConfig.SERVER_NAME version @SConfig.VERSION
+    -->
+
+    <title>@ViewBag.Title | gate</title>
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="~/lib/spectre/spectre.min.css">
+    <link rel="stylesheet" href="~/css/app.css" asp-append-version="true">
+</head>
+<body>
+<!-- scripts -->
+<script src="~/lib/moon/moon.min.js"></script>
+<script src="~/lib/moon/moon-browser.min.js"></script>
+<script src="~/lib/axios/axios.min.js"></script>
+<script src="~/js/app.js" asp-append-version="true"></script>
+
+<!-- header -->
+<header class="navbar bg-color-x1 mb-2 s-rounded p-2">
+    <section class="navbar-section">
+        <a href="/" class="navbar-brand mr-2">@SConfig.BRAND</a>
+    </section>
+    <section class="navbar-section">
+        @if (ViewBag.Auth == null) {
+            <a href="/login" class="btn btn-link btn-nav">Login</a>
+            <a href="/create" class="btn btn-link btn-nav">Create</a>
+        }
+        else {
+            <a id="logout" class="btn btn-link btn-nav">Logout</a>
+        }
+    </section>
+
+</header>
+
+<!-- view content -->
+<section class="page-content">
+    @RenderBody()
+</section>
+
+@RenderSection("Scripts", required: false)
+</body>
+</html>

@@ -7,15 +7,16 @@ using Gatekeeper.Models.Responses;
 using Gatekeeper.Server.Config;
 using Gatekeeper.Server.Models;
 using Gatekeeper.Server.Models.Validators;
+using Hexagon.Models;
 using Newtonsoft.Json;
 
 namespace Gatekeeper.Tests.Utilities {
-    public class AccountRegistrar : DependencyObject {
+    public class AccountRegistrar : DependencyService<SContext> {
         public const string TEST_USERNAME = "test";
         public const string TEST_NAME = "Test Testingtest";
         public const string TEST_EMAIL = "test@example.com";
         public const string TEST_PASSWORD = "1234567890";
-        
+
         public const string TEST_ADMIN = "admin";
 
         public AccountRegistrar(SContext context) : base(context) { }
@@ -36,6 +37,7 @@ namespace Gatekeeper.Tests.Utilities {
                 userToVerify.role = User.Role.User;
                 serverContext.userManager.updateUser(userToVerify);
             }
+
             return JsonConvert.DeserializeObject<AuthedUserResponse>(await resp.Content.ReadAsStringAsync());
         }
     }

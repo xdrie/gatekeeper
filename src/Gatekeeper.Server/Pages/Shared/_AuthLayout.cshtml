@@ -1,0 +1,18 @@
+@{
+    Layout = "_ShowLayout"; // use the show layout as parent
+}
+<article>
+    <div class="columns">
+        <div class="column col-6 col-md-8 col-sm-12 col-mx-auto">
+            <h1>@ViewBag.AuthType</h1>
+            <div class="toast toast-error" id="error" style="display:none">
+                error
+            </div>
+            <div id="auth-container">
+                @RenderBody()
+            </div>
+            <div id="load" class="loading loading-lg" style="display:none"></div>
+        </div>
+    </div>
+    <script type="text/javascript" asp-append-version="true" src="~/js/auth.js"></script>
+</article>
