@@ -1,3 +1,4 @@
+using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
@@ -13,7 +14,7 @@ namespace Gatekeeper.Tests.Utilities {
     public class AccountRegistrar : DependencyService<SContext> {
         public const string TEST_USERNAME = "test";
         public const string TEST_NAME = "Test Testingtest";
-        public const string TEST_EMAIL = "test@example.com";
+        public const string TEST_EMAIL = "test_X@example.com";
         public const string TEST_PASSWORD = "1234567890";
 
         public const string TEST_ADMIN = "admin";
@@ -25,7 +26,7 @@ namespace Gatekeeper.Tests.Utilities {
             var resp = await client.PostAsJsonAsync("/a/auth/create", new RegisterRequest {
                 username = username,
                 name = TEST_NAME,
-                email = TEST_EMAIL,
+                email = TEST_EMAIL.Replace("X", Guid.NewGuid().ToString("N")),
                 password = TEST_PASSWORD,
                 pronouns = User.Pronouns.TheyThem.ToString(),
                 isRobot = AuthRequestValidators.RegisterRequestValidator.NOT_ROBOT_PROMISE
