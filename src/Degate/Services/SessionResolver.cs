@@ -3,10 +3,11 @@ using Hexagon;
 using Hexagon.Models;
 
 namespace Degate.Services {
-    public class SessionTokenResolver<TContext> : DependencyService<TContext>, IRemoteTokenResolver where TContext : ServerContext {
-        public SessionTokenResolver(TContext context) : base(context) { }
+    public class SessionResolver<TContext> : DependencyService<TContext>, ISessionResolver
+        where TContext : ServerContext {
+        public SessionResolver(TContext context) : base(context) { }
 
-        public RemoteAuthentication resolve(string token) {
+        public RemoteAuthentication resolveSessionToken(string token) {
             // resolve user by token
 
             // 1. get matching session

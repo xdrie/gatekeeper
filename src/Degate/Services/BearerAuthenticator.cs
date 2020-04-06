@@ -5,14 +5,14 @@ using Hexagon.Models;
 using Hexagon.Services;
 
 namespace Degate.Services {
-    public class SessionBearerAuthenticator<TContext> : DependencyService<TContext>, IBearerAuthenticator
+    public class BearerAuthenticator<TContext> : DependencyService<TContext>, IBearerAuthenticator
         where TContext : ServerContext, IDegateContext {
-        public SessionBearerAuthenticator(TContext context) : base(context) { }
+        public BearerAuthenticator(TContext context) : base(context) { }
 
         public ClaimsPrincipal resolve(string token) {
             // we only accept session tokens here.
             // match the token to an existing session
-            var auth = serverContext.sessionTokenResolver.resolve(token);
+            var auth = serverContext.sessionTokenResolver.resolveSessionToken(token);
             if (auth == null) return null;
 
             var claims = new[] {

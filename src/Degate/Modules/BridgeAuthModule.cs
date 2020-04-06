@@ -20,7 +20,7 @@ namespace Degate.Modules {
             Before += ctx => {
                 // get the user
                 var tokenClaim = ctx.User.Claims.First(x => x.Type == IBearerAuthenticator.CLAIM_TOKEN);
-                remoteUser = serverContext.sessionTokenResolver.resolve(tokenClaim.Value);
+                remoteUser = serverContext.sessionTokenResolver.resolveSessionToken(tokenClaim.Value);
 
                 return Task.FromResult(true);
             };
