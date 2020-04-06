@@ -19,8 +19,11 @@ namespace FrenchFry.Demo {
             });
 
             var context = new SContext(services);
+            
             // register server context
             services.AddSingleton(context);
+
+            context.start();
         }
 
         public void Configure(IApplicationBuilder app) {

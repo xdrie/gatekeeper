@@ -26,5 +26,9 @@ namespace FrenchFry.Demo.Config {
             gateAuthClient = new GateAuthClient(GATE_APP, new Uri(GATE_SERVER), GATE_SECRET);
             userManager = new UserManager(this);
         }
+
+        public void start() {
+            getDbContext().Database.EnsureCreated();
+        }
     }
 }
