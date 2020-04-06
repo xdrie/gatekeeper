@@ -7,6 +7,7 @@ using Hexagon.Services;
 
 namespace FrenchFry.Demo.Config {
     public class SContext : ServerContext, IDegateContext {
+        public const string GATE_APP = "FrenchFry";
         public const string GATE_SERVER = "http://localhost:5000";
         public const string GATE_SECRET = "yeet";
         
@@ -17,7 +18,7 @@ namespace FrenchFry.Demo.Config {
 
         public SContext() {
             sessionTokenResolver = new SessionTokenResolver<SContext>(this);
-            gateAuthClient = new GateAuthClient("FrenchFry", new Uri(GATE_SERVER), GATE_SECRET);
+            gateAuthClient = new GateAuthClient(GATE_APP, new Uri(GATE_SERVER), GATE_SECRET);
         }
     }
 }
