@@ -1,0 +1,15 @@
+@page
+
+@{
+    ViewBag.Title = "Verify";
+    ViewBag.AuthType = "verify";
+    Layout = "_AuthLayout";
+}
+
+<form class="form-horizontal" id="auth">
+    <div class="form-group">
+        <label class="form-label" for="code">code</label>
+        <input class="form-input" type="text" id="code" name="code" placeholder="verification code" required>
+    </div>
+    <input type="submit" class="btn btn-primary mt-2" value="submit">
+</form>

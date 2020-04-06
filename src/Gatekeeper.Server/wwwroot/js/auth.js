@@ -23,7 +23,7 @@ function show_auth_error(err) {
             msg = 'conflicting username/email';
             break;
         case 422: // unproc entity
-        msg = 'invalid fields'
+            msg = 'invalid fields'
             break;
         case 401: // unauthorized
             msg = 'invalid credentials'
@@ -37,7 +37,7 @@ async function auth_create(data) {
     try {
         const resp = await axios.post('/a/auth/create', data);
         console.log(resp);
-        window.location.href = "/"; // successfully created account
+        window.location.href = "/verify"; // successfully created account, please verify
     } catch (err) {
         show_auth_error(err);
     }
@@ -47,7 +47,18 @@ async function auth_login(data) {
     try {
         const resp = await axios.post('/a/auth/login', data);
         console.log(resp);
-        window.location.href = "/"; // successfully logged in
+        window.location.href = "/dash"; // successfully logged in
+    } catch (err) {
+        show_auth_error(err);
+    }
+}
+
+async function auth_verify(data) {
+    try {
+        let code = data.code;
+        const resp = await axios.post(`/a/auth/verify/${code}`);
+        console.log(resp);
+        window.location.href = "/dash"; // successful verify
     } catch (err) {
         show_auth_error(err);
     }
@@ -57,8 +68,15 @@ $("#auth").addEventListener("submit", ev => {
     let formData = new FormData(ev.target);
     let authData = parseFormData(formData);
 
-    // figure out if login or create
-    let mode = authData.hasOwnProperty('email') ? 'create' : 'login';
+    // figure out auth mode
+    let mode = null;
+    if (authData.hasOwnProperty('email')) {
+        mode = 'create';
+    } else if (authData.hasOwnProperty('code')) {
+        mode = 'verify';
+    } else {
+        mode = 'login';
+    }
     console.log(`submitting auth (${mode})`, authData);
 
     switch (mode) {
@@ -67,6 +85,9 @@ $("#auth").addEventListener("submit", ev => {
             break;
         case 'login':
             auth_login(authData);
+            break;
+        case 'verify':
+            auth_verify(authData);
             break;
     }
 
