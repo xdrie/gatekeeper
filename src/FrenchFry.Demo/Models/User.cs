@@ -1,7 +1,7 @@
 using Hexagon.Models;
 
 namespace FrenchFry.Demo.Models {
-    public class User : DatabaseObject {
+    public class User : ModelObject {
         
     }
 }
