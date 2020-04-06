@@ -1,10 +1,12 @@
 using System;
 using Degate.Config;
 using Degate.Services;
+using FrenchFry.Demo.Models;
 using FrenchFry.Demo.Services;
 using Gatekeeper.Remote;
 using Hexagon;
 using Hexagon.Services;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace FrenchFry.Demo.Config {
     public class SContext : ServerContext, IDegateContext {
@@ -17,8 +19,9 @@ namespace FrenchFry.Demo.Config {
         public ISessionResolver sessionResolver { get; }
         public GateAuthClient gateAuthClient { get; }
         public UserManager userManager { get; }
+        public AppDbContext getDbContext() => services.BuildServiceProvider().GetService<AppDbContext>();
 
-        public SContext() {
+        public SContext(IServiceCollection services) : base(services) {
             sessionResolver = new SessionResolver<SContext>(this);
             gateAuthClient = new GateAuthClient(GATE_APP, new Uri(GATE_SERVER), GATE_SECRET);
             userManager = new UserManager(this);

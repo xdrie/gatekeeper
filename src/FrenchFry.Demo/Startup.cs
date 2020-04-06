@@ -18,7 +18,7 @@ namespace FrenchFry.Demo {
                 options.UseSqlite("Data Source=database.db");
             });
 
-            var context = new SContext();
+            var context = new SContext(services);
             // register server context
             services.AddSingleton(context);
         }
