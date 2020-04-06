@@ -10,7 +10,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Gatekeeper.Server.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20200406233148_PostgresUpdate1")]
+    [Migration("20200406233533_PostgresUpdate1")]
     partial class PostgresUpdate1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
