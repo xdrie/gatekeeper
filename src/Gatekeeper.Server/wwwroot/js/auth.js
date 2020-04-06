@@ -19,7 +19,9 @@ $("#auth").addEventListener("submit", ev => {
     let formData = new FormData(ev.target);
     let authData = parseFormData(formData);
 
-    console.log('submitting auth', authData);
+    // figure out if login or create
+    let route = authData.hasOwnProperty('email') ? 'create' : 'login';
+    console.log(`submitting auth (${route})`, authData);
 
     ev.preventDefault();
 });
