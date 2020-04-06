@@ -5,7 +5,7 @@ function onsignin(gate) {
     console.log(`welcome, ${gate.user.name}!`, gate.token);
     // post the token to our server and then save the session key
     fetch('/a/bridge', {
-        method: "POST",
+        method: 'POST',
         body: JSON.stringify(gate.token)
     })
         .then(response => response.json())
