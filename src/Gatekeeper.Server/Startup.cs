@@ -111,9 +111,9 @@ namespace Gatekeeper.Server {
 
                 app.UseStaticFiles();
                 app.UseRouting();
-                // app.UseEndpoints(endpoints => endpoints.MapCarter());
+                app.UseEndpoints(endpoints => endpoints.MapCarter());
                 app.UseEndpoints(endpoints => endpoints.MapRazorPages());
-                app.UseSwaggerUi3(settings => { settings.DocumentPath = "/openapi"; });
+                app.UseSwaggerUi3(settings => settings.DocumentPath = "/openapi");
             }
         }
     }
