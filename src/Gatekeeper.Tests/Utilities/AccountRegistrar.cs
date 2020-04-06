@@ -5,7 +5,6 @@ using Gatekeeper.Models.Identity;
 using Gatekeeper.Models.Requests;
 using Gatekeeper.Models.Responses;
 using Gatekeeper.Server.Config;
-using Gatekeeper.Server.Models;
 using Gatekeeper.Server.Models.Validators;
 using Hexagon.Models;
 using Newtonsoft.Json;

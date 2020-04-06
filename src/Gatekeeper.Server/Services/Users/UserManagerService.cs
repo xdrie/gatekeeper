@@ -1,16 +1,13 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using Gatekeeper.Models.Access;
 using Gatekeeper.Models.Identity;
 using Gatekeeper.Models.Requests;
 using Gatekeeper.Server.Config;
-using Gatekeeper.Server.Models;
 using Gatekeeper.Server.Services.Auth;
 using Hexagon.Models;
 using Hexagon.Utilities;
-using Microsoft.EntityFrameworkCore;
 
 namespace Gatekeeper.Server.Services.Users {
     public class UserManagerService : DependencyService<SContext> {

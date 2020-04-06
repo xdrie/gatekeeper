@@ -2,7 +2,6 @@ using System;
 using System.Linq;
 using Gatekeeper.Models.Identity;
 using Gatekeeper.Server.Config;
-using Gatekeeper.Server.Models;
 using Hexagon.Models;
 using Hexagon.Utilities;
 

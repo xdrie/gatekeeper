@@ -1,7 +1,5 @@
 using System.Net;
 using System.Threading.Tasks;
-using Carter.ModelBinding;
-using Carter.Response;
 using Gatekeeper.Models.Identity;
 using Gatekeeper.Models.Requests;
 using Gatekeeper.Models.Responses;

@@ -1,9 +1,7 @@
-using System.Linq;
 using Degate.Modules;
 using Degate.Utilities;
 using FrenchFry.Demo.Config;
 using Hexagon.Serialization;
-using Hexagon.Utilities;
 
 namespace FrenchFry.Demo.Modules {
     public class UserModule : GateAuthModule<SContext> {

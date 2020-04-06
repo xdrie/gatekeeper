@@ -3,7 +3,6 @@ using System.Linq;
 using Gatekeeper.Models.Access;
 using Gatekeeper.Models.Identity;
 using Gatekeeper.Server.Config;
-using Gatekeeper.Server.Models;
 using Hexagon.Models;
 
 namespace Gatekeeper.Server.Services.Users {

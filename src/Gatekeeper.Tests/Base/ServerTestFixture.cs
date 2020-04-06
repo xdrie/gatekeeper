@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using Gatekeeper.Models;
 using Gatekeeper.Models.Access;
 using Gatekeeper.Models.Remote;
 using Gatekeeper.Server;

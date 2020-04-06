@@ -1,9 +1,5 @@
-using System;
-using System.IO;
-using System.Linq;
 using System.Security.Claims;
 using Gatekeeper.Server.Config;
-using Gatekeeper.Server.Models;
 using Hexagon.Models;
 using Hexagon.Services;
 

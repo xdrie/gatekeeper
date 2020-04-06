@@ -3,7 +3,6 @@ using System.Net;
 using Gatekeeper.Models.Identity;
 using Gatekeeper.Models.Remote;
 using Gatekeeper.Server.Config;
-using Gatekeeper.Server.Services.Auth;
 using Hexagon.Modules;
 using Hexagon.Security;
 using Hexagon.Services;
