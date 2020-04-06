@@ -58,7 +58,7 @@ namespace Gatekeeper.Server.Services.Users {
 
         public Token issueRootToken(int userId) {
             // create an access token
-            var token = serverContext.tokenAuthenticator.issueRoot();
+            var token = serverContext.tokenResolver.issueRoot();
 
             return issueTokenFor(userId, token);
         }

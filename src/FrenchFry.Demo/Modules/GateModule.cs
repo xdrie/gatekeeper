@@ -1,12 +1,12 @@
 using System;
 using System.Net;
 using Carter.ModelBinding;
-using Carter.Response;
 using FrenchFry.Demo.Config;
 using Gatekeeper.Models.Identity;
+using Gatekeeper.Remote;
 using Hexagon.Modules;
 using Hexagon.Serialization;
-using Hexagon.Web;
+using Hexagon.Utilities;
 
 namespace FrenchFry.Demo.Modules {
     public class GateModule : ApiModule<SContext> {
@@ -28,9 +28,20 @@ namespace FrenchFry.Demo.Modules {
                     res.StatusCode = (int) HttpStatusCode.Unauthorized;
                     return;
                 }
+                
+                // - valid identity!
                 res.StatusCode = (int) HttpStatusCode.Accepted;
+                
+                // compute the session id
+                var sessionId = Convert.ToBase64String(Hasher.sha256(identity.user.uuid));
+                if (!serverContext.sessions.exists(sessionId)) {
+                    // store identity in a session
+                    var sess = serverContext.sessions.create(sessionId);
+                    sess.jar.Register<RemoteAuthentication>(identity);
+                }
+
                 // display the user's info
-                await res.respondSerialized(identity);
+                await res.respondSerialized(new GateUser(identity, sessionId));
             });
         }
     }

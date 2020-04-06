@@ -18,17 +18,17 @@ namespace Gatekeeper.Server.Config {
         public IServiceCollection services { get; set; }
         public AppDbContext getDbContext() => services.BuildServiceProvider().GetService<AppDbContext>();
         public UserManagerService userManager { get; set; }
-        public TokenAuthenticationService tokenAuthenticator { get; set; }
+        public TokenAuthenticationService tokenResolver { get; set; }
 
         public SContext(IServiceCollection services, SConfig config) {
             this.config = config;
             log.verbosity = config.logging.logLevel;
             userManager = new UserManagerService(this);
-            tokenAuthenticator = new TokenAuthenticationService(this);
+            tokenResolver = new TokenAuthenticationService(this);
             this.services = services;
         }
 
-        public override IApiAuthenticator getAuthenticator() => new ApiAuthenticator(this);
+        public override IBearerAuthenticator getAuthenticator() => new BearerAuthenticator(this);
 
         public override void Dispose() {
             base.Dispose();

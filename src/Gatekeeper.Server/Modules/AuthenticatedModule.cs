@@ -4,8 +4,9 @@ using Gatekeeper.Models.Identity;
 using Gatekeeper.Models.Remote;
 using Gatekeeper.Server.Config;
 using Gatekeeper.Server.Services.Auth;
-using Gatekeeper.Server.Services.Auth.Security;
 using Hexagon.Modules;
+using Hexagon.Security;
+using Hexagon.Services;
 
 namespace Gatekeeper.Server.Modules {
     public abstract class AuthenticatedModule : ApiModule<SContext> {
@@ -18,7 +19,7 @@ namespace Gatekeeper.Server.Modules {
             this.requiresUserAuthentication();
 
             this.Before += async (ctx) => {
-                var usernameClaim = ctx.User.Claims.First(x => x.Type == ApiAuthenticator.CLAIM_USERNAME);
+                var usernameClaim = ctx.User.Claims.First(x => x.Type == IBearerAuthenticator.CLAIM_USERNAME);
                 currentUser = serverContext.userManager.findByUsername(usernameClaim.Value);
 
                 if (currentUser.role < minimumRole) {
@@ -26,8 +27,8 @@ namespace Gatekeeper.Server.Modules {
                     return false;
                 }
 
-                var tokenClaim = ctx.User.Claims.First(x => x.Type == ApiAuthenticator.CLAIM_TOKEN);
-                credential = serverContext.tokenAuthenticator.resolve(tokenClaim.Value).Value;
+                var tokenClaim = ctx.User.Claims.First(x => x.Type == IBearerAuthenticator.CLAIM_TOKEN);
+                credential = serverContext.tokenResolver.resolve(tokenClaim.Value).Value;
 
                 // check if at least minimum scope
                 if (!credential.scope.greaterThan(minimumScope)) {

@@ -46,7 +46,7 @@ namespace Gatekeeper.Server.Modules.Provider {
                 // issue a new token for the app
                 // TODO: configurable timespan
                 var token = serverContext.userManager.issueTokenFor(user.dbid,
-                        serverContext.tokenAuthenticator.issue(grantedScope, TimeSpan.FromDays(7)));
+                        serverContext.tokenResolver.issue(grantedScope, TimeSpan.FromDays(7)));
 
                 res.StatusCode = (int) HttpStatusCode.Created;
                 await res.respondSerialized(token);
