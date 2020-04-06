@@ -2,50 +2,38 @@
 
 @{
     ViewBag.Title = "Create";
-    Layout = "_ShowLayout";
+    ViewBag.AuthType = "create";
+    Layout = "_AuthLayout";
 }
 
-<article>
-    <div class="columns">
-        <div class="column col-6 col-md-8 col-sm-12 col-mx-auto">
-            <h1>create</h1>
-            <div class="toast toast-error" id="error" style="display:none">
-                error
-            </div>
-            <form class="form-horizontal" id="auth">
-                <div class="form-group">
-                    <label class="form-label" for="username">username</label>
-                    <input class="form-input" type="text" id="username" name="username" placeholder="username" required>
-                </div>
-                <div class="form-group">
-                    <label class="form-label" for="name">name</label>
-                    <input class="form-input" type="text" aria-requried="true" id="name" name="name" placeholder="your name">
-                </div>
-                <div class="form-group">
-                    <label class="form-label" for="email">email</label>
-                    <input class="form-input" type="email" id="email" name="email" placeholder="your email">
-                </div>
-                <div class="form-group">
-                    <label class="form-label" for="password">password</label>
-                    <input class="form-input" pattern=".{8,}" type="password" id="password" name="password" placeholder="password" required>
-                </div>
-                <div class="form-group">
-                    <label class="form-label" for="pronouns">pronouns</label>
-                    <select class="form-select" id="pronouns" name="pronouns">
-                        <option>TheyThem</option>
-                        <option>SheHer</option>
-                        <option>HeHim</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label class="form-label" for="isRobot">confirm your humanity</label>
-                    <input class="form-input" type="text" id="isRobot" name="isRobot" placeholder="type the incantation">
-                </div>
-                <input type="submit" class="btn btn-primary mt-2" value="submit">
-            </form>
-        </div>
+<form class="form-horizontal" id="auth">
+    <div class="form-group">
+        <label class="form-label" for="username">username</label>
+        <input class="form-input" type="text" id="username" name="username" placeholder="username" required>
     </div>
-
-</article>
-
-<script type="text/javascript" asp-append-version="true" src="~/js/auth.js"></script>
+    <div class="form-group">
+        <label class="form-label" for="name">name</label>
+        <input class="form-input" type="text" aria-requried="true" id="name" name="name" placeholder="your name">
+    </div>
+    <div class="form-group">
+        <label class="form-label" for="email">email</label>
+        <input class="form-input" type="email" id="email" name="email" placeholder="your email">
+    </div>
+    <div class="form-group">
+        <label class="form-label" for="password">password</label>
+        <input class="form-input" pattern=".{8,}" type="password" id="password" name="password" placeholder="password" required>
+    </div>
+    <div class="form-group">
+        <label class="form-label" for="pronouns">pronouns</label>
+        <select class="form-select" id="pronouns" name="pronouns">
+            <option>TheyThem</option>
+            <option>SheHer</option>
+            <option>HeHim</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label class="form-label" for="isRobot">confirm your humanity</label>
+        <input class="form-input" type="text" id="isRobot" name="isRobot" placeholder="type the incantation">
+    </div>
+    <input type="submit" class="btn btn-primary mt-2" value="submit">
+</form>
