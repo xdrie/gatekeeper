@@ -40,10 +40,14 @@ namespace Degate.Modules {
                 // store identity in a session
                 var sess = serverContext.sessions.create(sessionId, TimeSpan.FromDays(1));
                 sess.jar.Register<RemoteAuthentication>(identity);
+                
+                updateRecord(identity);
 
                 // display the user's info
                 await res.respondSerialized(new GateUser(identity, sessionId));
             });
         }
+
+        public virtual void updateRecord(RemoteAuthentication remoteAuth) { }
     }
 }
