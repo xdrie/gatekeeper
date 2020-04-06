@@ -8,7 +8,9 @@ namespace FrenchFry.Demo.Services {
         public ApiAuthenticator(SContext context) : base(context) { }
 
         public ClaimsPrincipal resolve(string token) {
-            throw new System.NotImplementedException();
+            // we only accept session tokens here.
+            // match the token to an existing session
+            return null;
         }
     }
 }
