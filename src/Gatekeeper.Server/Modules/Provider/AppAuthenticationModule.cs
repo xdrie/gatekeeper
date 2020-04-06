@@ -44,7 +44,7 @@ namespace Gatekeeper.Server.Modules.Provider {
 
             // issue a new token for the app
             // TODO: configurable timespan
-            var token = serverContext.userManager.issueTokenFor(user.dbid,
+            var token = serverContext.userManager.issueTokenFor(user.id,
                 serverContext.tokenResolver.issue(grantedScope, TimeSpan.FromDays(7)));
 
             return (new RemoteIdentity(new PublicUser(user), token), HttpStatusCode.Created);

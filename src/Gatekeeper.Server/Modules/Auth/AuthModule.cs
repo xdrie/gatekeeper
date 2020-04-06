@@ -65,7 +65,7 @@ namespace Gatekeeper.Server.Modules.Auth {
                     var user = serverContext.userManager.registerUser(createReq);
                     serverContext.log.writeLine($"registered user {user.username}",
                         SLogger.LogLevel.Information);
-                    var token = serverContext.userManager.issueRootToken(user.dbid);
+                    var token = serverContext.userManager.issueRootToken(user.id);
 
                     // Return user details
                     res.StatusCode = (int) HttpStatusCode.Created;
@@ -91,7 +91,7 @@ namespace Gatekeeper.Server.Modules.Auth {
                     }
 
                     // issue a new token
-                    var token = serverContext.userManager.issueRootToken(login.user.dbid);
+                    var token = serverContext.userManager.issueRootToken(login.user.id);
 
                     // return user details
                     res.StatusCode = (int) HttpStatusCode.OK;
@@ -113,7 +113,7 @@ namespace Gatekeeper.Server.Modules.Auth {
                     }
 
                     // issue a new token
-                    var token = serverContext.userManager.issueRootToken(login.user.dbid);
+                    var token = serverContext.userManager.issueRootToken(login.user.id);
 
                     // return user details
                     res.StatusCode = (int) HttpStatusCode.OK;
@@ -128,7 +128,7 @@ namespace Gatekeeper.Server.Modules.Auth {
                 var login = await validateAndCheckPassword<LoginRequest>(req, res);
                 if (login.isValid) {
                     // delete the account
-                    serverContext.userManager.deleteUser(login.user.dbid);
+                    serverContext.userManager.deleteUser(login.user.id);
                     // return success indication
                     res.StatusCode = (int) HttpStatusCode.NoContent;
                     return;

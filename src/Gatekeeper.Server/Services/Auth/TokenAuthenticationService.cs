@@ -41,7 +41,7 @@ namespace Gatekeeper.Server.Services.Auth {
 
             // 2. match the token to a user
             using (var db = serverContext.getDbContext()) {
-                token = db.tokens.Find(token.dbid);
+                token = db.tokens.Find(token.id);
                 db.Entry(token).Reference(x => x.user).Load();
             }
 

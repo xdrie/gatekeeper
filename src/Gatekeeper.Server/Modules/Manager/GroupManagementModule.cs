@@ -34,7 +34,7 @@ namespace Gatekeeper.Server.Modules.Manager {
                 var updateType =
                     Enum.Parse<Group.UpdateType>(updateReq.type, true);
                 foreach (var group in updateReq.groups) {
-                    serverContext.userManager.updateGroupMembership(user.dbid, group, updateType);
+                    serverContext.userManager.updateGroupMembership(user.id, group, updateType);
                 }
             });
         }
