@@ -14,12 +14,12 @@ namespace FrenchFry.Demo.Config {
         
         public override IBearerAuthenticator getAuthenticator() => new BearerAuthenticator<SContext>(this);
         
-        public ISessionResolver sessionTokenResolver { get; }
+        public ISessionResolver sessionResolver { get; }
         public GateAuthClient gateAuthClient { get; }
         public UserManager userManager { get; }
 
         public SContext() {
-            sessionTokenResolver = new SessionResolver<SContext>(this);
+            sessionResolver = new SessionResolver<SContext>(this);
             gateAuthClient = new GateAuthClient(GATE_APP, new Uri(GATE_SERVER), GATE_SECRET);
             userManager = new UserManager(this);
         }

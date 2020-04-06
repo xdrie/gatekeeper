@@ -34,16 +34,11 @@ namespace Degate.Modules {
                 // - valid identity!
                 res.StatusCode = (int) HttpStatusCode.Accepted;
 
-                // compute the session id
-                var sessionId = Convert.ToBase64String(Hasher.sha256(identity.user.uuid));
-
-                // delete existing session, if any
-                if (serverContext.sessions.exists(sessionId)) {
-                    serverContext.sessions.delete(sessionId);
-                }
+                // get a session token
+                var sessionId = serverContext.sessionResolver.getSessionToken(identity.user.uuid);
 
                 // store identity in a session
-                var sess = serverContext.sessions.create(sessionId);
+                var sess = serverContext.sessions.create(sessionId, TimeSpan.FromDays(1));
                 sess.jar.Register<RemoteAuthentication>(identity);
 
                 // display the user's info

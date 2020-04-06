@@ -3,7 +3,7 @@ using Gatekeeper.Remote;
 
 namespace Degate.Config {
     public interface IDegateContext {
-        ISessionResolver sessionTokenResolver { get; }
+        ISessionResolver sessionResolver { get; }
         GateAuthClient gateAuthClient { get; }
     }
 }

@@ -12,7 +12,7 @@ namespace Degate.Services {
         public ClaimsPrincipal resolve(string token) {
             // we only accept session tokens here.
             // match the token to an existing session
-            var auth = serverContext.sessionTokenResolver.resolveSessionToken(token);
+            var auth = serverContext.sessionResolver.resolveSessionToken(token);
             if (auth == null) return null;
 
             var claims = new[] {
