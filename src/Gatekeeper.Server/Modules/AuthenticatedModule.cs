@@ -6,15 +6,15 @@ using Gatekeeper.Models.Remote;
 using Gatekeeper.Server.Config;
 using Gatekeeper.Server.Services.Auth;
 using Gatekeeper.Server.Services.Auth.Security;
+using Hexagon.Modules;
 
 namespace Gatekeeper.Server.Modules {
-    public abstract class AuthenticatedModule : ApiModule {
+    public abstract class AuthenticatedModule : ApiModule<SContext> {
         public User currentUser { get; private set; }
         public Credential credential { get; private set; }
 
         protected AuthenticatedModule(AccessScope minimumScope, User.Role minimumRole, string path,
-            SContext serverContext) : base(path,
-            serverContext) {
+            SContext serverContext) : base(path, serverContext) {
             // require authentication
             this.requiresUserAuthentication();
 

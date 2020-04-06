@@ -10,12 +10,13 @@ using Gatekeeper.Server.OpenApi.Auth;
 using Gatekeeper.Server.Services.Auth;
 using Gatekeeper.Server.Services.Users;
 using Hexagon.Logging;
+using Hexagon.Modules;
 using Hexagon.Serialization;
 using Hexagon.Web;
 using Microsoft.AspNetCore.Http;
 
 namespace Gatekeeper.Server.Modules.Auth {
-    public class AuthModule : ApiModule {
+    public class AuthModule : ApiModule<SContext> {
         public class ValidatedLogin<TLoginRequest> : ValidatedRequest<TLoginRequest>
             where TLoginRequest : LoginRequest {
             public User user;

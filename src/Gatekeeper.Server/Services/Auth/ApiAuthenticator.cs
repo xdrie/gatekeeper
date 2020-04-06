@@ -4,9 +4,10 @@ using System.Linq;
 using System.Security.Claims;
 using Gatekeeper.Server.Config;
 using Gatekeeper.Server.Models;
+using Hexagon.Services;
 
 namespace Gatekeeper.Server.Services.Auth {
-    public class ApiAuthenticator : DependencyObject {
+    public class ApiAuthenticator : DependencyObject, IApiAuthenticator {
         public ApiAuthenticator(SContext context) : base(context) { }
 
         public const string APP_SECRET_HEADER = "X-App-Secret";
@@ -14,8 +15,8 @@ namespace Gatekeeper.Server.Services.Auth {
         public const string CLAIM_USERNAME = "username";
         public const string CLAIM_TOKEN = "token";
 
-        public ClaimsPrincipal resolveIdentity(string tokenStr) {
-            var maybeCred = serverContext.tokenAuthenticator.resolve(tokenStr);
+        public ClaimsPrincipal resolve(string token) {
+            var maybeCred = serverContext.tokenAuthenticator.resolve(token);
             if (maybeCred == null) return null;
             var cred = maybeCred.Value;
 
