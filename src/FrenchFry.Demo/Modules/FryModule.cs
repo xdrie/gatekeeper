@@ -1,4 +1,6 @@
+using System;
 using System.Net;
+using Carter.Response;
 using Degate.Modules;
 using Degate.Utilities;
 using FrenchFry.Demo.Config;
@@ -10,12 +12,14 @@ namespace FrenchFry.Demo.Modules {
     public class FryModule : BridgeAuthModule<SContext> {
         public FryModule(SContext serverContext) : base("/fries", serverContext) {
             Get("/", async (req, res) => {
+                var account = getAccount();
                 await res.respondSerialized(new MonthlyResponse {
                     quota = getFryQuota(),
                     used = account.orderedFries
                 });
             });
             Post("/order", async (req, res) => {
+                var account = getAccount();
                 if (account.orderedFries >= getFryQuota()) {
                     res.StatusCode = (int) HttpStatusCode.PaymentRequired;
                     return;
@@ -24,6 +28,10 @@ namespace FrenchFry.Demo.Modules {
                 account.orderedFries++;
                 serverContext.userManager.save(account);
                 res.StatusCode = (int) HttpStatusCode.Accepted;
+                var r = new Random();
+                await res.respondSerialized(new FryResponse {
+                    mysterious = r.Next()
+                });
             });
         }
 
@@ -32,6 +40,6 @@ namespace FrenchFry.Demo.Modules {
             return fryQuota;
         }
 
-        public Account account => serverContext.userManager.findByUid(userId);
+        public Account getAccount() => serverContext.userManager.findByUid(userId);
     }
 }
