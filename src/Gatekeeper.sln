@@ -10,6 +10,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gatekeeper.Tests", "Gatekee
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gatekeeper.Core", "Gatekeeper.Core\Gatekeeper.Core.csproj", "{1A36B80A-E385-41BC-9DC7-24538F1BC8E9}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Demo", "Demo", "{0878711D-A46B-430E-B30F-C973E738815C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FrenchFry.Demo", "FrenchFry.Demo\FrenchFry.Demo.csproj", "{D5F2E247-623B-4038-B208-341923891CDF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,8 +36,13 @@ Global
 		{1A36B80A-E385-41BC-9DC7-24538F1BC8E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1A36B80A-E385-41BC-9DC7-24538F1BC8E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1A36B80A-E385-41BC-9DC7-24538F1BC8E9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D5F2E247-623B-4038-B208-341923891CDF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5F2E247-623B-4038-B208-341923891CDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5F2E247-623B-4038-B208-341923891CDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5F2E247-623B-4038-B208-341923891CDF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{5622CE5E-1AAE-41EC-A92A-C1BF119D69ED} = {54E8E5E0-EE9E-47A9-872D-55C0F7D8AE68}
+		{D5F2E247-623B-4038-B208-341923891CDF} = {0878711D-A46B-430E-B30F-C973E738815C}
 	EndGlobalSection
 EndGlobal

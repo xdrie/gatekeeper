@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace Gatekeeper.Server.Modules {
     /// <summary>
-    /// Defines an API module for Speercs
+    /// Defines an API module for the application
     /// </summary>
     public abstract class ApiModule : CarterModule {
         public SContext serverContext { get; }
