@@ -8,7 +8,13 @@ namespace FrenchFry.Demo.Services {
 
         public GateUser resolve(string token) {
             // resolve user by token
-            return null;
+
+            // 1. get matching session
+            if (!serverContext.sessions.exists(token)) return null;
+            
+            var sess = serverContext.sessions.get(token);
+            var user = sess.jar.Resolve<GateUser>();
+            return user;
         }
     }
 }
