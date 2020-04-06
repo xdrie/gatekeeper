@@ -16,6 +16,9 @@ function show_auth_error(err) {
         case 401: // unauthorized
             msg = 'invalid credentials'
             break;
+        case 404: // not found
+            msg = 'not found'
+            break;
     }
     toast_error(msg);
 
@@ -64,37 +67,40 @@ async function auth_verify(data) {
     }
 }
 
-$("#auth").addEventListener("submit", ev => {
-    let formData = new FormData(ev.target);
-    let authData = parseFormData(formData);
+let authForm = $("#auth");
+if (authForm) {
+    authForm.addEventListener("submit", ev => {
+        let formData = new FormData(ev.target);
+        let authData = parseFormData(formData);
 
-    // figure out auth mode
-    let mode = null;
-    if (authData.hasOwnProperty('email')) {
-        mode = 'create';
-    } else if (authData.hasOwnProperty('code')) {
-        mode = 'verify';
-    } else {
-        mode = 'login';
-    }
-    console.log(`submitting auth (${mode})`, authData);
+        // figure out auth mode
+        let mode = null;
+        if (authData.hasOwnProperty('email')) {
+            mode = 'create';
+        } else if (authData.hasOwnProperty('code')) {
+            mode = 'verify';
+        } else {
+            mode = 'login';
+        }
+        console.log(`submitting auth (${mode})`, authData);
 
-    $('#auth-container').hide();
-    $('#load').show();
-    $('#error').hide();
+        $('#auth-container').hide();
+        $('#load').show();
+        $('#error').hide();
 
-    let task = null;
-    switch (mode) {
-        case 'create':
-            task = auth_create(authData);
-            break;
-        case 'login':
-            task = auth_login(authData);
-            break;
-        case 'verify':
-            task = auth_verify(authData);
-            break;
-    }
+        let task = null;
+        switch (mode) {
+            case 'create':
+                task = auth_create(authData);
+                break;
+            case 'login':
+                task = auth_login(authData);
+                break;
+            case 'verify':
+                task = auth_verify(authData);
+                break;
+        }
 
-    ev.preventDefault();
-});
+        ev.preventDefault();
+    });
+}

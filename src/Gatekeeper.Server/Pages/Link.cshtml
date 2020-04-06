@@ -3,15 +3,20 @@
 @{
     ViewBag.Title = "Link";
     ViewBag.AuthType = "link";
+    ViewBag.Auth = true;
     Layout = "_AuthLayout";
 }
 
 <p>
-    the app <span id="app-name">[X]</span> wants to link your account.
+    the app <b><span id="app-name">[X]</span></b> wants to link your account (<span id="user">[X]</span>).
 </p>
 <form class="form-horizontal" id="link">
-    <input type="submit" class="btn btn-primary mt-2" value="accept">
+    <input type="submit" class="btn btn-primary mt-2" id="accept" value="accept">
     <a class="btn mt-2" id="cancel">cancel</a>
+</form>
+
+<form class="form-horizontal" id="callback" style="display:none">
+    
 </form>
 
 <script type="text/javascript" asp-append-version="true" src="~/js/link.js"></script>

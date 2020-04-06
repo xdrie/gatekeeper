@@ -1,5 +1,12 @@
 ﻿// app-wide script
 const $ = document.querySelector.bind(document)
+const $load = function (cb) {
+    window.addEventListener("load", cb);
+}
+
+Element.prototype.on = function (ev, cb) {
+    this.addEventListener(ev, e => cb(e));
+}
 
 Element.prototype.show = function () {
     this.style.display = '';
@@ -32,6 +39,16 @@ function parseFormData(formData) {
         object[key].push(value);
     });
     return object;
+}
+
+function parseQuery(queryString) {
+    var query = {};
+    var pairs = (queryString[0] === '?' ? queryString.substr(1) : queryString).split('&');
+    for (var i = 0; i < pairs.length; i++) {
+        var pair = pairs[i].split('=');
+        query[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1] || '');
+    }
+    return query;
 }
 
 function storeToken(token) {
@@ -86,7 +103,26 @@ function parse_pronouns(id) {
     }
 }
 
-window.addEventListener("load", function () {
+// guard to ensure we are authorized
+async function authGuard(cb) {
+    try {
+        const client = get_client();
+        if (!client.authed) {
+            throw "client not authorized";
+        }
+        // try fetching me page
+        const resp = await client.get('/u/me');
+        let me = resp.data;
+        console.log('me', me);
+        cb(me);
+    } catch (err) {
+        console.error(err);
+        // send back to login
+        window.location.href = "/login";
+    }
+}
+
+$load(() => {
     // bind defaults
     let logoutBtn = $('#logout');
     if (logoutBtn) {
