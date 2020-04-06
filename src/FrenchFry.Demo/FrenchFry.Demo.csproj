@@ -8,5 +8,9 @@
     <ItemGroup>
         <PackageReference Include="Carter" Version="5.1.0" />
     </ItemGroup>
+    
+    <ItemGroup>
+      <ProjectReference Include="..\..\lib\Hexagon\src\Hexagon\Hexagon.csproj" />
+    </ItemGroup>
 
 </Project>
