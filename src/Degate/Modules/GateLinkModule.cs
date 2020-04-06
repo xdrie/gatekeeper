@@ -12,7 +12,7 @@ using Hexagon.Utilities;
 namespace Degate.Modules {
     public abstract class GateLinkModule<TContext> : ApiModule<TContext>
         where TContext : ServerContext, IDegateContext {
-        protected GateLinkModule(TContext serverContext) : base("/gate", serverContext) {
+        protected GateLinkModule(string path, TContext serverContext) : base(path, serverContext) {
             Post("/", async (req, res) => {
                 // token is in form data
                 var gateReq = await req.Bind<Token>();
