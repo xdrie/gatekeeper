@@ -8,7 +8,7 @@
     background-color: #72837b;
 }
 
-.navbar a {
+.navbar a, a.btn.btn-link {
     color: inherit;
 }
 
