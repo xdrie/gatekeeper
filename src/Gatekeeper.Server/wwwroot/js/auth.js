@@ -1,47 +1,3 @@
-// https://stackoverflow.com/questions/41431322/how-to-convert-formdatahtml5-object-to-json
-function parseFormData(formData) {
-    var object = {};
-    formData.forEach((value, key) => {
-        // Reflect.has in favor of: object.hasOwnProperty(key)
-        if (!Reflect.has(object, key)) {
-            object[key] = value;
-            return;
-        }
-        if (!Array.isArray(object[key])) {
-            object[key] = [object[key]];
-        }
-        object[key].push(value);
-    });
-    return object;
-}
-
-function storeToken(token) {
-    window.localStorage.setItem('tok', token);
-    console.log('stored token:', token);
-}
-
-function loadToken() {
-    let v = window.localStorage.getItem('tok');
-    console.log('loaded token:', v);
-    return v;
-}
-
-function get_client() {
-    let cfg = {
-        baseURL: '/a',
-        // timeout: 1000,
-        headers: { }
-    };
-    // check if token is saved
-    let token = loadToken();
-    if (token) {
-        cfg.headers['Authorization'] = `Bearer ${token}`;
-    }
-    let client = axios.create(cfg);
-    client.authed = token != null;
-    return client;
-}
-
 function toast_error(msg) {
     $('#error').innerText = msg;
     $('#error').show()
@@ -64,14 +20,6 @@ function show_auth_error(err) {
     toast_error(msg);
 }
 
-// save authorization
-function storeAuthorization(data) {
-    let user = data.user;
-    console.log('authorized as', user);
-    let token = data.token;
-    storeToken(token.content);
-}
-
 async function auth_create(data) {
     try {
         const client = get_client();
@@ -90,7 +38,7 @@ async function auth_login(data) {
         const resp = await client.post('/auth/login', data);
         console.log(resp);
         storeAuthorization(resp.data);
-        window.location.href = "/dash"; // successfully logged in
+        window.location.href = "/user/dash"; // successfully logged in
     } catch (err) {
         show_auth_error(err);
     }
@@ -106,7 +54,7 @@ async function auth_verify(data) {
         }
         const resp = await client.post(`/auth/verify/${code}`);
         console.log(resp);
-        window.location.href = "/dash"; // successful verify
+        window.location.href = "/user/dash"; // successful verify
     } catch (err) {
         show_auth_error(err);
     }

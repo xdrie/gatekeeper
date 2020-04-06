@@ -19,7 +19,10 @@
     <link rel="stylesheet" href="~/css/app.css" asp-append-version="true">
 </head>
 <body>
-
+<!-- scripts -->
+<script src="~/lib/moon/moon.min.js"></script>
+<script src="~/lib/moon/moon-browser.min.js"></script>
+<script src="~/lib/axios/axios.min.js"></script>
 <script src="~/js/app.js" asp-append-version="true"></script>
 
 <!-- header -->
@@ -27,12 +30,16 @@
     <section class="navbar-section">
         <a href="/" class="navbar-brand mr-2">@SConfig.BRAND</a>
     </section>
-    @if (ViewBag.Auth == null) {
-        <section class="navbar-section">
+    <section class="navbar-section">
+        @if (ViewBag.Auth == null) {
             <a href="/login" class="btn btn-link btn-nav">Login</a>
             <a href="/create" class="btn btn-link btn-nav">Create</a>
-        </section>
-    }
+        }
+        else {
+            <a id="logout" class="btn btn-link btn-nav">Logout</a>
+        }
+    </section>
+
 </header>
 
 <!-- view content -->
@@ -40,10 +47,6 @@
     @RenderBody()
 </section>
 
-<!-- scripts -->
-<script src="~/lib/moon/moon.min.js"></script>
-<script src="~/lib/moon/moon-browser.min.js"></script>
-<script src="~/lib/axios/axios.min.js"></script>
 @RenderSection("Scripts", required: false)
 </body>
 </html>

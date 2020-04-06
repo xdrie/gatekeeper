@@ -1,0 +1,22 @@
+@page
+
+@{
+    ViewBag.Title = "Dash";
+    ViewBag.Auth = true;
+    Layout = "_ShowLayout";
+}
+
+<article>
+    <div id="dash" style="display:none">
+        <h1>Dashboard</h1>
+        <p>
+            This page is for authenticated users.
+            <pre>@DateTime.Now</pre>
+        </p>
+    </div>
+    <div id="load">
+        <div class="loading loading-lg"></div>
+    </div>
+</article>
+
+<script type="text/javascript" asp-append-version="true" src="~/js/dash.js"></script>
