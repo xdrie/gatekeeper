@@ -9,14 +9,17 @@
     <div class="columns">
         <div class="column col-6 col-md-8 col-sm-12 col-mx-auto">
             <h1>create</h1>
+            <div class="toast toast-error" id="error" style="display:none">
+                error
+            </div>
             <form class="form-horizontal" id="auth">
                 <div class="form-group">
                     <label class="form-label" for="username">username</label>
-                    <input class="form-input" type="text" id="username" name="username" placeholder="username">
+                    <input class="form-input" type="text" id="username" name="username" placeholder="username" required>
                 </div>
                 <div class="form-group">
                     <label class="form-label" for="name">name</label>
-                    <input class="form-input" type="text" id="name" name="name" placeholder="your name">
+                    <input class="form-input" type="text" aria-requried="true" id="name" name="name" placeholder="your name">
                 </div>
                 <div class="form-group">
                     <label class="form-label" for="email">email</label>
@@ -24,7 +27,7 @@
                 </div>
                 <div class="form-group">
                     <label class="form-label" for="password">password</label>
-                    <input class="form-input" pattern=".{8,}" type="password" id="password" name="password" placeholder="password">
+                    <input class="form-input" pattern=".{8,}" type="password" id="password" name="password" placeholder="password" required>
                 </div>
                 <div class="form-group">
                     <label class="form-label" for="pronouns">pronouns</label>

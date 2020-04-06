@@ -15,13 +15,40 @@ function parseFormData(formData) {
     return object;
 }
 
+async function auth_create(data) {
+    try {
+        const resp = await axios.post('/a/auth/create', data);
+        console.log(resp);
+        window.location.href = "/"; // successfully created account
+    } catch (err) {
+        console.error(err);
+        if (err.response.status == 409) { // conflict
+            $('#error').innerText = 'conflicting username/email'
+            $('#error').show()
+        }
+        if (err.response.status == 422) { // unproc entity
+            $('#error').innerText = 'invalid fields'
+            $('#error').show()
+        }
+    }
+}
+
 $("#auth").addEventListener("submit", ev => {
     let formData = new FormData(ev.target);
     let authData = parseFormData(formData);
 
     // figure out if login or create
-    let route = authData.hasOwnProperty('email') ? 'create' : 'login';
-    console.log(`submitting auth (${route})`, authData);
+    let mode = authData.hasOwnProperty('email') ? 'create' : 'login';
+    console.log(`submitting auth (${mode})`, authData);
+
+    switch (mode) {
+        case 'create':
+            auth_create(authData);
+            break;
+        case 'login':
+            auth_login(authData);
+            break;
+    }
 
     ev.preventDefault();
 });
