@@ -1,7 +1,9 @@
+using System;
 using Gatekeeper.Server.Models;
 using Gatekeeper.Server.Services.Auth;
 using Gatekeeper.Server.Services.Users;
 using Hexagon;
+using Hexagon.Logging;
 using Hexagon.Services;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -22,6 +24,16 @@ namespace Gatekeeper.Server.Config {
             userManager = new UserManagerService(this);
             tokenResolver = new TokenAuthenticationService(this);
             authenticator = new BearerAuthenticator(this);
+        }
+
+        public override void start() {
+            base.start();
+
+            tickService.schedule(() => {
+                var prunedTokens = tokenResolver.pruneExpiredTokens();
+                log.writeLine($"pruned {prunedTokens} expired tokens.",
+                    SLogger.LogLevel.Information);
+            }, TimeSpan.FromHours(8));
         }
 
         public override void Dispose() {

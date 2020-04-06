@@ -28,7 +28,7 @@ namespace FrenchFry.Demo.Config {
         
         public AppDbContext getDbContext() => services.BuildServiceProvider().GetService<AppDbContext>();
 
-        public void start() {
+        public override void start() {
             getDbContext().Database.EnsureCreated();
         }
     }

@@ -13,9 +13,6 @@ namespace Gatekeeper.Server.Services.Auth {
 
         public const int TOKEN_LENGTH = 32;
         public static TimeSpan ROOT_TOKEN_LIFETIME = TimeSpan.FromDays(7);
-        public static TimeSpan pruneInterval = TimeSpan.FromHours(8);
-
-        public DateTime lastPrune = DateTime.UnixEpoch;
 
         public Token issue(AccessScope scope, TimeSpan lifetime) {
             return new Token {
@@ -52,23 +49,10 @@ namespace Gatekeeper.Server.Services.Auth {
             return new Credential(token, AccessScope.parse(token.scope));
         }
 
-        public void tick() {
-            // - run scheduled tasks
-
-            // intermittent prune
-            if (lastPrune < DateTime.UtcNow - pruneInterval) {
-                var prunedTokens = prune();
-                serverContext.log.writeLine(
-                    $"ran scheduled prune (every {pruneInterval}), pruned {prunedTokens} expired tokens.",
-                    SLogger.LogLevel.Information);
-                lastPrune = DateTime.UtcNow;
-            }
-        }
-
         /// <summary>
         /// delete any and all expired tokens
         /// </summary>
-        public int prune() {
+        public int pruneExpiredTokens() {
             var pruned = 0;
             using (var db = serverContext.getDbContext()) {
                 var expiredTokens = new List<Token>();
