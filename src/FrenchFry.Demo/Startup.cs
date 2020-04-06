@@ -1,6 +1,8 @@
 using Carter;
 using FrenchFry.Demo.Config;
+using FrenchFry.Demo.Models;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace FrenchFry.Demo {
@@ -10,7 +12,12 @@ namespace FrenchFry.Demo {
 
             services.AddRazorPages()
                 .AddRazorRuntimeCompilation();
-            
+
+            services.AddDbContext<AppDbContext>(options => {
+                // sqlite
+                options.UseSqlite("Data Source=database.db");
+            });
+
             var context = new SContext();
             // register server context
             services.AddSingleton(context);
