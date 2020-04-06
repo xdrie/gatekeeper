@@ -1,10 +1,7 @@
-using System;
-using Gatekeeper.Models;
 using Gatekeeper.Server.Models;
 using Gatekeeper.Server.Services.Auth;
 using Gatekeeper.Server.Services.Users;
 using Hexagon;
-using Hexagon.Logging;
 using Hexagon.Services;
 using Microsoft.Extensions.DependencyInjection;
 

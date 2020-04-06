@@ -1,18 +1,20 @@
 using System.Security.Claims;
-using FrenchFry.Demo.Config;
+using Degate.Config;
+using Hexagon;
 using Hexagon.Models;
 using Hexagon.Services;
 
-namespace FrenchFry.Demo.Services {
-    public class BearerAuthenticator : DependencyService<SContext>, IBearerAuthenticator {
-        public BearerAuthenticator(SContext context) : base(context) { }
+namespace Degate.Services {
+    public class SessionBearerAuthenticator<TContext> : DependencyService<TContext>, IBearerAuthenticator
+        where TContext : ServerContext, IDegateContext {
+        public SessionBearerAuthenticator(TContext context) : base(context) { }
 
         public ClaimsPrincipal resolve(string token) {
             // we only accept session tokens here.
             // match the token to an existing session
-            var auth = serverContext.tokenResolver.resolve(token);
+            var auth = serverContext.sessionTokenResolver.resolve(token);
             if (auth == null) return null;
-            
+
             var claims = new[] {
                 new Claim(IBearerAuthenticator.CLAIM_TOKEN, token),
                 new Claim(IBearerAuthenticator.CLAIM_USERNAME, auth.user.username),

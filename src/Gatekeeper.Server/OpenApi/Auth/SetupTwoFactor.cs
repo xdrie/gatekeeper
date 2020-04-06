@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Net;
 using Carter.OpenApi;
 using Gatekeeper.Models.Responses;

@@ -1,7 +1,5 @@
 using System;
 using System.Net;
-using Carter.ModelBinding;
-using Carter.Response;
 using Gatekeeper.Models.Requests;
 using Gatekeeper.Models.Responses;
 using Gatekeeper.Server.Config;
