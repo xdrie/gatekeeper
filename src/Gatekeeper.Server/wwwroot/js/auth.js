@@ -15,21 +15,41 @@ function parseFormData(formData) {
     return object;
 }
 
+function show_auth_error(err) {
+    console.error(err);
+    let msg = '';
+    switch (err.response.status) {
+        case 409: // conflict
+            msg = 'conflicting username/email';
+            break;
+        case 422: // unproc entity
+        msg = 'invalid fields'
+            break;
+        case 401: // unauthorized
+            msg = 'invalid credentials'
+            break;
+    }
+    $('#error').innerText = msg;
+    $('#error').show()
+}
+
 async function auth_create(data) {
     try {
         const resp = await axios.post('/a/auth/create', data);
         console.log(resp);
         window.location.href = "/"; // successfully created account
     } catch (err) {
-        console.error(err);
-        if (err.response.status == 409) { // conflict
-            $('#error').innerText = 'conflicting username/email'
-            $('#error').show()
-        }
-        if (err.response.status == 422) { // unproc entity
-            $('#error').innerText = 'invalid fields'
-            $('#error').show()
-        }
+        show_auth_error(err);
+    }
+}
+
+async function auth_login(data) {
+    try {
+        const resp = await axios.post('/a/auth/login', data);
+        console.log(resp);
+        window.location.href = "/"; // successfully logged in
+    } catch (err) {
+        show_auth_error(err);
     }
 }
 
