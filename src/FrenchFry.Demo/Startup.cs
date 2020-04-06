@@ -7,6 +7,9 @@ namespace FrenchFry.Demo {
     public class Startup {
         public void ConfigureServices(IServiceCollection services) {
             services.AddCarter();
+
+            services.AddRazorPages()
+                .AddRazorRuntimeCompilation();
             
             var context = new SContext();
             // register server context
@@ -15,7 +18,9 @@ namespace FrenchFry.Demo {
 
         public void Configure(IApplicationBuilder app) {
             app.UseRouting();
+            app.UseStaticFiles();
             app.UseEndpoints(builder => builder.MapCarter());
+            app.UseEndpoints(builder => builder.MapRazorPages());
         }
     }
 }
