@@ -20,11 +20,9 @@ namespace Gatekeeper.Server.Config {
         public UserManagerService userManager { get; set; }
         public TokenAuthenticationService tokenAuthenticator { get; set; }
 
-        public SLogger log;
-
         public SContext(IServiceCollection services, SConfig config) {
             this.config = config;
-            log = new SLogger(config.logging.logLevel);
+            log.verbosity = config.logging.logLevel;
             userManager = new UserManagerService(this);
             tokenAuthenticator = new TokenAuthenticationService(this);
             this.services = services;
