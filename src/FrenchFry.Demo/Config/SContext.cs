@@ -1,9 +1,12 @@
 using System;
 using Degate.Config;
 using Degate.Services;
+using FrenchFry.Demo.Models;
+using FrenchFry.Demo.Services;
 using Gatekeeper.Remote;
 using Hexagon;
 using Hexagon.Services;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace FrenchFry.Demo.Config {
     public class SContext : ServerContext, IDegateContext {
@@ -11,14 +14,21 @@ namespace FrenchFry.Demo.Config {
         public const string GATE_SERVER = "http://localhost:5000";
         public const string GATE_SECRET = "yeet";
         
-        public override IBearerAuthenticator getAuthenticator() => new SessionBearerAuthenticator<SContext>(this);
+        public override IBearerAuthenticator getAuthenticator() => new BearerAuthenticator<SContext>(this);
         
-        public IRemoteTokenResolver sessionTokenResolver { get; }
+        public ISessionResolver sessionResolver { get; }
         public GateAuthClient gateAuthClient { get; }
+        public UserManager userManager { get; }
+        public AppDbContext getDbContext() => services.BuildServiceProvider().GetService<AppDbContext>();
 
-        public SContext() {
-            sessionTokenResolver = new SessionTokenResolver<SContext>(this);
+        public SContext(IServiceCollection services) : base(services) {
+            sessionResolver = new SessionResolver<SContext>(this);
             gateAuthClient = new GateAuthClient(GATE_APP, new Uri(GATE_SERVER), GATE_SECRET);
+            userManager = new UserManager(this);
+        }
+
+        public void start() {
+            getDbContext().Database.EnsureCreated();
         }
     }
 }

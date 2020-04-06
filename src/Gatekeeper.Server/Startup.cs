@@ -102,19 +102,20 @@ namespace Gatekeeper.Server {
 
                 // show banner and log some server information
                 SBoot.display(serverContext);
-                
-                if (hostEnv.IsDevelopment()) {
-                    app.UseDeveloperExceptionPage();
-                } else {
-                    app.UseExceptionHandler("/Error");
-                }
-
-                app.UseStaticFiles();
-                app.UseRouting();
-                app.UseEndpoints(endpoints => endpoints.MapCarter());
-                app.UseEndpoints(endpoints => endpoints.MapRazorPages());
-                app.UseSwaggerUi3(settings => settings.DocumentPath = "/openapi");
             }
+
+            if (hostEnv.IsDevelopment()) {
+                app.UseDeveloperExceptionPage();
+            }
+            else {
+                app.UseExceptionHandler("/Error");
+            }
+
+            app.UseStaticFiles();
+            app.UseRouting();
+            app.UseEndpoints(endpoints => endpoints.MapCarter());
+            app.UseEndpoints(endpoints => endpoints.MapRazorPages());
+            app.UseSwaggerUi3(settings => settings.DocumentPath = "/openapi");
         }
     }
 }

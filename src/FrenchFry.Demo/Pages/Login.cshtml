@@ -1,0 +1,22 @@
+@page
+@{
+    ViewBag.Title = "Login";
+    Layout = "_ShowLayout";
+}
+
+<article>
+    <h1 class="t-centered">
+        login
+    </h1>
+    <p>
+        login to access fry
+    </p>
+    <div class="gate-signin" data-appid="FrenchFry" data-server="http://localhost:5000" data-onsuccess="onsignin">
+        <div class="loading loading-lg"></div>
+    </div>
+</article>
+
+@section Scripts {
+    <script type="text/javascript" asp-append-version="true" src="~/js/gate_login.js"></script>
+    <script type="text/javascript" asp-append-version="true" src="~/js/auth.js"></script>
+}

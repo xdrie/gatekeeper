@@ -11,18 +11,15 @@ namespace Gatekeeper.Server.Config {
         /// configuration used to create this context instance
         /// </summary>
         public SConfig config { get; }
-
-        public IServiceCollection services { get; set; }
         public AppDbContext getDbContext() => services.BuildServiceProvider().GetService<AppDbContext>();
         public UserManagerService userManager { get; set; }
         public TokenAuthenticationService tokenResolver { get; set; }
 
-        public SContext(IServiceCollection services, SConfig config) {
+        public SContext(IServiceCollection services, SConfig config) : base(services) {
             this.config = config;
             log.verbosity = config.logging.logLevel;
             userManager = new UserManagerService(this);
             tokenResolver = new TokenAuthenticationService(this);
-            this.services = services;
         }
 
         public override IBearerAuthenticator getAuthenticator() => new BearerAuthenticator(this);

@@ -10,9 +10,9 @@ using Hexagon.Serialization;
 using Hexagon.Utilities;
 
 namespace Degate.Modules {
-    public abstract class GateLinkModule<TContext> : ApiModule<TContext>
+    public abstract class BridgeLinkModule<TContext> : ApiModule<TContext>
         where TContext : ServerContext, IDegateContext {
-        protected GateLinkModule(string path, TContext serverContext) : base(path, serverContext) {
+        protected BridgeLinkModule(string path, TContext serverContext) : base(path, serverContext) {
             Post("/", async (req, res) => {
                 // token is in form data
                 var gateReq = await req.Bind<Token>();
@@ -34,21 +34,20 @@ namespace Degate.Modules {
                 // - valid identity!
                 res.StatusCode = (int) HttpStatusCode.Accepted;
 
-                // compute the session id
-                var sessionId = Convert.ToBase64String(Hasher.sha256(identity.user.uuid));
-                
-                // delete existing session, if any
-                if (serverContext.sessions.exists(sessionId)) {
-                    serverContext.sessions.delete(sessionId);
-                }
-                
+                // get a session token
+                var sessionId = serverContext.sessionResolver.getSessionToken(identity.user.uuid);
+
                 // store identity in a session
-                var sess = serverContext.sessions.create(sessionId);
+                var sess = serverContext.sessions.create(sessionId, TimeSpan.FromDays(1));
                 sess.jar.Register<RemoteAuthentication>(identity);
+                
+                updateRecord(identity);
 
                 // display the user's info
                 await res.respondSerialized(new GateUser(identity, sessionId));
             });
         }
+
+        public virtual void updateRecord(RemoteAuthentication remoteAuth) { }
     }
 }
