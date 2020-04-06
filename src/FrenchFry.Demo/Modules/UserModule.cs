@@ -7,7 +7,7 @@ namespace FrenchFry.Demo.Modules {
         public UserModule(SContext serverContext) : base("/u", serverContext) {
             Get("/me", async (req, res) => {
                 // display user info
-                await res.respondSerialized(currentUser);
+                await res.respondSerialized(user);
             });
         }
     }

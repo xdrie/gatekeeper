@@ -10,12 +10,12 @@ namespace FrenchFry.Demo.Services {
         public ClaimsPrincipal resolve(string token) {
             // we only accept session tokens here.
             // match the token to an existing session
-            var user = serverContext.tokenResolver.resolve(token);
-            if (user == null) return null;
+            var auth = serverContext.tokenResolver.resolve(token);
+            if (auth == null) return null;
             
             var claims = new[] {
                 new Claim(IBearerAuthenticator.CLAIM_TOKEN, token),
-                new Claim(IBearerAuthenticator.CLAIM_USERNAME, user.auth.user.username),
+                new Claim(IBearerAuthenticator.CLAIM_USERNAME, auth.user.username),
             };
             var identity = new ClaimsIdentity(claims);
             var principal = new ClaimsPrincipal(identity);
