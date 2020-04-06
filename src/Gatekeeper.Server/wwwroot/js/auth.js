@@ -18,6 +18,10 @@ function show_auth_error(err) {
             break;
     }
     toast_error(msg);
+
+    // re-show forms
+    $('#auth-container').show();
+    $('#load').hide();
 }
 
 async function auth_create(data) {
@@ -75,15 +79,19 @@ $("#auth").addEventListener("submit", ev => {
     }
     console.log(`submitting auth (${mode})`, authData);
 
+    $('#auth-container').hide();
+    $('#load').show();
+
+    let task = null;
     switch (mode) {
         case 'create':
-            auth_create(authData);
+            task = auth_create(authData);
             break;
         case 'login':
-            auth_login(authData);
+            task = auth_login(authData);
             break;
         case 'verify':
-            auth_verify(authData);
+            task = auth_verify(authData);
             break;
     }
 

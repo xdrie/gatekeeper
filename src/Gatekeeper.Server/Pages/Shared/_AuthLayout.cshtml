@@ -8,7 +8,10 @@
             <div class="toast toast-error" id="error" style="display:none">
                 error
             </div>
-            @RenderBody()
+            <div id="auth-container">
+                @RenderBody()
+            </div>
+            <div id="load" class="loading loading-lg" style="display:none"></div>
         </div>
     </div>
     <script type="text/javascript" asp-append-version="true" src="~/js/auth.js"></script>
