@@ -24,3 +24,11 @@ span.tiny-version {
 img.emote {
     height: 2em;
 }
+
+.panel {
+    border: .05rem solid #48515b;
+}
+
+.profile-card p {
+    margin: 0 0 0.3rem;
+}

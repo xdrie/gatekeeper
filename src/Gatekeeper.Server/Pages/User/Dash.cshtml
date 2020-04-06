@@ -8,11 +8,37 @@
 
 <article>
     <div id="dash" style="display:none">
-        <h1>Dashboard</h1>
-        <p>
-            This page is for authenticated users.
-            <pre>@DateTime.Now</pre>
-        </p>
+        <div class="container">
+            <div class="columns">
+                <div class="column col-6 col-md-8 col-sm-12 col-mx-auto">
+                    <h1>dash</h1>
+                    <div class="card profile-card">
+                        <div class="card-header">
+                            <div class="card-title h5">
+                                <span id="profile-name"/>
+                            </div>
+                            <div class="card-subtitle text-gray">
+                                <span id="profile-pronouns"/>
+                            </div>
+                            <div class="card-subtitle text-gray">
+                                @@<span id="profile-username"/>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <p>
+                                email: <a id="profile-email"></a>
+                            </p>
+                            <p>
+                                joined on <span id="profile-registered"/>
+                            </p>
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn btn-primary">cool</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <div id="load" class="loading loading-lg"></div>
 </article>

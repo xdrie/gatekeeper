@@ -75,6 +75,17 @@ function auth_logout() {
     window.location.href = "/"; // return to home
 }
 
+function parse_pronouns(id) {
+    switch (id) {
+        case 0:
+            return 'they/them';
+        case 1:
+            return 'he/him';
+        case 2:
+            return 'she/her';
+    }
+}
+
 window.addEventListener("load", function () {
     // bind defaults
     let logoutBtn = $('#logout');
