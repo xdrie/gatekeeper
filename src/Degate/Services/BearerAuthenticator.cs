@@ -10,6 +10,7 @@ namespace Degate.Services {
         public BearerAuthenticator(TContext context) : base(context) { }
 
         public ClaimsPrincipal resolve(string token) {
+            serverContext.tickService.tick();
             // we only accept session tokens here.
             // match the token to an existing session
             var auth = serverContext.sessionResolver.resolveSessionToken(token);
