@@ -16,7 +16,7 @@
 
     <!-- Styles -->
     <link rel="stylesheet" href="~/lib/spectre/spectre.min.css">
-    <link rel="stylesheet" href="~/css/app.css">
+    <link rel="stylesheet" href="~/css/app.css" asp-append-version="true">
 </head>
 <body>
 <!-- header -->
@@ -32,6 +32,8 @@
 </section>
 
 <!-- scripts -->
+<script src="~/lib/moon/moon.min.js"></script>
+<script src="~/lib/moon/moon-browser.min.js"></script>
 <script src="~/js/app.js" asp-append-version="true"></script>
 @RenderSection("Scripts", required: false)
 </body>
