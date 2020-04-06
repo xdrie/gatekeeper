@@ -42,7 +42,7 @@ function get_client() {
     return client;
 }
 
-function show_error(msg) {
+function toast_error(msg) {
     $('#error').innerText = msg;
     $('#error').show()
 }
@@ -61,7 +61,7 @@ function show_auth_error(err) {
             msg = 'invalid credentials'
             break;
     }
-    show_error(msg);
+    toast_error(msg);
 }
 
 // save authorization
@@ -101,7 +101,7 @@ async function auth_verify(data) {
         let code = data.code;
         const client = get_client();
         if (!client.authed) {
-            show_error('no token stored');
+            toast_error('no token stored');
             throw "client not authorized";
         }
         const resp = await client.post(`/auth/verify/${code}`);
