@@ -36,11 +36,15 @@ namespace Degate.Modules {
 
                 // compute the session id
                 var sessionId = Convert.ToBase64String(Hasher.sha256(identity.user.uuid));
-                if (!serverContext.sessions.exists(sessionId)) {
-                    // store identity in a session
-                    var sess = serverContext.sessions.create(sessionId);
-                    sess.jar.Register<RemoteAuthentication>(identity);
+                
+                // delete existing session, if any
+                if (serverContext.sessions.exists(sessionId)) {
+                    serverContext.sessions.delete(sessionId);
                 }
+                
+                // store identity in a session
+                var sess = serverContext.sessions.create(sessionId);
+                sess.jar.Register<RemoteAuthentication>(identity);
 
                 // display the user's info
                 await res.respondSerialized(new GateUser(identity, sessionId));
