@@ -18,6 +18,8 @@ namespace Gatekeeper.Server.Services.Users {
         public User registerUser(RegisterRequest request) {
             if (findByUsername(request.username) != null)
                 throw new UserAlreadyExistsException("a user with the same username already exists");
+            if (findByEmail(request.email) != null)
+                throw new UserAlreadyExistsException("a user with the same email already exists");
             // encrypt the password
             var cryptPassword = CryptSecret.withDefaultParameters();
             var cryptoHelper = new SecretCryptoHelper(cryptPassword);
@@ -129,6 +131,12 @@ namespace Gatekeeper.Server.Services.Users {
         public User? findByUsername(string username) {
             using (var db = serverContext.getDbContext()) {
                 return db.users.SingleOrDefault(x => x.username == username);
+            }
+        }
+        
+        public User? findByEmail(string email) {
+            using (var db = serverContext.getDbContext()) {
+                return db.users.SingleOrDefault(x => x.email == email);
             }
         }
 

@@ -7,21 +7,22 @@
 
     <ItemGroup>
         <PackageReference Include="Carter" Version="5.1.0" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.2">
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.3">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="3.1.2" />
-        <PackageReference Include="NSwag.AspNetCore" Version="13.2.3" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="3.1.3" />
+        <PackageReference Include="NSwag.AspNetCore" Version="13.3.0" />
         <PackageReference Include="Otp.NET" Version="1.2.2" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.2" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.3" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.3" />
     </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\..\lib\Hexagon\src\Hexagon\Hexagon.csproj" />
         <ProjectReference Include="..\Gatekeeper.Core\Gatekeeper.Core.csproj" />
     </ItemGroup>
-
+    
     <ItemGroup>
         <EmbeddedResource Include="..\..\media\boot.txt">
             <Link>Data\boot.txt</Link>

@@ -1,0 +1,39 @@
+@page
+
+@{
+    ViewBag.Title = "Create";
+    ViewBag.AuthType = "create";
+    Layout = "_AuthLayout";
+}
+
+<form class="form-horizontal" id="auth">
+    <div class="form-group">
+        <label class="form-label" for="username">username</label>
+        <input class="form-input" type="text" id="username" name="username" placeholder="username" required>
+    </div>
+    <div class="form-group">
+        <label class="form-label" for="name">name</label>
+        <input class="form-input" type="text" aria-requried="true" id="name" name="name" placeholder="your name">
+    </div>
+    <div class="form-group">
+        <label class="form-label" for="email">email</label>
+        <input class="form-input" type="email" id="email" name="email" placeholder="your email">
+    </div>
+    <div class="form-group">
+        <label class="form-label" for="password">password</label>
+        <input class="form-input" pattern=".{8,}" type="password" id="password" name="password" placeholder="password" required>
+    </div>
+    <div class="form-group">
+        <label class="form-label" for="pronouns">pronouns</label>
+        <select class="form-select" id="pronouns" name="pronouns">
+            <option>TheyThem</option>
+            <option>SheHer</option>
+            <option>HeHim</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label class="form-label" for="isRobot">confirm your humanity</label>
+        <input class="form-input" type="text" id="isRobot" name="isRobot" placeholder="type the incantation">
+    </div>
+    <input type="submit" class="btn btn-primary mt-2" value="submit">
+</form>
