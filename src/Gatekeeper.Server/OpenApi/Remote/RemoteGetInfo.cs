@@ -15,7 +15,7 @@ namespace Gatekeeper.Server.OpenApi.Remote {
             },
             new RouteMetaDataResponse {
                 Code = (int) HttpStatusCode.OK,
-                Description = $"A {nameof(RemoteAuthentication)} representing the current authentication",
+                Description = $"A {nameof(RemoteAuthentication)} representing the authentication privileges of a given user",
                 Response = typeof(RemoteAuthentication)
             }
         };
