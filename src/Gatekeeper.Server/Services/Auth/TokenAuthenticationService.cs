@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Gatekeeper.Models.Identity;
 using Gatekeeper.Server.Config;
@@ -15,7 +16,7 @@ namespace Gatekeeper.Server.Services.Auth {
         public Token issue(AccessScope scope, TimeSpan lifetime) {
             return new Token {
                 content = StringUtils.secureRandomString(TOKEN_LENGTH),
-                expires = DateTime.Now.Add(lifetime),
+                expires = DateTime.UtcNow.Add(lifetime),
                 scope = scope.path
             };
         }
@@ -45,6 +46,22 @@ namespace Gatekeeper.Server.Services.Auth {
 
             // 3. parse token scopes/path
             return new Credential(token, AccessScope.parse(token.scope));
+        }
+
+        /// <summary>
+        /// delete any and all expired tokens
+        /// </summary>
+        public void prune() {
+            using (var db = serverContext.getDbContext()) {
+                var expiredTokens = new List<Token>();
+                foreach (var token in db.tokens) {
+                    if (token.expired()) {
+                        expiredTokens.Add(token);
+                    }
+                }
+                db.tokens.RemoveRange(expiredTokens);
+                db.SaveChanges();
+            }
         }
     }
 }

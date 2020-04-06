@@ -47,7 +47,7 @@ namespace Gatekeeper.Tests.Modules.Auth {
             var data = JsonConvert.DeserializeObject<AuthedUserResponse>(await resp.Content.ReadAsStringAsync());
             Assert.Equal(username, data.user.username);
             Assert.NotNull(data.token.content);
-            Assert.True(data.token.expires > DateTime.Now);
+            Assert.False(data.token.expired());
         }
 
         [Fact]

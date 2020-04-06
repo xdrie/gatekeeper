@@ -10,5 +10,7 @@ namespace Gatekeeper.Models.Identity {
         public string content { get; set; }
         public DateTime expires { get; set; }
         public string scope { get; set; }
+
+        public bool expired() => expires <= DateTime.UtcNow;
     }
 }

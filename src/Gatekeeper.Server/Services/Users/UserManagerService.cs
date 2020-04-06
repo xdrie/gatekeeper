@@ -31,7 +31,7 @@ namespace Gatekeeper.Server.Services.Users {
                 password = cryptPassword,
                 pronouns = Enum.Parse<User.Pronouns>(request.pronouns, true),
                 verification = StringUtils.secureRandomString(8),
-                registered = DateTime.Now,
+                registered = DateTime.UtcNow,
                 groups = new string[0]
             };
             // - set default settings
