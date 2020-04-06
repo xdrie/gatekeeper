@@ -5,20 +5,15 @@ function toast_error(msg) {
 
 function show_auth_error(err) {
     console.error(err);
-    let msg = '';
-    switch (err.response.status) {
-        case 409: // conflict
-            msg = 'conflicting username/email';
-            break;
-        case 422: // unproc entity
-            msg = 'invalid fields'
-            break;
-        case 401: // unauthorized
-            msg = 'invalid credentials'
-            break;
-        case 404: // not found
-            msg = 'not found'
-            break;
+    let msg = 'auth error (unspecified)';
+    let errCodes = {
+        409: 'conflicting username/email',
+        422: 'invalid fields',
+        401: 'invalid credentials'
+    };
+    let sc = err.response.status;
+    if (sc in errCodes) {
+        msg = errCodes[sc];
     }
     toast_error(msg);
 

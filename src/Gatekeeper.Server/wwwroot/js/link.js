@@ -19,6 +19,20 @@ function sendCallback(url, token) {
     form.submit();
 };
 
+function show_link_error(err) {
+    console.error(err);
+    let msg = 'auth error (unspecified)';
+    let errCodes = {
+        404: 'app not found',
+        403: 'you do not have permission to link this app'
+    };
+    let sc = err.response.status;
+    if (sc in errCodes) {
+        msg = errCodes[sc];
+    }
+    toast_error(msg);
+}
+
 async function linkApplication(app, cbUri) {
     // request an app token
     try {
@@ -30,8 +44,7 @@ async function linkApplication(app, cbUri) {
         // now, we need to post to the callback uri
         sendCallback(cbUri, appToken);
     } catch (err) {
-        console.error(err);
-        toast_error(`failed to link (${err.response.status})`);
+        show_link_error(err);
     }
 }
 
