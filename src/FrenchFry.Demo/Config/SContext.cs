@@ -9,11 +9,15 @@ namespace FrenchFry.Demo.Config {
     public class SContext : ServerContext, IDegateContext {
         public const string GATE_SERVER = "http://localhost:5000";
         public const string GATE_SECRET = "yeet";
-
-        public IRemoteTokenResolver sessionTokenResolver => new SessionTokenResolver<SContext>(this);
+        
         public override IBearerAuthenticator getAuthenticator() => new SessionBearerAuthenticator<SContext>(this);
+        
+        public IRemoteTokenResolver sessionTokenResolver { get; }
+        public GateAuthClient gateAuthClient { get; }
 
-        public GateAuthClient gateAuthClient { get; } =
-            new GateAuthClient("FrenchFry", new Uri(GATE_SERVER), GATE_SECRET);
+        public SContext() {
+            sessionTokenResolver = new SessionTokenResolver<SContext>(this);
+            gateAuthClient = new GateAuthClient("FrenchFry", new Uri(GATE_SERVER), GATE_SECRET);
+        }
     }
 }
