@@ -3,15 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using Gatekeeper.Models.Identity;
 using Gatekeeper.Server.Config;
+using Hexagon.Logging;
 using Hexagon.Models;
 using Hexagon.Utilities;
 
 namespace Gatekeeper.Server.Services.Auth {
     public class TokenAuthenticationService : DependencyService<SContext> {
         public TokenAuthenticationService(SContext context) : base(context) { }
-        
+
         public const int TOKEN_LENGTH = 32;
         public static TimeSpan ROOT_TOKEN_LIFETIME = TimeSpan.FromDays(7);
+        public static TimeSpan pruneInterval = TimeSpan.FromHours(8);
+
+        public DateTime lastPrune = DateTime.UnixEpoch;
 
         public Token issue(AccessScope scope, TimeSpan lifetime) {
             return new Token {
@@ -48,10 +52,24 @@ namespace Gatekeeper.Server.Services.Auth {
             return new Credential(token, AccessScope.parse(token.scope));
         }
 
+        public void tick() {
+            // - run scheduled tasks
+
+            // intermittent prune
+            if (lastPrune < DateTime.UtcNow - pruneInterval) {
+                var prunedTokens = prune();
+                serverContext.log.writeLine(
+                    $"ran scheduled prune (every {pruneInterval}), pruned {prunedTokens} expired tokens.",
+                    SLogger.LogLevel.Information);
+                lastPrune = DateTime.UtcNow;
+            }
+        }
+
         /// <summary>
         /// delete any and all expired tokens
         /// </summary>
-        public void prune() {
+        public int prune() {
+            var pruned = 0;
             using (var db = serverContext.getDbContext()) {
                 var expiredTokens = new List<Token>();
                 foreach (var token in db.tokens) {
@@ -59,9 +77,13 @@ namespace Gatekeeper.Server.Services.Auth {
                         expiredTokens.Add(token);
                     }
                 }
+
                 db.tokens.RemoveRange(expiredTokens);
+                pruned = expiredTokens.Count;
                 db.SaveChanges();
             }
+
+            return pruned;
         }
     }
 }
