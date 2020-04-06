@@ -7,9 +7,10 @@ function show_auth_error(err) {
     console.error(err);
     let msg = 'auth error (unspecified)';
     let errCodes = {
+        401: 'invalid credentials',
         409: 'conflicting username/email',
         422: 'invalid fields',
-        401: 'invalid credentials'
+        423: 'account not verified'
     };
     let sc = err.response.status;
     if (sc in errCodes) {
