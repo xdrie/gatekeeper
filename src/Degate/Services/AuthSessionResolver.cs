@@ -12,6 +12,7 @@ namespace Degate.Services {
     public class AuthSessionResolver<TContext> : DependencyService<TContext>, IAuthSessionResolver
         where TContext : ServerContext {
         public string cryptKey { get; }
+        public TimeSpan sessionValidity { get; set; } = TimeSpan.FromDays(1);
 
         public AuthSessionResolver(TContext context) : base(context) {
             cryptKey = Convert.ToBase64String(AesCrypt.randomBytes(AesCrypt.KEY_LENGTH));
@@ -22,7 +23,7 @@ namespace Degate.Services {
             var sessionId = getSessionToken(identity.user.uuid);
 
             // store identity in a session
-            var sess = serverContext.sessions.create(sessionId, TimeSpan.FromDays(1));
+            var sess = serverContext.sessions.create(sessionId, sessionValidity);
             sess.jar.Register<RemoteAuthentication>(identity);
 
             return sessionId;
