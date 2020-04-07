@@ -1,4 +1,14 @@
 
+async function fetchGroups() {
+    const client = get_client();
+    const resp = await client.get('/u/groups');
+    let groups = resp.data;
+    if (groups.length > 0) {
+        // populate groups list
+        $('#profile-groups').innerText = groups.join(', ');
+    }
+}
+
 function populateDash(user) {
     $('#load').hide();
     $('#dash').show();
@@ -11,6 +21,9 @@ function populateDash(user) {
     $('#profile-email').href = `mailto:${user.email}`;
     $('#profile-registered').innerText = new Date(user.registered).toLocaleDateString();
     $('#profile-uuid').innerText = user.uuid;
+
+    // fetch groups
+    fetchGroups();
 }
 
 $load(() => {
