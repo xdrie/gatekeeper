@@ -29,3 +29,5 @@ dotnet build Gatekeeper.sln
 cd Gatekeeper.Tests
 dotnet test
 ```
+
+![icon](media/glyph.png)
