@@ -110,7 +110,7 @@ namespace Gatekeeper.Server {
                 }
 
                 // show banner and log some server information
-                SBoot.display(serverContext);
+                SBoot.display(serverContext, hostEnv);
             }
 
             if (hostEnv.IsDevelopment()) {

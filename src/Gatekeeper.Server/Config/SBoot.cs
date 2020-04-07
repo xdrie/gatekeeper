@@ -3,18 +3,23 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using Hexagon.Logging;
+using Microsoft.AspNetCore.Hosting;
+
+#if !DEBUG
+using Microsoft.Extensions.Hosting;
+#endif
 
 namespace Gatekeeper.Server.Config {
     public class SBoot {
         public const string BOOT_BANNER = "Gatekeeper.Server.Data.boot.txt";
 
-        public static void display(SContext context) {
+        public static void display(SContext context, IWebHostEnvironment env) {
             var bootBannerRes = Assembly.GetExecutingAssembly().GetManifestResourceStream(BOOT_BANNER);
             using (var sr = new StreamReader(bootBannerRes)) {
                 context.log.writeLine($"\n{sr.ReadToEnd()}\nv{SConfig.VERSION} instance '{SConfig.SERVER_NAME}'",
                     SLogger.LogLevel.Information);
             }
-            
+
 #if DEBUG
             // print debug banner (always)
             context.log.writeLine(
