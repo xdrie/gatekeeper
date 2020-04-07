@@ -4,6 +4,6 @@ using Gatekeeper.Remote;
 namespace Degate.Config {
     public interface IDegateContext {
         ISessionResolver sessionResolver { get; }
-        GateAuthClient gateAuthClient { get; }
+        IRemoteAuthClient remoteAuthClient { get; }
     }
 }

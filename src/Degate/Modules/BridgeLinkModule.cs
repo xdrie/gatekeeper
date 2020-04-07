@@ -19,13 +19,13 @@ namespace Degate.Modules {
 
                 // - import the token
 
-                if (!serverContext.gateAuthClient.validate(gateReq)) {
+                if (!serverContext.remoteAuthClient.validate(gateReq)) {
                     res.StatusCode = (int) HttpStatusCode.UnprocessableEntity; // invalid
                     return;
                 }
 
                 // now, import the identity
-                var identity = await serverContext.gateAuthClient.getRemoteIdentity(gateReq);
+                var identity = await serverContext.remoteAuthClient.getRemoteIdentity(gateReq);
                 if (identity == null) {
                     res.StatusCode = (int) HttpStatusCode.Unauthorized;
                     return;

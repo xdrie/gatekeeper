@@ -5,7 +5,7 @@ using Gatekeeper.Models.Identity;
 using Newtonsoft.Json;
 
 namespace Gatekeeper.Remote {
-    public class GateAuthClient {
+    public class GateAuthClient : IRemoteAuthClient {
         public string app { get; }
         public Uri server { get; }
         public string secret { get; }
