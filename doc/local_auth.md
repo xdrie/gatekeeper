@@ -21,7 +21,7 @@ in debug mode, the `isRobot` value is checked against `"I am not a robot"`.
 when given a valid request, gatekeeper will return an object with a `user` and a `token`.
 for further authenticated requests, use `token.content` as a Bearer token (pass `Authorization: Bearer <token>` as a header)
 
-after creating the account, it will be marked as `Pending` until it is verified. in order to verify, simply `POST /a/auth/verify/{code}` (in debug mode, `code` defaults to `00000000`).
+after creating the account, it will be marked as `Pending` until it is verified. in order to verify, simply `POST /a/auth/verify/{uuid}/{code}` (in debug mode, `code` defaults to `00000000`).
 
 the account should now have a role of `User` and be usable for most standard operations.
 

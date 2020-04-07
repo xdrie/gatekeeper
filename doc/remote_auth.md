@@ -52,6 +52,7 @@ when a user authenticates to a remote application, it can obtain the list of rul
 ## issuing an app token
 
 for our `FrenchFry` app, `GET /a/app/token/FrenchFry` to request that the server grant an app token. if the user has been granted permission to the app, a token will be returned.
+for fetching user details along with an app token, use `GET /a/app/login/FrenchFry` to get a `RemoteIdentity`, containing both public user information and a token.
 
 ## fetching user info
 
