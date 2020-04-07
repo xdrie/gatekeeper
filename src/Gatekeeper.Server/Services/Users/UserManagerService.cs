@@ -94,10 +94,14 @@ namespace Gatekeeper.Server.Services.Users {
                 var user = db.users.SingleOrDefault(x => x.id == userId);
                 switch (updateType) {
                     case Group.UpdateType.Add:
+                        // make sure groups aren't duplicated
+                        if (user.groups.Contains(groupName)) break;
                         user.groups = user.groups.Concat(new[] {groupName}).ToArray();
+
                         break;
                     case Group.UpdateType.Remove:
                         user.groups = user.groups.Except(new[] {groupName}).ToArray();
+
                         break;
                 }
 
