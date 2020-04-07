@@ -22,7 +22,14 @@ namespace Gatekeeper.Server.Modules {
                 currentUser = serverContext.userManager.findByUsername(usernameClaim.Value);
 
                 if (currentUser.role < minimumRole) {
-                    ctx.Response.StatusCode = (int) HttpStatusCode.Forbidden;
+                    // give a special code for pending users
+                    if (currentUser.role == User.Role.Pending) {
+                        ctx.Response.StatusCode = (int) HttpStatusCode.Locked;
+                    }
+                    else {
+                        ctx.Response.StatusCode = (int) HttpStatusCode.Forbidden;
+                    }
+
                     return false;
                 }
 
@@ -69,7 +76,7 @@ namespace Gatekeeper.Server.Modules {
     /// </summary>
     public abstract class RemoteApplicationModule : AuthenticatedModule {
         public RemoteApp remoteApp { get; private set; }
-        
+
         protected RemoteApplicationModule(string path, SContext serverContext) : base(AccessScope.globalScope,
             User.Role.User, path, serverContext) {
             this.Before += async (ctx) => {
@@ -79,14 +86,14 @@ namespace Gatekeeper.Server.Modules {
                     ctx.Response.StatusCode = (int) HttpStatusCode.Unauthorized;
                     return false;
                 }
-                
+
                 // match the token to an app
                 remoteApp = serverContext.config.apps.SingleOrDefault(x => x.name == credential.scope.app);
                 if (remoteApp == null || remoteApp.secret != appSecret) {
                     ctx.Response.StatusCode = (int) HttpStatusCode.Unauthorized;
                     return false;
                 }
-                
+
                 return true;
             };
         }

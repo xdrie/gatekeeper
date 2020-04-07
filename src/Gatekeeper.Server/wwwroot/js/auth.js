@@ -7,9 +7,10 @@ function show_auth_error(err) {
     console.error(err);
     let msg = 'auth error (unspecified)';
     let errCodes = {
+        401: 'invalid credentials',
         409: 'conflicting username/email',
         422: 'invalid fields',
-        401: 'invalid credentials'
+        423: 'account not verified'
     };
     let sc = err.response.status;
     if (sc in errCodes) {
@@ -27,8 +28,9 @@ async function auth_create(data) {
         const client = get_client();
         const resp = await client.post('/auth/create', data);
         console.log(resp);
-        storeAuthorization(resp.data);
-        window.location.href = "/verify"; // successfully created account, please verify
+        let auth = resp.data;
+        storeAuthorization(auth);
+        window.location.href = `/verify?id=${auth.user.uuid}`; // successfully created account, please verify
     } catch (err) {
         show_auth_error(err);
     }
@@ -57,11 +59,9 @@ async function auth_verify(data) {
     try {
         let code = data.code;
         const client = get_client();
-        if (!client.authed) {
-            toast_error('no token stored');
-            throw "client not authorized";
-        }
-        const resp = await client.post(`/auth/verify/${code}`);
+        let args = parseQuery(window.location.search);
+        // use anonymous verify
+        const resp = await client.post(`/auth/verify/${args.id}/${code}`);
         console.log(resp);
         window.location.href = "/user/dash"; // successful verify
     } catch (err) {

@@ -73,8 +73,17 @@ namespace Gatekeeper.Server {
 
             // set up database
             services.AddDbContext<AppDbContext>(options => {
-                options.UseSqlite(context.config.server.database);
-                // options.UseInMemoryDatabase("InMemoryDb");
+                switch (serverConfig.server.databaseBackend) {
+                    case SConfig.Server.DatabaseBackend.InMemory:
+                        options.UseInMemoryDatabase(context.config.server.databaseConnection);
+                        break;
+                    case SConfig.Server.DatabaseBackend.Sqlite:
+                        options.UseSqlite(context.config.server.databaseConnection);
+                        break;
+                    case SConfig.Server.DatabaseBackend.Postgres:
+                        options.UseNpgsql(context.config.server.databaseConnection);
+                        break;
+                }
                 if (context.config.logging.databaseLogging) {
                     options.EnableDetailedErrors();
                     options.EnableSensitiveDataLogging();

@@ -77,7 +77,7 @@ function wireLinking(user) {
 
     const config = args;
 
-    $("#link").on("submit", e => {
+    $("#accept").on("click", e => {
         // do the linking
         console.log('link requested');
         linkApplication(config);

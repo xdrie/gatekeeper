@@ -16,17 +16,23 @@ namespace Gatekeeper.Server.Config {
     public class SConfig : ServerConfiguration {
         public const string BRAND = "GaTE";
         public const string SERVER_NAME = "ALTiCU Gatekeeper.Server";
-        public const string VERSION = "0.1.3";
+        public const string VERSION = "0.2.0";
 
         public class Server {
-            public const string DEFAULT_DATABASE = "Data Source=database.db";
+            public const string DEFAULT_DATABASE = "Data Source=database.db"; // Default Sqlite database
 
             /// <summary>
             /// Database connection path.
-            /// Specify a file using "Data Source=database.db"
-            /// Specify in-memory transient using null
             /// </summary>
-            public string database = DEFAULT_DATABASE;
+            public string databaseConnection = DEFAULT_DATABASE;
+
+            public DatabaseBackend databaseBackend = DatabaseBackend.Sqlite;
+
+            public enum DatabaseBackend {
+                InMemory,
+                Sqlite,
+                Postgres
+            }
 
 #if DEBUG
             /// <summary>
@@ -71,6 +77,8 @@ namespace Gatekeeper.Server.Config {
 
         protected override void load(TomlTable tb) {
             var serverTable = tb.getField<TomlTable>(nameof(server));
+            serverTable.bindField(ref server.databaseConnection, nameof(Server.databaseConnection));
+            serverTable.bindField(ref server.databaseBackend, nameof(Server.databaseBackend));
 #if DEBUG
             serverTable.bindField(ref server.development, nameof(Server.development));
 #endif

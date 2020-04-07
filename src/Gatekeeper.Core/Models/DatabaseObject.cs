@@ -1,6 +1,7 @@
 #region
 
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using MsgPack.Serialization;
 using Newtonsoft.Json;
 
@@ -8,6 +9,10 @@ using Newtonsoft.Json;
 
 namespace Gatekeeper.Models {
     public class DatabaseObject {
-        [JsonIgnore] [MessagePackIgnore] [Key] public int dbid { get; set; }
+        [JsonIgnore]
+        [MessagePackIgnore]
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int id { get; set; }
     }
 }

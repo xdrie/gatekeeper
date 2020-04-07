@@ -73,7 +73,7 @@ namespace Gatekeeper.Server.Services.Users {
         public void deleteUser(int userId) {
             using (var db = serverContext.getDbContext()) {
                 // delete all associated tokens
-                var userTokens = db.tokens.Where(x => x.user.dbid == userId);
+                var userTokens = db.tokens.Where(x => x.user.id == userId);
                 db.tokens.RemoveRange(userTokens);
                 // delete user
                 var user = db.users.Find(userId);
@@ -91,7 +91,7 @@ namespace Gatekeeper.Server.Services.Users {
 
         public void updateGroupMembership(int userId, string groupName, Group.UpdateType updateType) {
             using (var db = serverContext.getDbContext()) {
-                var user = db.users.SingleOrDefault(x => x.dbid == userId);
+                var user = db.users.SingleOrDefault(x => x.id == userId);
                 switch (updateType) {
                     case Group.UpdateType.Add:
                         user.groups = user.groups.Concat(new[] {groupName}).ToArray();
@@ -120,7 +120,7 @@ namespace Gatekeeper.Server.Services.Users {
             updateUser(user);
             // revoke all other tokens
             using (var db = serverContext.getDbContext()) {
-                var otherTokens = db.tokens.Where(x => x.content != currentToken.content && x.user.dbid == user.dbid);
+                var otherTokens = db.tokens.Where(x => x.content != currentToken.content && x.user.id == user.id);
                 db.tokens.RemoveRange(otherTokens);
                 db.SaveChanges();
             }
@@ -146,7 +146,7 @@ namespace Gatekeeper.Server.Services.Users {
 
         private User loadPassword(User forUser) {
             using (var db = serverContext.getDbContext()) {
-                var user = db.users.First(x => x.dbid == forUser.dbid);
+                var user = db.users.First(x => x.id == forUser.id);
                 db.Entry(user).Reference(x => x.password).Load();
                 return user;
             }
@@ -154,7 +154,7 @@ namespace Gatekeeper.Server.Services.Users {
 
         public User loadGroups(User forUser) {
             using (var db = serverContext.getDbContext()) {
-                var user = db.users.First(x => x.dbid == forUser.dbid);
+                var user = db.users.First(x => x.id == forUser.id);
                 // disable, because we are currently using array-backed serialization
                 // db.Entry(user).Collection(x => x.groups).Load();
                 return user;
