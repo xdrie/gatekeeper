@@ -33,7 +33,7 @@ namespace Gatekeeper.Server.Services.Users {
             }
 
             public IEnumerable<Permission> aggregatePermissions() {
-                return groups.SelectMany(x => x.permissions);
+                return groups.SelectMany(x => x.permissions).Distinct();
             }
 
             public List<AccessRule> aggregateRules() {
