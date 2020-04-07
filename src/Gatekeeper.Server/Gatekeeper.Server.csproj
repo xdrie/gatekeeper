@@ -28,5 +28,7 @@
         <EmbeddedResource Include="..\..\media\boot.txt">
             <Link>Data\boot.txt</Link>
         </EmbeddedResource>
+
+        <None Include="wwwroot\*" />
     </ItemGroup>
 </Project>
