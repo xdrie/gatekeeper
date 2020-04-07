@@ -71,7 +71,7 @@ function storeAuthorization(data) {
     storeToken(token.content);
 }
 
-function get_client() {
+function get_client(reset = false) {
     let cfg = {
         baseURL: '/a',
         // timeout: 1000,
@@ -79,7 +79,7 @@ function get_client() {
     };
     // check if token is saved
     let token = loadToken();
-    if (token) {
+    if (token && !reset) {
         cfg.headers['Authorization'] = `Bearer ${token}`;
     }
     let client = axios.create(cfg);

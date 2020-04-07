@@ -10,6 +10,7 @@ function populateDash(user) {
     $('#profile-email').innerText = user.email;
     $('#profile-email').href = `mailto:${user.email}`;
     $('#profile-registered').innerText = new Date(user.registered).toLocaleDateString();
+    $('#profile-uuid').innerText = user.uuid;
 }
 
 $load(() => {

@@ -25,7 +25,7 @@ function show_auth_error(err) {
 
 async function auth_create(data) {
     try {
-        const client = get_client();
+        const client = get_client(true); // reset
         const resp = await client.post('/auth/create', data);
         console.log(resp);
         let auth = resp.data;
@@ -38,10 +38,11 @@ async function auth_create(data) {
 
 async function auth_login(data) {
     try {
-        const client = get_client();
+        const client = get_client(true); // reset
         const resp = await client.post('/auth/login', data);
         console.log(resp);
-        storeAuthorization(resp.data);
+        let auth = resp.data;
+        storeAuthorization(auth);
         // successful login
         // check if there was a continuation, otherwise send to dash
         let args = parseQuery(window.location.search);
