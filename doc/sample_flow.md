@@ -14,15 +14,39 @@ on the server side, a group called `Insiders` is defined.
 the `Insiders` group has access to the `/Food` layer, and the rule `FrenchFry.quota = 100`, entitling each member to that many monthly fries.
 there is also a group called `Friends`, which can also access the `/Food` layer, but has rule `FrenchFry.quota = 10`.
 
+the corresponding configuration is shown here:
+
+```toml
+
+[[apps]]
+name = "FrenchFry"
+layers = [ "/Food" ]
+secret = "yeet"
+
+[[groups]]
+name = "Friends"
+priority = 1
+permissions = [ "/Food" ]
+    [groups.rules]
+    FrenchFry.quota = 10
+
+[[groups]]
+name = "Insiders"
+priority = 10
+permissions = [ "/Food" ]
+    [groups.rules]
+    FrenchFry.quota = 100
+```
+
 ## login
 
 the user wants to get authorized to the fry order page.
-so they visit `https://frenchfry.local/login`, which redirects them to `https://auth.alt.icu/authorize/FrenchFry?cb=https://frenchfry.local/gate`.
-this will present a consent screen to the user, who will accept, and then they will be redirected to `https://frenchfry.local/gate?token=xxxx`.
+so they visit `https://frenchfry.local/login`, which redirects them to `https://auth.alt.icu/link?app=FrenchFry?cb=https://frenchfry.local/gate`.
+this will present a consent screen to the user, who will accept, and then they will be redirected to `POST https://frenchfry.local/gate` with the token in form data.
 
 ## frenchfry session
 
-when `FrenchFry` receives `GET /gate?token=xxxx`, it will then request user details from gatekeeper by using the remote api.
+when `FrenchFry` receives `POST /gate`, it will then request user details from gatekeeper by using the remote api.
 this user details object will contain basic identity information such as `username`, `name`, and `uuid`, and also a list of `rules`.
 internally, it will create a session with the identity and rules and then issue an apikey to the `FrenchFry` frontend.
 

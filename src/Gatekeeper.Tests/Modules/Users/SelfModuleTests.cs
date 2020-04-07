@@ -1,4 +1,3 @@
-using System.Net.Http;
 using System.Threading.Tasks;
 using Gatekeeper.Models.Identity;
 using Gatekeeper.Tests.Base;

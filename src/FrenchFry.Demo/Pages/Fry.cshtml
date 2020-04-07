@@ -1,0 +1,19 @@
+@page
+@{
+    ViewBag.Title = "Login";
+    Layout = "_ShowLayout";
+}
+
+<article>
+    <h1 class="t-centered">fry access</h1>
+    <p id="status">
+        here you may access fry
+    </p>
+    <p id="monthly"></p>
+    <a id="order" class="btn btn-primary">order</a>
+    <a id="logout" class="btn">logout</a>
+</article>
+
+@section Scripts {
+    <script type="text/javascript" asp-append-version="true" src="~/js/fry.js"></script>
+}
