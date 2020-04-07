@@ -5,6 +5,10 @@ using Hexagon.Models;
 using Hexagon.Services;
 
 namespace Degate.Services {
+    /// <summary>
+    /// authenticates bearer tokens corresponding to remote authentication sessions
+    /// </summary>
+    /// <typeparam name="TContext"></typeparam>
     public class BearerAuthenticator<TContext> : DependencyService<TContext>, IBearerAuthenticator
         where TContext : ServerContext, IDegateContext {
         public BearerAuthenticator(TContext context) : base(context) { }
@@ -13,7 +17,7 @@ namespace Degate.Services {
             serverContext.tickService.tick();
             // we only accept session tokens here.
             // match the token to an existing session
-            var auth = serverContext.sessionResolver.resolveSessionToken(token);
+            var auth = serverContext.authSessionResolver.resolveSessionToken(token);
             if (auth == null) return null;
 
             var claims = new[] {

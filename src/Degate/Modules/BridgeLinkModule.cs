@@ -31,16 +31,10 @@ namespace Degate.Modules {
                     return;
                 }
 
-                // - valid identity!
+                // - valid identity! - link the identity to a session
                 res.StatusCode = (int) HttpStatusCode.Accepted;
+                var sessionId = serverContext.authSessionResolver.issueSession(identity);
 
-                // get a session token
-                var sessionId = serverContext.sessionResolver.getSessionToken(identity.user.uuid);
-
-                // store identity in a session
-                var sess = serverContext.sessions.create(sessionId, TimeSpan.FromDays(1));
-                sess.jar.Register<RemoteAuthentication>(identity);
-                
                 updateRecord(identity);
 
                 // display the user's info
