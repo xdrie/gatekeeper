@@ -9,6 +9,7 @@ namespace Gatekeeper.Tests.Base {
     public abstract class UserDependentTests : ServerDependentTests, IAsyncLifetime {
         protected HttpClient client;
         protected AuthenticatedUser user;
+        protected Token token;
         protected string username => user.username;
         protected string userId => user.uuid;
 
@@ -20,7 +21,8 @@ namespace Gatekeeper.Tests.Base {
             var username = $"{AccountRegistrar.TEST_USERNAME}_{StringUtils.secureRandomString(8)}";
             var authedUser = await registrar.registerAccount(client, username);
             user = authedUser.user;
-            client.addBearerToken(authedUser.token); // store auth in client
+            token = authedUser.token;
+            client.addBearerToken(token); // store auth in client
         }
 
         public virtual Task DisposeAsync() {

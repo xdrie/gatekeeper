@@ -15,28 +15,18 @@ using Xunit;
 #endregion
 
 namespace Gatekeeper.Tests.Modules.Auth {
-    public class AuthModuleTests {
-        private readonly ServerTestFixture fx;
-
-        public AuthModuleTests(ServerTestFixture fixture) {
-            fx = fixture;
-        }
+    public class AuthModuleTests : UserDependentTests {
+        public AuthModuleTests(ServerTestFixture fx) : base(fx) { }
 
         [Fact]
         public async Task canRegisterAccount() {
-            
-            var username = AccountRegistrar.TEST_USERNAME + "_reg";
-            var authedUser = await new AccountRegistrar(fx.serverContext).registerAccount(client, username);
-            Assert.Equal(username, authedUser.user.username);
-            Assert.NotNull(authedUser.token.content);
-            Assert.Equal(authedUser.token.scope, AccessScope.ROOT_PATH);
+            Assert.Equal(username, user.username);
+            Assert.NotNull(token.content);
+            Assert.Equal(token.scope, AccessScope.ROOT_PATH);
         }
 
         [Fact]
         public async Task canLoginAccount() {
-            
-            var username = AccountRegistrar.TEST_USERNAME + "_login";
-            var authedUser = await new AccountRegistrar(fx.serverContext).registerAccount(client, username);
             // now attempt to log in
             var resp = await client.PostAsJsonAsync("/a/auth/login", new LoginRequest {
                 username = username,
@@ -51,9 +41,6 @@ namespace Gatekeeper.Tests.Modules.Auth {
 
         [Fact]
         public async Task canDeleteAccount() {
-            
-            var username = AccountRegistrar.TEST_USERNAME + "_delete";
-            var authedUser = await new AccountRegistrar(fx.serverContext).registerAccount(client, username);
             var resp = await client.PostAsJsonAsync("/a/auth/delete", new LoginRequest {
                 username = username,
                 password = AccountRegistrar.TEST_PASSWORD
