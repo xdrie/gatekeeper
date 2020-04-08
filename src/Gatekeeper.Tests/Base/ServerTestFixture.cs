@@ -78,7 +78,7 @@ namespace Gatekeeper.Tests.Base {
 
             private SConfig createTestConfig() {
                 var testConfig = new SConfig();
-                
+
                 // - apps
                 testConfig.apps.Add(new RemoteApp {
                     name = "Hotels",
@@ -90,7 +90,7 @@ namespace Gatekeeper.Tests.Base {
                     layers = new List<string> {"/Food"},
                     secret = Constants.Apps.APP_SECRET
                 });
-                
+
                 // - groups
                 testConfig.groups.Add(new Group {
                     name = "Luxurious",
@@ -105,7 +105,7 @@ namespace Gatekeeper.Tests.Base {
                     }
                 });
 
-                testConfig.users.defaultGroups = new List<string> { "Friends" };
+                testConfig.users.defaultGroups = new List<string> {"Friends"};
 
                 return testConfig;
             }
