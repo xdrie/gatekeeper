@@ -9,7 +9,7 @@ using Gatekeeper.Tests.Utilities;
 using Xunit;
 
 namespace Gatekeeper.Tests.Modules.Manager {
-    [Collection(UserTestCollection.KEY)]
+    
     public class GroupManagementTests {
         private readonly UserTestFixture fx;
 
@@ -18,7 +18,7 @@ namespace Gatekeeper.Tests.Modules.Manager {
         }
 
         public async Task<HttpClient> registerAdminAccount(string username) {
-            var client = fx.getClient();
+            
             var authedUser =
                 await new AccountRegistrar(fx.serverContext).registerAccount(client, username, verify: true);
             client.addToken(authedUser.token);

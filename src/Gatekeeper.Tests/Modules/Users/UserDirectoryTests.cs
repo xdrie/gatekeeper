@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 using Xunit;
 
 namespace Gatekeeper.Tests.Modules.Users {
-    [Collection(UserTestCollection.KEY)]
+    
     public class UserDirectoryTests {
         private readonly UserTestFixture fx;
 

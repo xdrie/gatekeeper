@@ -12,7 +12,6 @@ using Newtonsoft.Json;
 using Xunit;
 
 namespace Gatekeeper.Tests.Modules.Auth {
-    [Collection(ServerTestCollection.KEY)]
     public class TwoFactorAuthTests {
         private readonly ServerTestFixture fx;
 
@@ -21,9 +20,9 @@ namespace Gatekeeper.Tests.Modules.Auth {
         }
 
         public async Task<(HttpClient, TotpSetupResponse)> registerAndStartTotpSetup(string username) {
-            var client = fx.getClient();
+            
             var authedUser = await new AccountRegistrar(fx.serverContext).registerAccount(client, username, verify: true);
-            client.addToken(authedUser.token);
+            client.addBearerToken(authedUser.token);
 
             var resp = await client.GetAsync("/a/auth/setup2fa");
             resp.EnsureSuccessStatusCode();

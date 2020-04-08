@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 using Xunit;
 
 namespace Gatekeeper.Tests.Modules.Provider {
-    [Collection(UserTestCollection.KEY)]
+    
     public class RemoteAuthTests {
         private readonly UserTestFixture fx;
 

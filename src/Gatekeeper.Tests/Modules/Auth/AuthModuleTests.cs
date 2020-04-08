@@ -15,7 +15,6 @@ using Xunit;
 #endregion
 
 namespace Gatekeeper.Tests.Modules.Auth {
-    [Collection(ServerTestCollection.KEY)]
     public class AuthModuleTests {
         private readonly ServerTestFixture fx;
 
@@ -25,7 +24,7 @@ namespace Gatekeeper.Tests.Modules.Auth {
 
         [Fact]
         public async Task canRegisterAccount() {
-            var client = fx.getClient();
+            
             var username = AccountRegistrar.TEST_USERNAME + "_reg";
             var authedUser = await new AccountRegistrar(fx.serverContext).registerAccount(client, username);
             Assert.Equal(username, authedUser.user.username);
@@ -35,7 +34,7 @@ namespace Gatekeeper.Tests.Modules.Auth {
 
         [Fact]
         public async Task canLoginAccount() {
-            var client = fx.getClient();
+            
             var username = AccountRegistrar.TEST_USERNAME + "_login";
             var authedUser = await new AccountRegistrar(fx.serverContext).registerAccount(client, username);
             // now attempt to log in
@@ -51,21 +50,8 @@ namespace Gatekeeper.Tests.Modules.Auth {
         }
 
         [Fact]
-        public async Task canVerifyAccount() {
-            var client = fx.getClient();
-            var username = AccountRegistrar.TEST_USERNAME + "_verify";
-            var authedUser = await new AccountRegistrar(fx.serverContext).registerAccount(client, username);
-            client.addToken(authedUser.token);
-            // fetch the verification code manually
-            var verificationCode = fx.serverContext.userManager.findByUsername(username).verification;
-            // now attempt to log in
-            var resp = await client.PostAsync($"/a/auth/verify/{verificationCode}", null);
-            resp.EnsureSuccessStatusCode();
-        }
-
-        [Fact]
         public async Task canDeleteAccount() {
-            var client = fx.getClient();
+            
             var username = AccountRegistrar.TEST_USERNAME + "_delete";
             var authedUser = await new AccountRegistrar(fx.serverContext).registerAccount(client, username);
             var resp = await client.PostAsJsonAsync("/a/auth/delete", new LoginRequest {
