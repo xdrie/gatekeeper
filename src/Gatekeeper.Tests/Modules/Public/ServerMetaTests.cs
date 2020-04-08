@@ -7,17 +7,11 @@ using Newtonsoft.Json;
 using Xunit;
 
 namespace Gatekeeper.Tests.Modules.Public {
-    public class ServerMetaTests {
-        private readonly ServerTestFixture fx;
-
-        public ServerMetaTests(ServerTestFixture fixture) {
-            fx = fixture;
-        }
+    public class ServerMetaTests : ServerDependentTests {
+        public ServerMetaTests(ServerTestFixture fixture) : base(fixture) { }
 
         [Fact]
         public async Task canGetServerMetadata() {
-            
-            
             // check meta page
             var resp = await client.GetAsync($"/a/meta");
             resp.EnsureSuccessStatusCode();
