@@ -105,6 +105,12 @@ namespace Gatekeeper.Server.Modules.Auth {
             Post<LoginTwoFactor>("/login2fa", async (req, res) => {
                 var login = await validateAndCheckPassword<LoginRequestTwoFactor>(req, res);
                 if (login.isValid) {
+                    // this route is not to be used unless two factor is enabled
+                    if (!login.user.totpEnabled) {
+                        res.StatusCode = (int) HttpStatusCode.PreconditionFailed;
+                        return;
+                    }
+                    
                     // use TOTP provider to check code
                     var provider = new TotpProvider(login.user.totp);
                     if (!provider.verify(login.request.otpcode)) {

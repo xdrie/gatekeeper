@@ -13,17 +13,18 @@ using Xunit;
 
 namespace Gatekeeper.Tests.Modules.Auth {
     public class TwoFactorAuthTests : UserDependentTests {
+        private TotpSetupResponse totpSetup;
         public TwoFactorAuthTests(ServerTestFixture fx) : base(fx) { }
 
-        public async Task<TotpSetupResponse> registerAndStartTotpSetup() {
+        public override async Task InitializeAsync() {
+            await base.InitializeAsync();
             var resp = await client.GetAsync("/a/auth/setup2fa");
             resp.EnsureSuccessStatusCode();
-            var data = JsonConvert.DeserializeObject<TotpSetupResponse>(await resp.Content.ReadAsStringAsync());
-            return data;
+            totpSetup = JsonConvert.DeserializeObject<TotpSetupResponse>(await resp.Content.ReadAsStringAsync());
         }
 
-        private async Task confirmTotpSetup(string b64Secret) {
-            var totpProvider = new TotpProvider(Convert.FromBase64String(b64Secret));
+        private async Task confirmTotpSetup() {
+            var totpProvider = new TotpProvider(Convert.FromBase64String(totpSetup.secret));
 
             var resp = await client.PostAsJsonAsync("/a/auth/confirm2fa", new TwoFactorConfirmRequest {
                 otpcode = totpProvider.getCode()
@@ -33,20 +34,19 @@ namespace Gatekeeper.Tests.Modules.Auth {
 
         [Fact]
         public async Task canGetTwoFactorSetupSecret() {
-            var totpSetup = await registerAndStartTotpSetup();
             Assert.True(Convert.FromBase64String(totpSetup.secret).Length == TotpProvider.TOTP_SECRET_LENGTH);
         }
 
         [Fact]
         public async Task canConfirmTwoFactor() {
-            var totpSetup = await registerAndStartTotpSetup();
+            await confirmTotpSetup();
             // check the server context
             Assert.True(fx.serverContext.userManager.findByUsername(username).totpEnabled);
         }
 
         [Fact]
         public async Task requiresOtpCodeWhenTwoFactorEnabled() {
-            var totpSetup = await registerAndStartTotpSetup();
+            await confirmTotpSetup();
             // attempt a login, which should fail with FailedDependency (requires OTP)
             var resp = await client.PostAsJsonAsync("/a/auth/login", new LoginRequest {
                 username = username,
@@ -57,7 +57,7 @@ namespace Gatekeeper.Tests.Modules.Auth {
 
         [Fact]
         public async Task canLoginTwoFactor() {
-            var totpSetup = await registerAndStartTotpSetup();
+            await confirmTotpSetup();
             var totpProvider = new TotpProvider(Convert.FromBase64String(totpSetup.secret));
             // attempt a 2fa login
             var resp = await client.PostAsJsonAsync("/a/auth/login2fa", new LoginRequestTwoFactor {

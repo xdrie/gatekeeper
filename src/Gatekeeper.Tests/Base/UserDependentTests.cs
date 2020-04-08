@@ -23,6 +23,10 @@ namespace Gatekeeper.Tests.Base {
             user = authedUser.user;
             token = authedUser.token;
             client.addBearerToken(token); // store auth in client
+            // verify user
+            var findUser = fx.serverContext.userManager.findByUsername(username);
+            findUser.role = User.Role.User;
+            fx.serverContext.userManager.updateUser(findUser);
         }
 
         public virtual Task DisposeAsync() {
