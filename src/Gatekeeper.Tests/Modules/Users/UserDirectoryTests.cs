@@ -6,23 +6,16 @@ using Newtonsoft.Json;
 using Xunit;
 
 namespace Gatekeeper.Tests.Modules.Users {
-    [Collection(UserTestCollection.KEY)]
-    public class UserDirectoryTests {
-        private readonly UserTestFixture fx;
-
-        public UserDirectoryTests(UserTestFixture fixture) {
-            fx = fixture;
-        }
+    public class UserDirectoryTests : UserDependentTests {
+        public UserDirectoryTests(ServerTestFixture fx) : base(fx) { }
 
         [Fact]
         public async Task canFetchMeFromDirectory() {
-            var client = await fx.getAuthedClient();
-
             // check me page
-            var resp = await client.GetAsync($"/a/u/{fx.username}");
+            var resp = await client.GetAsync($"/a/u/{username}");
             resp.EnsureSuccessStatusCode();
             var data = JsonConvert.DeserializeObject<PublicUser>(await resp.Content.ReadAsStringAsync());
-            Assert.Equal(fx.username, data.username);
+            Assert.Equal(username, data.username);
         }
     }
 }

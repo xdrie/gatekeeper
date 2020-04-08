@@ -19,28 +19,22 @@ namespace Degate.Modules {
 
                 // - import the token
 
-                if (!serverContext.gateAuthClient.validate(gateReq)) {
+                if (!serverContext.remoteAuthClient.validate(gateReq)) {
                     res.StatusCode = (int) HttpStatusCode.UnprocessableEntity; // invalid
                     return;
                 }
 
                 // now, import the identity
-                var identity = await serverContext.gateAuthClient.getRemoteIdentity(gateReq);
+                var identity = await serverContext.remoteAuthClient.getRemoteIdentity(gateReq);
                 if (identity == null) {
                     res.StatusCode = (int) HttpStatusCode.Unauthorized;
                     return;
                 }
 
-                // - valid identity!
+                // - valid identity! - link the identity to a session
                 res.StatusCode = (int) HttpStatusCode.Accepted;
+                var sessionId = serverContext.authSessionResolver.issueSession(identity);
 
-                // get a session token
-                var sessionId = serverContext.sessionResolver.getSessionToken(identity.user.uuid);
-
-                // store identity in a session
-                var sess = serverContext.sessions.create(sessionId, TimeSpan.FromDays(1));
-                sess.jar.Register<RemoteAuthentication>(identity);
-                
                 updateRecord(identity);
 
                 // display the user's info

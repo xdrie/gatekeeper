@@ -5,8 +5,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\lib\Hexagon\src\Hexagon\Hexagon.csproj"/>
-        <ProjectReference Include="..\Gatekeeper.Core\Gatekeeper.Core.csproj"/>
+        <ProjectReference Include="..\..\lib\Hexagon\src\Hexagon\Hexagon.csproj" />
+        <ProjectReference Include="..\Gatekeeper.Core\Gatekeeper.Core.csproj" />
     </ItemGroup>
 
 </Project>
