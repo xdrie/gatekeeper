@@ -6,8 +6,8 @@ using Gatekeeper.Server.Config;
 using Gatekeeper.Server.OpenApi.Auth;
 using Gatekeeper.Server.Services.Auth;
 using Hexagon.Serialization;
-using Hexagon.Utilities;
 using Hexagon.Web;
+using Iri.Glass.Utilities;
 
 namespace Gatekeeper.Server.Modules.Auth {
     public class TwoFactorSetupModule : AuthenticatedUserModule {

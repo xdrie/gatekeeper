@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Gatekeeper.Models.Identity;
 using Gatekeeper.Server.Config;
-using Hexagon.Logging;
 using Hexagon.Models;
-using Hexagon.Utilities;
+using Iri.Glass.Utilities;
 
 namespace Gatekeeper.Server.Services.Auth {
     public class TokenAuthenticationService : DependencyService<SContext> {

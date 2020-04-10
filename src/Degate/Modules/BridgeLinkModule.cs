@@ -1,4 +1,3 @@
-using System;
 using System.Net;
 using Carter.ModelBinding;
 using Degate.Config;
@@ -7,7 +6,6 @@ using Gatekeeper.Remote;
 using Hexagon;
 using Hexagon.Modules;
 using Hexagon.Serialization;
-using Hexagon.Utilities;
 
 namespace Degate.Modules {
     public abstract class BridgeLinkModule<TContext> : ApiModule<TContext>

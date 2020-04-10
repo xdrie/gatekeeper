@@ -1,6 +1,5 @@
 using System;
 using System.Net;
-using Carter.Response;
 using Degate.Modules;
 using Degate.Utilities;
 using FrenchFry.Demo.Config;

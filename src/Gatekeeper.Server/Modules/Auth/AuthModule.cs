@@ -7,10 +7,10 @@ using Gatekeeper.Server.Config;
 using Gatekeeper.Server.OpenApi.Auth;
 using Gatekeeper.Server.Services.Auth;
 using Gatekeeper.Server.Services.Users;
-using Hexagon.Logging;
 using Hexagon.Modules;
 using Hexagon.Serialization;
 using Hexagon.Web;
+using Iri.Glass.Logging;
 using Microsoft.AspNetCore.Http;
 
 namespace Gatekeeper.Server.Modules.Auth {
@@ -64,7 +64,7 @@ namespace Gatekeeper.Server.Modules.Auth {
                     // register the user
                     var user = serverContext.userManager.registerUser(createReq);
                     serverContext.log.writeLine($"registered user {user.username}",
-                        SLogger.LogLevel.Information);
+                        Logger.Verbosity.Information);
                     var token = serverContext.userManager.issueRootToken(user.id);
 
                     // Return user details
