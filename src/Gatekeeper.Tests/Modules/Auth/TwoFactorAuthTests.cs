@@ -6,7 +6,6 @@ using Gatekeeper.Models.Requests;
 using Gatekeeper.Models.Responses;
 using Gatekeeper.Server.Services.Auth;
 using Gatekeeper.Tests.Base;
-using Gatekeeper.Tests.Meta;
 using Gatekeeper.Tests.Utilities;
 using Newtonsoft.Json;
 using Xunit;

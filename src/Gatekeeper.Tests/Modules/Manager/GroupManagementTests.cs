@@ -1,10 +1,8 @@
 using System.Linq;
-using System.Net.Http;
 using System.Threading.Tasks;
 using Gatekeeper.Models.Identity;
 using Gatekeeper.Models.Requests;
 using Gatekeeper.Tests.Base;
-using Gatekeeper.Tests.Meta;
 using Gatekeeper.Tests.Utilities;
 using Xunit;
 

@@ -3,8 +3,8 @@ using Gatekeeper.Server.Models;
 using Gatekeeper.Server.Services.Auth;
 using Gatekeeper.Server.Services.Users;
 using Hexagon;
-using Hexagon.Logging;
 using Hexagon.Services;
+using Iri.Glass.Logging;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Gatekeeper.Server.Config {
@@ -20,7 +20,7 @@ namespace Gatekeeper.Server.Config {
 
         public SContext(IServiceCollection services, SConfig config) : base(services) {
             this.config = config;
-            log.verbosity = config.logging.logLevel;
+            log.verbosity = config.logging.Verbosity;
             userManager = new UserManagerService(this);
             tokenResolver = new TokenAuthenticationService(this);
             authenticator = new BearerAuthenticator(this);
@@ -32,7 +32,7 @@ namespace Gatekeeper.Server.Config {
             tickService.schedule(() => {
                 var prunedTokens = tokenResolver.pruneExpiredTokens();
                 log.writeLine($"pruned {prunedTokens} expired tokens.",
-                    SLogger.LogLevel.Information);
+                    Logger.Verbosity.Information);
             }, TimeSpan.FromHours(8));
         }
 

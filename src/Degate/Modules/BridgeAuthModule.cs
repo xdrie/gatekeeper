@@ -5,7 +5,6 @@ using Gatekeeper.Models.Identity;
 using Hexagon;
 using Hexagon.Modules;
 using Hexagon.Security;
-using Hexagon.Serialization;
 using Hexagon.Services;
 
 namespace Degate.Modules {

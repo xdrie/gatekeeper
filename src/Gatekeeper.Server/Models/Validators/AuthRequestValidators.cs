@@ -2,7 +2,7 @@ using FluentValidation;
 using Gatekeeper.Models.Access;
 using Gatekeeper.Models.Identity;
 using Gatekeeper.Models.Requests;
-using Hexagon.Utilities;
+using Iri.Glass.Utilities;
 
 namespace Gatekeeper.Server.Models.Validators {
     public static class AuthRequestValidators {

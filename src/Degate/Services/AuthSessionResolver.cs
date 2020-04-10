@@ -2,7 +2,7 @@ using System;
 using Gatekeeper.Models.Identity;
 using Hexagon;
 using Hexagon.Models;
-using Hexagon.Utilities;
+using Iri.Glass.Utilities;
 
 namespace Degate.Services {
     /// <summary>

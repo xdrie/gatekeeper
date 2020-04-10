@@ -2,7 +2,6 @@ using System.Threading.Tasks;
 using Gatekeeper.Models.Meta;
 using Gatekeeper.Server.Config;
 using Gatekeeper.Tests.Base;
-using Gatekeeper.Tests.Meta;
 using Newtonsoft.Json;
 using Xunit;
 

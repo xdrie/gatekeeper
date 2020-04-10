@@ -51,7 +51,7 @@ namespace Gatekeeper.Tests.Base {
                     // serverContext = sp.GetService<SContext>();
                     //
                     // // set server context options
-                    // serverContext.log.verbosity = SLogger.LogLevel.Trace;
+                    // serverContext.log.verbosity = Logger.Verbosity.Trace;
 
                     // Create a scope to obtain a reference to the database
                     // context (ApplicationDbContext).

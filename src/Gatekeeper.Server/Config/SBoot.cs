@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using Hexagon.Logging;
+using Iri.Glass.Logging;
 using Microsoft.AspNetCore.Hosting;
 
 #if !DEBUG
@@ -17,7 +17,7 @@ namespace Gatekeeper.Server.Config {
             var bootBannerRes = Assembly.GetExecutingAssembly().GetManifestResourceStream(BOOT_BANNER);
             using (var sr = new StreamReader(bootBannerRes)) {
                 context.log.writeLine($"\n{sr.ReadToEnd()}\nv{SConfig.VERSION} instance '{SConfig.SERVER_NAME}'",
-                    SLogger.LogLevel.Information);
+                    Logger.Verbosity.Information);
             }
 
 #if DEBUG
@@ -41,7 +41,7 @@ namespace Gatekeeper.Server.Config {
             var configuredAppNames = string.Join(", ", context.config.apps.Select(x => x.name));
             context.log.writeLine(
                 $"available remote application configurations[{context.config.apps.Count}]: remote applications are configured: [{configuredAppNames}]",
-                SLogger.LogLevel.Information);
+                Logger.Verbosity.Information);
         }
     }
 }

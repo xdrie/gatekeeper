@@ -5,18 +5,18 @@ using System.Collections.Generic;
 using System.Linq;
 using Gatekeeper.Models.Access;
 using Gatekeeper.Models.Remote;
-using Hexagon.Config;
-using Hexagon.Logging;
-using Hexagon.Utilities;
+using Iri.Glass.Config;
+using Iri.Glass.Logging;
+using Iri.Glass.Utilities;
 using Tomlyn.Model;
 
 #endregion
 
 namespace Gatekeeper.Server.Config {
-    public class SConfig : ServerConfiguration {
+    public class SConfig : TomlConfig {
         public const string BRAND = "GaTE";
         public const string SERVER_NAME = "ALTiCU Gatekeeper.Server";
-        public const string VERSION = "0.2.3";
+        public const string VERSION = "0.2.4";
 
         public class Server {
             public const string DEFAULT_DATABASE = "Data Source=database.db"; // Default Sqlite database
@@ -58,7 +58,7 @@ namespace Gatekeeper.Server.Config {
             /// <summary>
             /// The verbosity of the application logger
             /// </summary>
-            public SLogger.LogLevel logLevel = SLogger.LogLevel.Information;
+            public Logger.Verbosity Verbosity = Logger.Verbosity.Information;
 
             /// <summary>
             /// Whether to enable ASP.NET Core verbose logging
@@ -126,7 +126,7 @@ namespace Gatekeeper.Server.Config {
             usersTable.bindField(ref users.defaultGroups, nameof(users.defaultGroups));
 
             var loggingTable = tb.getField<TomlTable>(nameof(logging));
-            loggingTable.bindField(ref logging.logLevel, nameof(logging.logLevel));
+            loggingTable.bindField(ref logging.Verbosity, nameof(logging.Verbosity));
             loggingTable.bindField(ref logging.aspnetVerboseLogging, nameof(logging.aspnetVerboseLogging));
             loggingTable.bindField(ref logging.databaseLogging, nameof(logging.databaseLogging));
         }
