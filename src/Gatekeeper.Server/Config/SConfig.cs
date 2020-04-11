@@ -40,6 +40,8 @@ namespace Gatekeeper.Server.Config {
             /// </summary>
             public bool development = true;
 #endif
+
+            public List<string> cors = new List<string>();
         }
 
         public Server server = new Server();
@@ -77,11 +79,7 @@ namespace Gatekeeper.Server.Config {
 
         protected override void load(TomlTable tb) {
             var serverTable = tb.getField<TomlTable>(nameof(server));
-            serverTable.bindField(ref server.databaseConnection, nameof(Server.databaseConnection));
-            serverTable.bindField(ref server.databaseBackend, nameof(Server.databaseBackend));
-#if DEBUG
-            serverTable.bindField(ref server.development, nameof(Server.development));
-#endif
+            serverTable.autoBind(server);
 
             var appsTables = tb.getField<TomlTableArray>(nameof(apps));
             foreach (var appTable in appsTables) {
@@ -123,12 +121,10 @@ namespace Gatekeeper.Server.Config {
             }
 
             var usersTable = tb.getField<TomlTable>(nameof(users));
-            usersTable.bindField(ref users.defaultGroups, nameof(users.defaultGroups));
+            usersTable.autoBind(users);
 
             var loggingTable = tb.getField<TomlTable>(nameof(logging));
-            loggingTable.bindField(ref logging.Verbosity, nameof(logging.Verbosity));
-            loggingTable.bindField(ref logging.aspnetVerboseLogging, nameof(logging.aspnetVerboseLogging));
-            loggingTable.bindField(ref logging.databaseLogging, nameof(logging.databaseLogging));
+            loggingTable.autoBind(logging);
         }
 
         #endregion
