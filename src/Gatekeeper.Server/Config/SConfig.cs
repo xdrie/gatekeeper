@@ -78,7 +78,7 @@ namespace Gatekeeper.Server.Config {
         #region Configuration Loading
 
         protected override void load(TomlTable tb) {
-            var serverTable = tb.getField<TomlTable>(nameof(server));
+            var serverTable = tb.getTable(nameof(server));
             serverTable.autoBind(server);
 
             var appsTables = tb.getField<TomlTableArray>(nameof(apps));
@@ -120,10 +120,10 @@ namespace Gatekeeper.Server.Config {
                 groups.Add(loadedGroup);
             }
 
-            var usersTable = tb.getField<TomlTable>(nameof(users));
+            var usersTable = tb.getTable(nameof(users));
             usersTable.autoBind(users);
 
-            var loggingTable = tb.getField<TomlTable>(nameof(logging));
+            var loggingTable = tb.getTable(nameof(logging));
             loggingTable.autoBind(logging);
         }
 
