@@ -6,7 +6,7 @@ using Gatekeeper.Server.OpenApi.Auth;
 using Hexagon.Modules;
 
 namespace Gatekeeper.Server.Modules.Auth {
-    public class VerifyModule : ApiModule<SContext> {
+    public class VerifyModule : GateApiModule {
         public VerifyModule(SContext serverContext) : base("/auth", serverContext) {
             Post<VerifyUser>("/verify/{uuid}/{code}", async (req, res) => {
                 // make sure user exists

@@ -7,7 +7,7 @@ using Hexagon.Modules;
 using Hexagon.Serialization;
 
 namespace Gatekeeper.Server.Modules.Users {
-    public class UserDirectoryModule : ApiModule<SContext> {
+    public class UserDirectoryModule : GateApiModule {
         public UserDirectoryModule(SContext serverContext) : base("/u", serverContext) {
             Get<GetPublicUser>("/{username}", async (req, res) => {
                 var user = serverContext.userManager.findByUsername(req.RouteValues.As<string>("username"));

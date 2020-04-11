@@ -14,7 +14,7 @@ using Iri.Glass.Logging;
 using Microsoft.AspNetCore.Http;
 
 namespace Gatekeeper.Server.Modules.Auth {
-    public class AuthModule : ApiModule<SContext> {
+    public class AuthModule : GateApiModule {
         public class ValidatedLogin<TLoginRequest> : ValidatedRequest<TLoginRequest>
             where TLoginRequest : LoginRequest {
             public User user;

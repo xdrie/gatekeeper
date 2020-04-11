@@ -8,7 +8,7 @@ using Hexagon.Security;
 using Hexagon.Services;
 
 namespace Gatekeeper.Server.Modules {
-    public abstract class AuthenticatedModule : ApiModule<SContext> {
+    public abstract class AuthenticatedModule : GateApiModule {
         public User currentUser { get; private set; }
         public Credential credential { get; private set; }
 
