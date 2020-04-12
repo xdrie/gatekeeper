@@ -6,8 +6,8 @@ using Gatekeeper.Models.Identity;
 using Gatekeeper.Models.Requests;
 using Gatekeeper.Server.Config;
 using Gatekeeper.Server.Services.Auth;
+using Gatekeeper.Utils;
 using Hexagon.Models;
-using Iri.Glass.Utilities;
 
 namespace Gatekeeper.Server.Services.Users {
     public class UserManagerService : DependencyService<SContext> {

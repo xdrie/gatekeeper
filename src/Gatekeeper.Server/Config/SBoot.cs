@@ -2,8 +2,8 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using Iri.Glass.Logging;
 using Microsoft.AspNetCore.Hosting;
+using Serilog;
 
 #if !DEBUG
 using Microsoft.Extensions.Hosting;
@@ -16,32 +16,27 @@ namespace Gatekeeper.Server.Config {
         public static void display(SContext context, IWebHostEnvironment env) {
             var bootBannerRes = Assembly.GetExecutingAssembly().GetManifestResourceStream(BOOT_BANNER);
             using (var sr = new StreamReader(bootBannerRes)) {
-                context.log.writeLine($"\n{sr.ReadToEnd()}\nv{SConfig.VERSION} instance '{SConfig.SERVER_NAME}'",
-                    Logger.Verbosity.Information);
+                Console.WriteLine(sr.ReadToEnd());
+                Log.Information("v{Version} instance '{ServerName}'", SConfig.VERSION, SConfig.SERVER_NAME);
             }
 
 #if DEBUG
             // print debug banner (always)
-            context.log.writeLine(
-                $"this is a DEBUG build of {nameof(Server)}. this build should NEVER be used in production.",
-                ConsoleColor.Red);
+            Log.Warning("THIS IS A DEBUG BUILD OF {ServerName}. DO NOT USE IN PROD.", nameof(Server));
             if (context.config.server.development) {
-                context.log.writeLine(
-                    $"development/test mode is enabled. default values and fake external services will be used.",
-                    ConsoleColor.Red);
+                Log.Warning("Dev/Test mode is enabled. Default values and fake external services will be used.");
             }
 #else
                 if (!env.IsProduction()) {
-                    context.log.writeLine(
-                        $"this is a release build of {nameof(Gatekeeper.Server)}, but is not being run in Production (it is being run in '{env.EnvironmentName}')",
-                        ConsoleColor.Red);
+                    Log.Error("This is a release build of {ServerName}, but is not being run in Prod (being run in '{EnvName}')",
+                        nameof(GateKeeper.server), env.EnvironmentName);
                 }
 #endif
 
             var configuredAppNames = string.Join(", ", context.config.apps.Select(x => x.name));
-            context.log.writeLine(
-                $"available remote application configurations[{context.config.apps.Count}]: remote applications are configured: [{configuredAppNames}]",
-                Logger.Verbosity.Information);
+            Log.Information(
+                "Availible remote application configurations[{configCount}]: remote apps are configured: [{configNames}]",
+                context.config.apps.Count, configuredAppNames);
         }
     }
 }

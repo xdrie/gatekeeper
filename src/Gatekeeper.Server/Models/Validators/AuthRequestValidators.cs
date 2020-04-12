@@ -2,7 +2,6 @@ using FluentValidation;
 using Gatekeeper.Models.Access;
 using Gatekeeper.Models.Identity;
 using Gatekeeper.Models.Requests;
-using Iri.Glass.Utilities;
 
 namespace Gatekeeper.Server.Models.Validators {
     public static class AuthRequestValidators {
@@ -10,7 +9,7 @@ namespace Gatekeeper.Server.Models.Validators {
             public const string NOT_ROBOT_PROMISE = "I am not a robot";
 
             public RegisterRequestValidator() {
-                RuleFor(x => x.username).NotEmpty().Length(4, 32).Matches(StringValidator.identifierRegex);
+                RuleFor(x => x.username).NotEmpty().Length(4, 32);
                 RuleFor(x => x.name).NotEmpty().MaximumLength(32);
                 RuleFor(x => x.email).NotEmpty().EmailAddress();
                 RuleFor(x => x.password).NotEmpty().MinimumLength(8);
