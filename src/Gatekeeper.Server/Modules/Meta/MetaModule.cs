@@ -10,7 +10,10 @@ namespace Gatekeeper.Server.Modules.Meta {
             Get<GetMeta>("/", async (req, res) => {
                 await res.respondSerialized(new ServerMetadata {
                     name = SConfig.SERVER_NAME,
-                    version = SConfig.VERSION
+                    version = SConfig.VERSION,
+#if DEBUG
+                    development = serverContext.config.server.development
+#endif
                 });
             });
         }
