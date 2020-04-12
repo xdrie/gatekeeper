@@ -1,6 +1,3 @@
 [submodule "lib/Hexagon"]
 	path = lib/Hexagon
 	url = https://git.alt.icu/alticu/Hexagon.git
-[submodule "lib/Iri.Glass"]
-	path = lib/Iri.Glass
-	url = https://git.alt.icu/alticu/Iri.Glass.git

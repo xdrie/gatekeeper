@@ -5,15 +5,11 @@ using System.Collections.Generic;
 using System.Linq;
 using Gatekeeper.Models.Access;
 using Gatekeeper.Models.Remote;
-using Iri.Glass.Config;
-using Iri.Glass.Logging;
-using Iri.Glass.Utilities;
-using Tomlyn.Model;
 
 #endregion
 
 namespace Gatekeeper.Server.Config {
-    public class SConfig : TomlConfig {
+    public class SConfig {
         public const string BRAND = "GaTE";
         public const string SERVER_NAME = "ALTiCU Gatekeeper.Server";
         public const string VERSION = "0.2.4";
@@ -58,11 +54,6 @@ namespace Gatekeeper.Server.Config {
 
         public class Logging {
             /// <summary>
-            /// The verbosity of the application logger
-            /// </summary>
-            public Logger.Verbosity Verbosity = Logger.Verbosity.Information;
-
-            /// <summary>
             /// Whether to enable ASP.NET Core verbose logging
             /// </summary>
             public bool aspnetVerboseLogging = true;
@@ -74,62 +65,5 @@ namespace Gatekeeper.Server.Config {
         }
 
         public Logging logging = new Logging();
-
-        #region Configuration Loading
-
-        protected override void load(TomlTable tb) {
-            var serverTable = tb.getTable(nameof(server));
-            serverTable.autoBind(server);
-
-            var appsTables = tb.getTableArray(nameof(apps));
-            foreach (var appTable in appsTables) {
-                var cfgApp = new RemoteApp();
-                appTable.autoBind(cfgApp);
-                // validate app
-                if (!StringValidator.isIdentifier(cfgApp.name)) {
-                    throw new ConfigurationException(nameof(cfgApp.name), $"app name '{cfgApp.name}' is not valid");
-                }
-
-                if (string.IsNullOrEmpty(cfgApp.secret)) {
-                    throw new ConfigurationException(nameof(cfgApp.secret), "app secret cannot be empty");
-                }
-
-                apps.Add(cfgApp);
-            }
-
-            var groupsTables = tb.getTableArray(nameof(groups));
-            foreach (var groupTable in groupsTables) {
-                var cfgGroup = new Group();
-                groupTable.autoBind(cfgGroup);
-                // validate group
-                if (!StringValidator.isIdentifier(cfgGroup.name)) {
-                    throw new ConfigurationException(nameof(cfgGroup.name),
-                        $"group name '{cfgGroup.name}' is not a valid identifier.");
-                }
-
-                // load permissions and rules
-                cfgGroup.permissions = groupTable.getTableArray(nameof(Group.permissions))
-                    .Select(x => new Permission(x.ToString()))
-                    .ToList();
-                var groupRules = groupTable.getTable(nameof(Group.rules));
-                foreach (var appRulesTablePair in groupRules) {
-                    var ruleApp = appRulesTablePair.Key;
-                    var rulesTable = (TomlTable) appRulesTablePair.Value;
-                    foreach (var appRule in rulesTable) {
-                        cfgGroup.rules.Add(new AccessRule(ruleApp, appRule.Key, appRule.Value.ToString()));
-                    }
-                }
-
-                groups.Add(cfgGroup);
-            }
-
-            var usersTable = tb.getTable(nameof(users));
-            usersTable.autoBind(users);
-
-            var loggingTable = tb.getTable(nameof(logging));
-            loggingTable.autoBind(logging);
-        }
-
-        #endregion
     }
 }

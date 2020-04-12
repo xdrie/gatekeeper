@@ -2,7 +2,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Gatekeeper.Models.Identity;
 using Gatekeeper.Tests.Utilities;
-using Iri.Glass.Utilities;
+using Gatekeeper.Utils;
 using Xunit;
 
 namespace Gatekeeper.Tests.Base {

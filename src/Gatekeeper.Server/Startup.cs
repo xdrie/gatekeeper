@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -11,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Serilog;
 
 namespace Gatekeeper.Server {
     public class Startup {
@@ -53,19 +55,14 @@ namespace Gatekeeper.Server {
                 };
             });
 
-            var serverConfig = default(SConfig);
-            var configDescriptor = services.SingleOrDefault(d => d.ServiceType == typeof(SConfig));
-            if (configDescriptor == null) {
-                // load configuration
-                serverConfig = new SConfig(); // default configuration
-                if (File.Exists(CONFIG_FILE)) {
-                    var configTxt = File.ReadAllText(CONFIG_FILE);
-                    serverConfig.load(configTxt);
-                }
-            }
-            else {
-                serverConfig = (SConfig) configDescriptor.ImplementationInstance;
-            }
+            var confBuilder = new ConfigurationBuilder()
+                .AddIniFile(Path.Combine(Directory.GetCurrentDirectory(), "server.cfg"), optional: true)
+                .AddEnvironmentVariables(prefix: "GATEKEEPER_")
+                .AddCommandLine(Environment.GetCommandLineArgs().Skip(1).ToArray());
+            var conf = confBuilder.Build();
+
+            var serverConfig = new SConfig();
+            conf.Bind(serverConfig);
 
             var context = new SContext(services, serverConfig);
             // register server context
@@ -89,6 +86,12 @@ namespace Gatekeeper.Server {
                     options.EnableSensitiveDataLogging();
                 }
             });
+
+            // Make our logger
+            Log.Logger = new LoggerConfiguration()
+                .ReadFrom.Configuration(conf)
+                .WriteTo.Console()
+                .CreateLogger();
 
             // server context start signal
             context.start();
