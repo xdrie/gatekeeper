@@ -1,8 +1,7 @@
-using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using Carter;
+using Config.Net;
 using Gatekeeper.Server.Config;
 using Gatekeeper.Server.Models;
 using Gatekeeper.Server.OpenApi;
@@ -55,18 +54,20 @@ namespace Gatekeeper.Server {
                 };
             });
 
-            var confBuilder = new ConfigurationBuilder()
-                .AddIniFile(Path.Combine(Directory.GetCurrentDirectory(), "server.cfg"), optional: true)
-                .AddEnvironmentVariables(prefix: "GATEKEEPER_")
-                .AddCommandLine(Environment.GetCommandLineArgs().Skip(1).ToArray());
-            var conf = confBuilder.Build();
-
-            var serverConfig = new SConfig();
+            SConfig serverConfig;
             var configDescriptor = services.SingleOrDefault(d => d.ServiceType == typeof(SConfig));
-            if (configDescriptor == null)
-                conf.Bind(serverConfig);
-            else
+            if (configDescriptor == null) {
+                serverConfig = new ConfigurationBuilder<SConfig>()
+                    .UseYamlFile("config.yml")
+                    .UseCommandLineArgs()
+                    .UseEnvironmentVariables()
+                    .Build();
+            }
+            else {
                 serverConfig = (SConfig) configDescriptor.ImplementationInstance;
+            }
+
+            System.Console.WriteLine(serverConfig.server.cors[0]);
 
             var context = new SContext(services, serverConfig);
             // register server context
@@ -93,7 +94,6 @@ namespace Gatekeeper.Server {
 
             // Make our logger
             Log.Logger = new LoggerConfiguration()
-                .ReadFrom.Configuration(conf)
                 .WriteTo.Console()
                 .CreateLogger();
 
