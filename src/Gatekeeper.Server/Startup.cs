@@ -1,7 +1,7 @@
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Carter;
-using Config.Net;
 using Gatekeeper.Server.Config;
 using Gatekeeper.Server.Models;
 using Gatekeeper.Server.OpenApi;
@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using nucs.JsonSettings;
 using Serilog;
 
 namespace Gatekeeper.Server {
@@ -57,17 +58,11 @@ namespace Gatekeeper.Server {
             SConfig serverConfig;
             var configDescriptor = services.SingleOrDefault(d => d.ServiceType == typeof(SConfig));
             if (configDescriptor == null) {
-                serverConfig = new ConfigurationBuilder<SConfig>()
-                    .UseYamlFile("config.yml")
-                    .UseCommandLineArgs()
-                    .UseEnvironmentVariables()
-                    .Build();
+                serverConfig = JsonSettings.Load<SConfig>(Path.Combine(Directory.GetCurrentDirectory(), "config.json"));
             }
             else {
                 serverConfig = (SConfig) configDescriptor.ImplementationInstance;
             }
-
-            System.Console.WriteLine(serverConfig.server.cors[0]);
 
             var context = new SContext(services, serverConfig);
             // register server context

@@ -8,6 +8,7 @@ speercs-docker*
 *.toml
 speercs.json
 hosting.json
+config.json
 *.lidb
 *.db
 

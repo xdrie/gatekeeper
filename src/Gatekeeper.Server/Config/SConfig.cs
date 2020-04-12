@@ -1,15 +1,14 @@
 #region
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using Gatekeeper.Models.Access;
 using Gatekeeper.Models.Remote;
+using nucs.JsonSettings;
 
 #endregion
 
 namespace Gatekeeper.Server.Config {
-    public class SConfig {
+    public class SConfig : JsonSettings {
         public const string BRAND = "GaTE";
         public const string SERVER_NAME = "ALTiCU Gatekeeper.Server";
         public const string VERSION = "0.2.4";
@@ -65,5 +64,6 @@ namespace Gatekeeper.Server.Config {
         }
 
         public Logging logging = new Logging();
+        public override string FileName { get; set; }
     }
 }
