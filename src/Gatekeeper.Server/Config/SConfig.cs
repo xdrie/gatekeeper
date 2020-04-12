@@ -81,47 +81,43 @@ namespace Gatekeeper.Server.Config {
             var serverTable = tb.getTable(nameof(server));
             serverTable.autoBind(server);
 
-            if (tb.ContainsKey(nameof(apps))) {
-                var appsTables = tb.getField<TomlTableArray>(nameof(apps));
-                foreach (var appTable in appsTables) {
-                    var loadedApp = new RemoteApp {
-                        name = appTable.getField<string>(nameof(RemoteApp.name)),
-                        secret = appTable.getField<string>(nameof(RemoteApp.secret)),
-                        layers = appTable.getField<TomlArray>(nameof(RemoteApp.layers))
-                            .Select(x => x.ToString())
-                            .ToList(),
-                    };
-                    apps.Add(loadedApp);
-                }
+            var appsTables = tb.getTableArray(nameof(apps));
+            foreach (var appTable in appsTables) {
+                var loadedApp = new RemoteApp {
+                    name = appTable.getField<string>(nameof(RemoteApp.name)),
+                    secret = appTable.getField<string>(nameof(RemoteApp.secret)),
+                    layers = appTable.getField<TomlArray>(nameof(RemoteApp.layers))
+                        .Select(x => x.ToString())
+                        .ToList(),
+                };
+                apps.Add(loadedApp);
             }
 
-            if (tb.ContainsKey(nameof(groups))) {
-                var groupsTables = tb.getField<TomlTableArray>(nameof(groups));
-                foreach (var groupTable in groupsTables) {
-                    var loadedGroup = new Group {
-                        name = groupTable.getField<string>(nameof(Group.name)),
-                        priority = groupTable.getField<long>(nameof(Group.priority))
-                    };
-                    // validate group name
-                    if (!StringValidator.isIdentifier(loadedGroup.name)) {
-                        throw new FormatException($"group name {loadedGroup.name} is not a valid identifier.");
-                    }
-
-                    // load permissions and rules
-                    loadedGroup.permissions = groupTable.getField<TomlArray>(nameof(Group.permissions))
-                        .Select(x => new Permission(x.ToString()))
-                        .ToList();
-                    var groupRules = groupTable.getField<TomlTable>(nameof(Group.rules));
-                    foreach (var appRulesTablePair in groupRules) {
-                        var ruleApp = appRulesTablePair.Key;
-                        var rulesTable = (TomlTable) appRulesTablePair.Value;
-                        foreach (var appRule in rulesTable) {
-                            loadedGroup.rules.Add(new AccessRule(ruleApp, appRule.Key, appRule.Value.ToString()));
-                        }
-                    }
-
-                    groups.Add(loadedGroup);
+            var groupsTables = tb.getTableArray(nameof(groups));
+            foreach (var groupTable in groupsTables) {
+                var loadedGroup = new Group {
+                    name = groupTable.getField<string>(nameof(Group.name)),
+                    priority = groupTable.getField<long>(nameof(Group.priority))
+                };
+                // validate group name
+                if (!StringValidator.isIdentifier(loadedGroup.name)) {
+                    throw new FormatException($"group name {loadedGroup.name} is not a valid identifier.");
                 }
+
+                // load permissions and rules
+                loadedGroup.permissions = groupTable.getTableArray(nameof(Group.permissions))
+                    .Select(x => new Permission(x.ToString()))
+                    .ToList();
+                var groupRules = groupTable.getTable(nameof(Group.rules));
+                foreach (var appRulesTablePair in groupRules) {
+                    var ruleApp = appRulesTablePair.Key;
+                    var rulesTable = (TomlTable) appRulesTablePair.Value;
+                    foreach (var appRule in rulesTable) {
+                        loadedGroup.rules.Add(new AccessRule(ruleApp, appRule.Key, appRule.Value.ToString()));
+                    }
+                }
+
+                groups.Add(loadedGroup);
             }
 
             var usersTable = tb.getTable(nameof(users));
