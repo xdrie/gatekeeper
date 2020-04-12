@@ -2,8 +2,8 @@ using System.Collections.Generic;
 
 namespace Gatekeeper.Models.Remote {
     public class RemoteApp {
-        public virtual string name { get; set; }
-        public virtual List<string> layers { get; set; } = new List<string>();
-        public virtual string secret { get; set; }
+        public string name;
+        public List<string> layers = new List<string>();
+        public string secret;
     }
 }

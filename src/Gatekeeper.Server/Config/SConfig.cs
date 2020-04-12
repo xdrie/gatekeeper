@@ -83,29 +83,32 @@ namespace Gatekeeper.Server.Config {
 
             var appsTables = tb.getTableArray(nameof(apps));
             foreach (var appTable in appsTables) {
-                var loadedApp = new RemoteApp {
-                    name = appTable.getField<string>(nameof(RemoteApp.name)),
-                    secret = appTable.getField<string>(nameof(RemoteApp.secret)),
-                    layers = appTable.getField<TomlArray>(nameof(RemoteApp.layers))
-                        .Select(x => x.ToString())
-                        .ToList(),
-                };
-                apps.Add(loadedApp);
+                var cfgApp = new RemoteApp();
+                appTable.autoBind(cfgApp);
+                // validate app
+                if (!StringValidator.isIdentifier(cfgApp.name)) {
+                    throw new ConfigurationException(nameof(cfgApp.name), $"app name '{cfgApp.name}' is not valid");
+                }
+
+                if (string.IsNullOrEmpty(cfgApp.secret)) {
+                    throw new ConfigurationException(nameof(cfgApp.secret), "app secret cannot be empty");
+                }
+
+                apps.Add(cfgApp);
             }
 
             var groupsTables = tb.getTableArray(nameof(groups));
             foreach (var groupTable in groupsTables) {
-                var loadedGroup = new Group {
-                    name = groupTable.getField<string>(nameof(Group.name)),
-                    priority = groupTable.getField<long>(nameof(Group.priority))
-                };
-                // validate group name
-                if (!StringValidator.isIdentifier(loadedGroup.name)) {
-                    throw new FormatException($"group name {loadedGroup.name} is not a valid identifier.");
+                var cfgGroup = new Group();
+                groupTable.autoBind(cfgGroup);
+                // validate group
+                if (!StringValidator.isIdentifier(cfgGroup.name)) {
+                    throw new ConfigurationException(nameof(cfgGroup.name),
+                        $"group name '{cfgGroup.name}' is not a valid identifier.");
                 }
 
                 // load permissions and rules
-                loadedGroup.permissions = groupTable.getTableArray(nameof(Group.permissions))
+                cfgGroup.permissions = groupTable.getTableArray(nameof(Group.permissions))
                     .Select(x => new Permission(x.ToString()))
                     .ToList();
                 var groupRules = groupTable.getTable(nameof(Group.rules));
@@ -113,11 +116,11 @@ namespace Gatekeeper.Server.Config {
                     var ruleApp = appRulesTablePair.Key;
                     var rulesTable = (TomlTable) appRulesTablePair.Value;
                     foreach (var appRule in rulesTable) {
-                        loadedGroup.rules.Add(new AccessRule(ruleApp, appRule.Key, appRule.Value.ToString()));
+                        cfgGroup.rules.Add(new AccessRule(ruleApp, appRule.Key, appRule.Value.ToString()));
                     }
                 }
 
-                groups.Add(loadedGroup);
+                groups.Add(cfgGroup);
             }
 
             var usersTable = tb.getTable(nameof(users));
