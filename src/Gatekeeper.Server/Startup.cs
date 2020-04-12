@@ -30,6 +30,9 @@ namespace Gatekeeper.Server {
             // Adds services required for using options.
             services.AddOptions();
 
+            // Adds services required for using CORS
+            services.AddCors();
+
             // enable Razor Pages
             services.AddRazorPages()
                 .AddRazorRuntimeCompilation();
@@ -98,10 +101,10 @@ namespace Gatekeeper.Server {
 
         public void Configure(IApplicationBuilder app) {
             // update the database
+            var serverContext = app.ApplicationServices.GetService<SContext>();
             using (var serviceScope = app.ApplicationServices
                 .GetRequiredService<IServiceScopeFactory>()
                 .CreateScope()) {
-                var serverContext = app.ApplicationServices.GetService<SContext>();
 
                 using (var dbContext = serviceScope.ServiceProvider.GetService<AppDbContext>()) {
                     if (!dbContext.Database.IsInMemory()) {
@@ -124,6 +127,12 @@ namespace Gatekeeper.Server {
 
             app.UseStaticFiles();
             app.UseRouting();
+            app.UseCors(b => {
+                b
+                    .WithOrigins(serverContext.config.server.cors.ToArray())
+                    .AllowAnyHeader()
+                    .AllowCredentials();
+            });
             app.UseEndpoints(endpoints => endpoints.MapCarter());
             app.UseEndpoints(endpoints => endpoints.MapRazorPages());
             app.UseSwaggerUi3(settings => settings.DocumentPath = "/openapi");
