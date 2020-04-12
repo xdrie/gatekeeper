@@ -62,7 +62,11 @@ namespace Gatekeeper.Server {
             var conf = confBuilder.Build();
 
             var serverConfig = new SConfig();
-            conf.Bind(serverConfig);
+            var configDescriptor = services.SingleOrDefault(d => d.ServiceType == typeof(SConfig));
+            if (configDescriptor == null)
+                conf.Bind(serverConfig);
+            else
+                serverConfig = (SConfig) configDescriptor.ImplementationInstance;
 
             var context = new SContext(services, serverConfig);
             // register server context
