@@ -15,7 +15,7 @@ namespace Gatekeeper.Server.Models.Validators {
                 RuleFor(x => x.email).NotEmpty().EmailAddress();
                 RuleFor(x => x.password).NotEmpty().MinimumLength(8);
                 RuleFor(x => x.isRobot).Equal(NOT_ROBOT_PROMISE);
-                RuleFor(x => x.pronouns).IsEnumName(typeof(User.Pronouns), false);
+                RuleFor(x => x.pronouns).NotEmpty().IsEnumName(typeof(User.Pronouns), false);
             }
         }
 
