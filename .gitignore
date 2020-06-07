@@ -1,5 +1,6 @@
 # Mono crashes
 *.blob
+database.db*
 
 # Docker
 speercs-docker*
