@@ -21,3 +21,4 @@ COPY --from=build /app .
 #ENV LANG en_US.UTF-8
 
 ENTRYPOINT ["./Gatekeeper.Server"]
+EXPOSE 80
