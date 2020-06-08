@@ -29,7 +29,7 @@ namespace Gatekeeper.Server.Config {
 #else
                 if (!env.IsProduction()) {
                     Log.Error("This is a release build of {ServerName}, but is not being run in Prod (being run in '{EnvName}')",
-                        nameof(GateKeeper.server), env.EnvironmentName);
+                        nameof(Gatekeeper), env.EnvironmentName);
                 }
 #endif
 
