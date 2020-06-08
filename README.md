@@ -24,6 +24,11 @@ Gatekeeper is ALTiCU's unified authentication service.
 dotnet build Gatekeeper.sln
 ```
 
+### docker
+```
+docker build --pull -t gatekeeper:alpine -f src/docker/Dockerfile .
+```
+
 ### tests
 ```
 cd Gatekeeper.Tests

@@ -9,7 +9,7 @@ RUN dotnet restore -r linux-musl-x64
 RUN dotnet publish -c Release -o /app -r linux-musl-x64 --self-contained false --no-restore
 
 # final stage/image
-FROM mcr.microsoft.com/dotnet/core/runtime:3.1-alpine
+FROM mcr.microsoft.com/dotnet/core/aspnet:3.0-alpine AS runtime
 WORKDIR /app
 COPY --from=build /app .
 
@@ -19,8 +19,5 @@ COPY --from=build /app .
 #RUN apk add --no-cache icu-libs
 #ENV LC_ALL en_US.UTF-8
 #ENV LANG en_US.UTF-8
-
-# remove source
-# RUN rm -rf /source
 
 ENTRYPOINT ["./Gatekeeper.Server"]
