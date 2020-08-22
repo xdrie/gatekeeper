@@ -1,7 +1,7 @@
 using System.IO;
 using Microsoft.AspNetCore;
 using Microsoft.Extensions.Configuration;
-using Serilog;
+using Microsoft.Extensions.Logging;
 
 namespace Gatekeeper.Server {
     using Microsoft.AspNetCore.Hosting;
@@ -25,7 +25,10 @@ namespace Gatekeeper.Server {
                 .UseConfiguration(config)
                 .UseKestrel()
                 .UseContentRoot(Directory.GetCurrentDirectory())
-                .UseSerilog()
+                .ConfigureLogging(logging => { // add aspnet logger
+                    logging.ClearProviders();
+                    logging.AddConsole();
+                })
                 .UseStartup<Startup>();
         }
     }

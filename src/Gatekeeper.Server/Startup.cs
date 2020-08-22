@@ -11,8 +11,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using nucs.JsonSettings;
-using Serilog;
 
 namespace Gatekeeper.Server {
     public class Startup {
@@ -58,10 +56,15 @@ namespace Gatekeeper.Server {
                 };
             });
 
-            SConfig serverConfig;
+            var serverConfig = default(SConfig);
             var configDescriptor = services.SingleOrDefault(d => d.ServiceType == typeof(SConfig));
             if (configDescriptor == null) {
-                serverConfig = JsonSettings.Load<SConfig>(Path.Combine(Directory.GetCurrentDirectory(), "config.json"));
+                // load configuration
+                serverConfig = new SConfig(); // default configuration
+                if (File.Exists(CONFIG_FILE)) {
+                    var configTxt = File.ReadAllText(CONFIG_FILE);
+                    serverConfig.load(configTxt);
+                }
             }
             else {
                 serverConfig = (SConfig) configDescriptor.ImplementationInstance;
@@ -89,11 +92,6 @@ namespace Gatekeeper.Server {
                     options.EnableSensitiveDataLogging();
                 }
             });
-
-            // Make our logger
-            Log.Logger = new LoggerConfiguration()
-                .WriteTo.Console()
-                .CreateLogger();
 
             // server context start signal
             context.start();

@@ -1,5 +1,6 @@
 # Mono crashes
 *.blob
+database.db*
 
 # Docker
 speercs-docker*
@@ -8,7 +9,6 @@ speercs-docker*
 *.toml
 speercs.json
 hosting.json
-config.json
 *.lidb
 *.db
 
