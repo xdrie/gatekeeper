@@ -8,44 +8,35 @@ using Microsoft.AspNetCore.Http;
 
 namespace Gatekeeper.Server.Modules.Test {
     public class BeanModule : GateApiModule {
-        class BeanRequest {
-            public string name { get; set; }
+        class WenEta {
+            public class Request {
+                public string thing { get; set; }
+            }
 
-            class Validator : AbstractValidator<BeanRequest> {
+            public class Response {
+                public string thing { get; set; }
+                public string eta { get; set; }
+            }
+
+            class Validator : AbstractValidator<Request> {
                 public Validator() {
-                    RuleFor(x => x.name).NotEmpty();
+                    RuleFor(x => x.thing).NotEmpty();
                 }
             }
         }
 
-        class BeanResponse {
-            public string name { get; set; }
-            public bool delicious { get; set; }
-        }
-
         public BeanModule(SContext serverContext) : base("/bean", serverContext) {
-            createGet<BeanRequest, BeanResponse>("/order1", async (req) => {
-                return new BeanResponse {
-                    name = req.name,
-                    delicious = true
+            createGet<WenEta.Request, WenEta.Response>("/weneta", async (req) => {
+                return new WenEta.Response {
+                    thing = req.thing,
+                    eta = "son",
                 };
             });
-        }
-
-        public async Task validateThenProcess<TRequest, TResponse>(HttpRequest req, HttpResponse res,
-            Func<TRequest, Task<TResponse>> process) where TRequest : class {
-            var validatedReq = await this.validateRequest<TRequest>(req, res);
-            if (!validatedReq.isValid) return;
-            var reqModel = validatedReq.request;
-            var response = await process(reqModel);
-            await res.respondSerialized(response);
-        }
-
-        public void createGet<TRequest, TResponse>(string route, Func<TRequest, Task<TResponse>> process)
-            where TRequest : class {
-            Get(route, async (req, res) => {
-                // call validator first, then process
-                await validateThenProcess(req, res, process);
+            createPost<WenEta.Request, WenEta.Response>("/tweet", async (req) => {
+                return new WenEta.Response {
+                    thing = req.thing,
+                    eta = "ok",
+                };
             });
         }
     }
