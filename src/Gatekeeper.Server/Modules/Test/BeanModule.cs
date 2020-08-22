@@ -1,10 +1,5 @@
-using System;
-using System.Threading.Tasks;
 using FluentValidation;
 using Gatekeeper.Server.Config;
-using Hexagon.Serialization;
-using Hexagon.Web;
-using Microsoft.AspNetCore.Http;
 
 namespace Gatekeeper.Server.Modules.Test {
     public class BeanModule : GateApiModule {
