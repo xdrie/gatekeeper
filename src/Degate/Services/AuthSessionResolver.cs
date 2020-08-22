@@ -1,9 +1,8 @@
 using System;
-using System.Collections.Generic;
 using Gatekeeper.Models.Identity;
-using Gatekeeper.Utils;
 using Hexagon;
 using Hexagon.Models;
+using Iri.Glass.Utilities;
 
 namespace Degate.Services {
     /// <summary>
@@ -16,13 +15,14 @@ namespace Degate.Services {
         public TimeSpan sessionValidity { get; set; } = TimeSpan.FromDays(1);
 
         public AuthSessionResolver(TContext context) : base(context) {
-            cryptKey = Convert.ToBase64String(CryptoUtils.randomBytes(CryptoUtils.KEY_LENGTH));
+            cryptKey = Convert.ToBase64String(AesCrypt.randomBytes(AesCrypt.KEY_LENGTH));
         }
 
         public virtual string issueSession(RemoteAuthentication identity) {
             // get a session token
             var sessionId = getSessionToken(identity.user.uuid);
 
+            // store identity in a session
             var sess = serverContext.sessions.create(sessionId, sessionValidity);
             sess.jar.Register<RemoteAuthentication>(identity);
 
@@ -42,12 +42,12 @@ namespace Degate.Services {
 
         public virtual string getSessionToken(string userId) {
             // encrompt user id
-            return CryptoUtils.encrypt(userId, cryptKey);
+            return AesCrypt.encrypt(userId, cryptKey);
         }
 
         public virtual string getUserId(string sessionToken) {
             // decrompt user id
-            return CryptoUtils.decrypt(sessionToken, cryptKey);
+            return AesCrypt.decrypt(sessionToken, cryptKey);
         }
     }
 }

@@ -1,15 +1,13 @@
 using System;
 using System.Net;
-using System.Security.Cryptography;
-using System.Text;
 using Gatekeeper.Models.Requests;
 using Gatekeeper.Models.Responses;
 using Gatekeeper.Server.Config;
 using Gatekeeper.Server.OpenApi.Auth;
 using Gatekeeper.Server.Services.Auth;
-using Gatekeeper.Utils;
 using Hexagon.Serialization;
 using Hexagon.Web;
+using Iri.Glass.Utilities;
 
 namespace Gatekeeper.Server.Modules.Auth {
     public class TwoFactorSetupModule : AuthenticatedUserModule {
@@ -24,10 +22,7 @@ namespace Gatekeeper.Server.Modules.Auth {
 
                 // we generate a new TOTP secret
                 var seed = StringUtils.secureRandomString(TotpProvider.TOTP_SECRET_LENGTH);
-                byte[] seedBytes;
-                using (var sha256 = SHA256.Create()) {
-                    seedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(seed));
-                }
+                var seedBytes = Hasher.sha256(seed);
                 currentUser.totp = seedBytes;
                 serverContext.userManager.updateUser(currentUser);
 
