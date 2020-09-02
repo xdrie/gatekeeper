@@ -8,7 +8,7 @@ the openapi file can be found at `GET /openapi`, and the web documentation brows
 
 ## basic configuration
 
-configuration is stored in `config.toml`. see the [configuration model](../src/Gatekeeper/Config/SConfig.cs) for a detailed list of options.
+configuration is stored in `config.toml`. see the [configuration model](../src/Gatekeeper.Server/Config/SConfig.cs) for a detailed list of options.
 
 of particular interest may be `server.database` for setting the database path, and the `logging` module for configuring logging.
 
