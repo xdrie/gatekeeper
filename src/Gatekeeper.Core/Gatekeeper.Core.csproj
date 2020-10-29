@@ -3,6 +3,8 @@
     <PropertyGroup>
         <TargetFramework>netcoreapp3.1</TargetFramework>
         <RootNamespace>Gatekeeper</RootNamespace>
+        <PackageId>Alticu.Gatekeeper.Core</PackageId>
+        <Version>0.4.2-beta</Version>
     </PropertyGroup>
 
     <ItemGroup>

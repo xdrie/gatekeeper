@@ -2,6 +2,8 @@
 
     <PropertyGroup>
         <TargetFramework>netcoreapp3.1</TargetFramework>
+        <PackageId>Alticu.Gatekeeper.Degate</PackageId>
+        <Version>0.4.2-beta</Version>
     </PropertyGroup>
 
     <ItemGroup>
