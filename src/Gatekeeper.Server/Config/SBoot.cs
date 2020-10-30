@@ -34,7 +34,7 @@ namespace Gatekeeper.Server.Config {
                 if (!env.IsProduction()) {
                     context.log.writeLine(
                         $"this is a release build of {nameof(Gatekeeper.Server)}, but is not being run in Production (it is being run in '{env.EnvironmentName}')",
-                        ConsoleColor.Red);
+                        Logger.Verbosity.Error);
                 }
 #endif
 
