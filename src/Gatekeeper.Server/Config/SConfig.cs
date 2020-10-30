@@ -16,7 +16,7 @@ namespace Gatekeeper.Server.Config {
     public class SConfig : TomlConfig {
         public const string BRAND = "GaTE";
         public const string SERVER_NAME = "ALTiCU Gatekeeper.Server";
-        public const string VERSION = "0.4.0";
+        public const string VERSION = "0.4.4b";
 
         public class Server {
             public const string DEFAULT_DATABASE = "Data Source=database.db"; // Default Sqlite database
@@ -99,16 +99,17 @@ namespace Gatekeeper.Server.Config {
 
             var groupsTables = tb.getTableArray(nameof(groups));
             foreach (var groupTable in groupsTables) {
-                var cfgGroup = new Group();
-                groupTable.autoBind(cfgGroup);
+                var cfgGroup = new Group {
+                    name = groupTable.getField<string>(nameof(Group.name)),
+                    priority = groupTable.getField<long>(nameof(Group.priority))
+                };
                 // validate group
                 if (!StringValidator.isIdentifier(cfgGroup.name)) {
                     throw new ConfigurationException(nameof(cfgGroup.name),
                         $"group name '{cfgGroup.name}' is not a valid identifier.");
                 }
-
                 // load permissions and rules
-                cfgGroup.permissions = groupTable.getTableArray(nameof(Group.permissions))
+                cfgGroup.permissions = groupTable.getField<TomlArray>(nameof(Group.permissions))
                     .Select(x => new Permission(x.ToString()))
                     .ToList();
                 var groupRules = groupTable.getTable(nameof(Group.rules));

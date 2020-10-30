@@ -24,17 +24,17 @@ namespace Gatekeeper.Server.Config {
             // print debug banner (always)
             context.log.writeLine(
                 $"this is a DEBUG build of {nameof(Server)}. this build should NEVER be used in production.",
-                ConsoleColor.Red);
+                Logger.Verbosity.Error);
             if (context.config.server.development) {
                 context.log.writeLine(
                     $"development/test mode is enabled. default values and fake external services will be used.",
-                    ConsoleColor.Red);
+                    Logger.Verbosity.Error);
             }
 #else
                 if (!env.IsProduction()) {
                     context.log.writeLine(
                         $"this is a release build of {nameof(Gatekeeper.Server)}, but is not being run in Production (it is being run in '{env.EnvironmentName}')",
-                        ConsoleColor.Red);
+                        Logger.Verbosity.Error);
                 }
 #endif
 
