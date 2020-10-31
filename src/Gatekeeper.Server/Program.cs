@@ -28,7 +28,9 @@ namespace Gatekeeper.Server {
                 .ConfigureLogging(logging => { // add aspnet logger
                     logging.ClearProviders();
                     logging.AddConsole();
-                    logging.AddFilter("Microsoft.EntityFrameworkCore.Database.Command", LogLevel.Trace);
+                    logging.SetMinimumLevel(LogLevel.Warning);
+                    // // filter out database command logging
+                    // logging.AddFilter("Microsoft.EntityFrameworkCore.Database.Command", LogLevel.Warning);
                 })
                 .UseStartup<Startup>();
         }
