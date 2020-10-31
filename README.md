@@ -28,6 +28,7 @@ dotnet build Gatekeeper.sln
 ```
 docker build --pull -t gatekeeper:alpine -f src/docker/Dockerfile .
 ```
+see [documentation](doc/docker_setup.md) for details on setup.
 
 ### tests
 ```
