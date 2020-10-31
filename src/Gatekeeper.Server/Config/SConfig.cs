@@ -70,7 +70,7 @@ namespace Gatekeeper.Server.Config {
             /// <summary>
             /// Whether to enable detailed/sensitive database logging
             /// </summary>
-            public bool databaseLogging = true;
+            public bool databaseLogging = false;
         }
 
         public Logging logging = new Logging();
