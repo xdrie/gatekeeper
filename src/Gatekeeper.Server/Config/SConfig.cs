@@ -16,7 +16,7 @@ namespace Gatekeeper.Server.Config {
     public class SConfig : TomlConfig {
         public const string BRAND = "GaTE";
         public const string SERVER_NAME = "ALTiCU Gatekeeper.Server";
-        public const string VERSION = "0.4.4b";
+        public const string VERSION = "0.4.5b";
 
         public class Server {
             public const string DEFAULT_DATABASE = "Data Source=database.db"; // Default Sqlite database
