@@ -8,7 +8,14 @@ we will set up a docker container that:
 + connects to host postgres via unix domain socket
 + links in configuration file from host
 
-this assumes that you've already followed the instructions to build the `gatekeeper:alpine` image.
+## build
+
+first, we need to build the `gatekeeper:alpine` image.
+
+from the repository root, run:
+```sh
+docker build --pull -t gatekeeper:alpine -f src/docker/Dockerfile .
+```
 
 ## preparation
 
