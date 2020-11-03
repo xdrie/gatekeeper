@@ -3,11 +3,11 @@
 #endregion
 
 namespace Gatekeeper.Models.Identity {
-    public class CryptSecret : DatabaseObject {
+    public class HashedSecret : DatabaseObject {
         public string hash { get; set; }
 
-        public static CryptSecret withDefaultParameters() {
-            return new CryptSecret { };
+        public static HashedSecret withDefaultParameters() {
+            return new HashedSecret { };
         }
     }
 }

@@ -19,9 +19,9 @@ namespace Gatekeeper.Server.Services.Users {
             if (findByEmail(request.email) != null)
                 throw new UserAlreadyExistsException("a user with the same email already exists");
             // encrypt the password
-            var cryptPassword = CryptSecret.withDefaultParameters();
-            var cryptoHelper = new SecretCryptoHelper(cryptPassword);
-            cryptoHelper.storeSecret(request.password);
+            var cryptPassword = HashedSecret.withDefaultParameters();
+            var cryptoHelper = new PasswordHasher(cryptPassword);
+            cryptoHelper.store(request.password);
             // create the user
             var user = new User {
                 name = request.name,
@@ -113,7 +113,7 @@ namespace Gatekeeper.Server.Services.Users {
             user = loadPassword(user);
             var ret = false;
             // calculate hash and compare
-            var cryptoHelper = new SecretCryptoHelper(user.password);
+            var cryptoHelper = new PasswordHasher(user.password);
             return cryptoHelper.verify(password);
         }
 
