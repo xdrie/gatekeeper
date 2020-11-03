@@ -114,9 +114,7 @@ namespace Gatekeeper.Server.Services.Users {
             var ret = false;
             // calculate hash and compare
             var cryptoHelper = new SecretCryptoHelper(user.password);
-            var hashedPassword = cryptoHelper.hashCleartext(password);
-            ret = StructuralComparisons.StructuralEqualityComparer.Equals(hashedPassword, user.password.hash);
-            return ret;
+            return cryptoHelper.verify(password);
         }
 
         public void setupTotpLock(User user, Token currentToken) {

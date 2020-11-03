@@ -3,6 +3,7 @@
 using System.Security.Cryptography;
 using System.Text;
 using Gatekeeper.Models.Identity;
+using Isopoh.Cryptography.Argon2;
 
 #endregion
 
@@ -14,32 +15,16 @@ namespace Gatekeeper.Server.Services.Auth {
             this.cryptSecret = cryptSecret;
         }
 
-        private byte[] generateSalt() {
-            var len = cryptSecret.saltLength;
-            var bytes = new byte[len];
-            using (var rng = RandomNumberGenerator.Create()) {
-                rng.GetBytes(bytes);
-            }
-
-            return bytes;
-        }
-
-        private byte[] calculateSecretHash(byte[] password, byte[] salt) {
-            var iter = cryptSecret.iterations;
-            var len = cryptSecret.length;
-            using (var deriveBytes = new Rfc2898DeriveBytes(password, salt, iter)) {
-                return deriveBytes.GetBytes(len);
-            }
+        private string calculateSecretHash(string password) {
+            return Argon2.Hash(password);
         }
 
         public void storeSecret(string secret) {
-            cryptSecret.salt = generateSalt();
-            cryptSecret.hash = calculateSecretHash(Encoding.UTF8.GetBytes(secret), cryptSecret.salt);
+            cryptSecret.hash = calculateSecretHash(secret);
         }
 
-        public byte[] hashCleartext(string secret) {
-            var hash = calculateSecretHash(Encoding.UTF8.GetBytes(secret), cryptSecret.salt);
-            return hash;
+        public bool verify(string testPassword) {
+            return Argon2.Verify(cryptSecret.hash, testPassword);
         }
     }
 }
