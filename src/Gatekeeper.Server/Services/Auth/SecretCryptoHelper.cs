@@ -1,7 +1,5 @@
 #region
 
-using System.Security.Cryptography;
-using System.Text;
 using Gatekeeper.Models.Identity;
 using Isopoh.Cryptography.Argon2;
 
