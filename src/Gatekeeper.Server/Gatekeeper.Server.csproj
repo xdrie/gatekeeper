@@ -2,7 +2,7 @@
     <PropertyGroup>
         <TargetFramework>netcoreapp3.1</TargetFramework>
         <Nullable>enable</Nullable>
-        <Version>0.4.5-beta</Version>
+        <Version>0.5.0-beta</Version>
     </PropertyGroup>
 
     <PropertyGroup>
@@ -11,6 +11,7 @@
 
     <ItemGroup>
         <PackageReference Include="Carter" Version="5.2.0" />
+        <PackageReference Include="Isopoh.Cryptography.Argon2" Version="1.1.9" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.9">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>

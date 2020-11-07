@@ -3,15 +3,17 @@ using System;
 using Gatekeeper.Server.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Gatekeeper.Server.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201103003431_Update040")]
+    partial class Update040
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,8 +26,20 @@ namespace Gatekeeper.Server.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("hash")
-                        .HasColumnType("TEXT");
+                    b.Property<byte[]>("hash")
+                        .HasColumnType("BLOB");
+
+                    b.Property<int>("iterations")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("length")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<byte[]>("salt")
+                        .HasColumnType("BLOB");
+
+                    b.Property<int>("saltLength")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("id");
 
